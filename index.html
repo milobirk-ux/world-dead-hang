@@ -89,7 +89,20 @@
             position: relative;
         }
 
-        .status-pill {
+        .desktop-title { display: block; }
+        .mobile-title { display: none; }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 7.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin: 0 auto 20px;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 5px 25px rgba(0,0,0,0.8);
+        }
             display: inline-block;
             background: transparent;
             border: 1px solid var(--accent-red);
@@ -602,14 +615,39 @@
         .history-item span.h-time { color: var(--gold); font-weight: 700; }
 
         @media (max-width: 900px) {
+            /* Title Fix */
+            .desktop-title { display: none; }
+            .mobile-title { display: block; }
+            .mobile-title { font-size: 3.5rem; line-height: 1.1; }
+
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
-            h1 { font-size: 4rem; }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .lb-header, .lb-row { grid-template-columns: 50px 80px 1fr 100px; }
-            .video-btn { display: none; } 
-            .location { display: none; } 
-            .country-col, .date-col { display: none; }
+
+            /* Leaderboard Name Fix */
+            .lb-header, .lb-row {
+                grid-template-columns: 40px 1fr 80px; /* Rank | Athlete | Time */
+                gap: 15px;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .lb-header > div:nth-child(2), /* Hide Tier */
+            .lb-header > div:nth-child(4), /* Hide Background */
+            .lb-header > div:nth-child(5), /* Hide Location */
+            .lb-header > div:nth-child(6), /* Hide Date */
+            .lb-header > div:nth-child(8), /* Hide Watch */
+            .lb-row > div:nth-child(2),
+            .lb-row > div:nth-child(4),
+            .lb-row > div:nth-child(5),
+            .lb-row > div:nth-child(6),
+            .lb-row > div:nth-child(8) {
+                display: none;
+            }
+            .name { font-size: 1.2rem; }
+            .time { font-size: 1.8rem; }
+            .rank { font-size: 1.5rem; color: #666; }
+            .rank-1 { color: var(--gold); }
+
             .cta-section { flex-direction: column; text-align: center; gap: 30px; }
             .cta-section::before { width: 100%; height: 4px; bottom: auto; }
         }
@@ -628,8 +666,13 @@
 
     <header>
         <div class="status-pill" style="margin-bottom: 20px;">OFFICIAL 2026 SEASON LIVE</div>
-        <h1>
+        <h1 class="desktop-title">
             <span style="color: var(--gold);">WORLD</span> DEAD HANG<br>
+            <span style="color: var(--gold);">CHAMPIONSHIP</span>
+        </h1>
+        <h1 class="mobile-title">
+            <span style="color: var(--gold);">WORLD</span><br>
+            DEAD HANG<br>
             <span style="color: var(--gold);">CHAMPIONSHIP</span>
         </h1>
         <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
