@@ -249,19 +249,20 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .lb-header {
-            display: grid;
-            grid-template-columns: 70px 100px 300px 1.5fr 1.5fr 120px 100px 100px;
-            gap: 20px;
-            padding: 15px 25px;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
-            background: #080808;
-            letter-spacing: 1px;
-            font-family: 'Roboto Mono', monospace;
+        /* Mobile Expanded Row Styles */
+        .mobile-details {
+            display: none;
+            background: #111;
+            padding: 15px;
+            border-top: 1px solid #222;
+            font-size: 0.9rem;
+            color: #ccc;
+            grid-column: 1 / -1; /* Span full width */
         }
+        
+        .mobile-details div { margin-bottom: 8px; }
+        .mobile-details strong { color: #fff; text-transform: uppercase; font-size: 0.75rem; margin-right: 8px; color: var(--text-dim); }
+        .mobile-details a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold); }
 
         .lb-row {
             display: grid;
@@ -272,6 +273,7 @@
             align-items: center;
             transition: all 0.2s ease;
             position: relative;
+            cursor: pointer; /* Indicate clickable */
         }
 
         .lb-row:hover { 
@@ -1004,10 +1006,11 @@
             }).join('');
 
             const row = document.createElement('div');
-            row.className = 'lb-row';
-            const displayDateMain = athlete.lastAttempt.split(' ')[0];
-            const displayLocation = athlete.location.split('/')[0].trim();
+            // Wrap content in a main container for click targeting, plus a hidden details container
+            row.className = 'lb-row-wrapper'; 
+            
             row.innerHTML = `
+            <div class="lb-row" onclick="toggleMobileDetails(this)">
                 <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
                 <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                 <div class="name-cell">
@@ -1032,11 +1035,35 @@
                 <div style="text-align: center; color: #999; font-family: 'Roboto Mono', monospace; font-size: 0.85rem;">${displayDateMain}</div>
                 <div class="time" style-align: center;">${athlete.currentPR}</div>
                 <div style="text-align: right;"><a href="${athlete.video}" class="video-btn">Watch</a></div>
+            </div>
+            <!-- Mobile Expanded Details -->
+            <div class="mobile-details">
+                <div><strong>Tier:</strong> <span class="tier-badge ${tier.class}" style="transform:scale(0.8); transform-origin:left center; display:inline-block;">${tier.label}</span></div>
+                <div><strong>Occupation:</strong> ${athlete.occupation}</div>
+                <div><strong>Date Set:</strong> ${displayDateMain}</div>
+                <div style="margin-top:10px;"><a href="${athlete.video}" target="_blank">▶ Watch Video Proof</a></div>
+            </div>
             `;
             list.appendChild(row);
         });
         
         renderSidebar();
+    }
+    
+    function toggleMobileDetails(rowElement) {
+        // Only trigger on mobile screens
+        if (window.innerWidth > 900) return;
+        
+        const wrapper = rowElement.parentElement;
+        const details = wrapper.querySelector('.mobile-details');
+        if (details.style.display === 'block') {
+            details.style.display = 'none';
+            rowElement.style.background = '';
+        } else {
+            // Close others first? Optional. keeping it simple for now.
+            details.style.display = 'block';
+            rowElement.style.background = '#111';
+        }
     }
     
     function renderSidebar() {
