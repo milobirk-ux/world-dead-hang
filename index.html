@@ -626,27 +626,44 @@
 
             /* Leaderboard Name Fix */
             .lb-header, .lb-row {
-                grid-template-columns: 40px 1fr 80px; /* Rank | Athlete | Time */
-                gap: 15px;
-                padding-left: 15px;
-                padding-right: 15px;
+                grid-template-columns: 35px 1fr 90px 70px; /* Rank | Athlete | Loc | Time */
+                gap: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                align-items: center;
             }
             .lb-header > div:nth-child(2), /* Hide Tier */
             .lb-header > div:nth-child(4), /* Hide Background */
-            .lb-header > div:nth-child(5), /* Hide Location */
+            /* .lb-header > div:nth-child(5), Unhide Location */
             .lb-header > div:nth-child(6), /* Hide Date */
             .lb-header > div:nth-child(8), /* Hide Watch */
             .lb-row > div:nth-child(2),
             .lb-row > div:nth-child(4),
-            .lb-row > div:nth-child(5),
+            /* .lb-row > div:nth-child(5), Unhide Location */
             .lb-row > div:nth-child(6),
             .lb-row > div:nth-child(8) {
                 display: none;
             }
-            .name { font-size: 1.2rem; }
-            .time { font-size: 1.8rem; }
-            .rank { font-size: 1.5rem; color: #666; }
-            .rank-1 { color: var(--gold); }
+            
+            /* Specific Mobile Styles */
+            .rank { font-size: 1.3rem; margin-right: 0; }
+            .name { font-size: 1.0rem; white-space: normal; line-height: 1.2; } /* Allow name wrap if needed */
+            .time { font-size: 1.5rem; text-align: right; }
+            
+            /* Location Column Mobile */
+            .lb-row > div:nth-child(5) {
+                display: block !important;
+                font-size: 0.7rem !important;
+                line-height: 1.1;
+                text-align: center !important;
+                white-space: normal;
+                overflow: hidden;
+            }
+            .lb-header > div:nth-child(5) {
+                display: block !important;
+                text-align: center !important;
+                font-size: 0.6rem;
+            }
 
             .cta-section { flex-direction: column; text-align: center; gap: 30px; }
             .cta-section::before { width: 100%; height: 4px; bottom: auto; }
