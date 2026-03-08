@@ -1019,12 +1019,12 @@
                 return `<div class="history-item"><span>${displayDate}</span><span class="h-time">${h.time}</span></div>`
             }).join('');
 
+            // Create the main row
             const row = document.createElement('div');
-            // Wrap content in a main container for click targeting, plus a hidden details container
-            row.className = 'lb-row-wrapper'; 
+            row.className = 'lb-row';
+            row.onclick = function() { toggleMobileDetails(this); };
             
             row.innerHTML = `
-            <div class="lb-row" onclick="toggleMobileDetails(this)">
                 <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
                 <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                 <div class="name-cell">
@@ -1049,16 +1049,19 @@
                 <div style="text-align: center; color: #999; font-family: 'Roboto Mono', monospace; font-size: 0.85rem;">${displayDateMain}</div>
                 <div class="time" style-align: center;">${athlete.currentPR}</div>
                 <div style="text-align: right;"><a href="${athlete.video}" class="video-btn">Watch</a></div>
-            </div>
-            <!-- Mobile Expanded Details -->
-            <div class="mobile-details">
+            `;
+            list.appendChild(row);
+
+            // Create the details row (hidden by default)
+            const detailsRow = document.createElement('div');
+            detailsRow.className = 'mobile-details';
+            detailsRow.innerHTML = `
                 <div><strong>Tier:</strong> <span class="tier-badge ${tier.class}" style="transform:scale(0.8); transform-origin:left center; display:inline-block;">${tier.label}</span></div>
                 <div><strong>Occupation:</strong> ${athlete.occupation}</div>
                 <div><strong>Date Set:</strong> ${displayDateMain}</div>
-                <div style="margin-top:10px;"><a href="${athlete.video}" target="_blank">▶ Watch Video Proof</a></div>
-            </div>
+                <div style="margin-top:10px;"><a href="${athlete.video}" target="_blank" style="color: var(--gold); font-weight:bold;">▶ Watch Video Proof</a></div>
             `;
-            list.appendChild(row);
+            list.appendChild(detailsRow);
         });
         
         renderSidebar();
@@ -1068,15 +1071,16 @@
         // Only trigger on mobile screens
         if (window.innerWidth > 900) return;
         
-        const wrapper = rowElement.parentElement;
-        const details = wrapper.querySelector('.mobile-details');
-        if (details.style.display === 'block') {
-            details.style.display = 'none';
-            rowElement.style.background = '';
-        } else {
-            // Close others first? Optional. keeping it simple for now.
-            details.style.display = 'block';
-            rowElement.style.background = '#111';
+        // The details row is the immediate next sibling
+        const details = rowElement.nextElementSibling;
+        if (details && details.classList.contains('mobile-details')) {
+            if (details.style.display === 'block') {
+                details.style.display = 'none';
+                rowElement.style.background = '';
+            } else {
+                details.style.display = 'block';
+                rowElement.style.background = '#111';
+            }
         }
     }
     
