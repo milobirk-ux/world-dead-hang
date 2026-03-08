@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Rules | WDHC</title>
+    <link rel="icon" type="image/jpeg" href="media/full_logo_footer.jpg">
+    <link rel="stylesheet" href="style.css"> <!-- Assuming we use the same stylesheet -->
+    <style>
+        /* Re-using styles from index.html for consistency */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
+        
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --surface-hover: #111;
+            --gold: #D4AF37;
+            --gold-dim: #8a702a;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --silver: #E0E0E0;
+            --text: #ffffff;
+            --text-dim: #888;
+            --border: #222;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-logo { font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: #fff; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 30px; font-size: 0.9rem; text-transform: uppercase; font-weight: 600; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px 80px;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4rem;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+        
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            color: #fff;
+        }
+
+        .submission-tier {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .submission-tier h2 {
+            margin-top: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            text-transform: uppercase;
+        }
+        
+        .standard-badge {
+            border: 1px solid #555;
+            color: #999;
+        }
+        
+        .verified-badge {
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+        }
+
+        p, ul {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+        
+        ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+            color: #000;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 15px 40px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            box-shadow: 0 0 20px var(--gold-glow);
+            text-align: center;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+        
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px var(--gold-glow);
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo">WDHC</div>
+        <div class="nav-links">
+            <a href="index.html">Leaderboard</a>
+            <a href="rules.html">Rulebook</a>
+            <a href="submit.html" class="active">Submit</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Submission Guidelines</h1>
+        <p style="text-align: center; max-width: 600px; margin: 0 auto 50px;">To ensure fairness and accuracy, all submissions must adhere to the following guidelines. Submissions are reviewed in the order they are received.</p>
+
+        <!-- Standard Submission Tier -->
+        <div class="submission-tier" style="border-left-color: var(--silver); margin-bottom: 30px;">
+            <h2>
+                <span>Standard Submission (Required for all entries)</span>
+            </h2>
+            <p>This is the baseline for all entries on the leaderboard. Your video must be unedited and meet all the core requirements of the official rulebook.</p>
+            <ul>
+                <li>Uninterrupted, continuous video from start to finish.</li>
+                <li>A clear view of a timer must be present throughout the entire hang.</li>
+                <li>Full body must be in the frame at the start and end of the hang.</li>
+                <li>No gloves, straps, hooks, or grip aids of any kind are permitted. Liquid chalk only.</li>
+            </ul>
+        </div>
+
+        <!-- Pro-Level Verification Tier -->
+        <div class="submission-tier" style="border-left-color: var(--gold); margin-bottom: 30px;">
+             <h2>
+                <span>Verified Submission (For '<span style="color:var(--gold);">✔</span>' Badge)</span>
+            </h2>
+            <p>For athletes seeking the highest level of validation, the Verified Submission tier provides a path to earn the ✔ badge on the leaderboard. All Standard rules apply, plus the following must be demonstrated in a single unedited video:</p>
+            <ul>
+                <li><strong>Bar Measurement:</strong> Provide a close-up of the bar with a tape measure showing 1.25" (32mm) diameter, or state bar brand and model in submission notes for independent verification.</li>
+                <li><strong>Bar Surface Check:</strong> Before the hang, provide a clear close-up of the entire bar surface confirming it is free of tape, grooves, or residue.</li>
+                <li><strong>Grip View:</strong> Brief close-up of hand position on bar before the hang begins, showing double overhand grip with no prohibited aids.</li>
+                <li><strong>Chalk Application:</strong> Show on-camera application of liquid chalk before the attempt. No reapplication once the hang begins.</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 60px; text-align: center;">
+            <h2 style="text-align: center; margin-bottom: 30px;">Official Submission Form</h2>
+            <iframe 
+                src="https://tally.so/embed/RGzOe4?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                width="100%" 
+                height="800" 
+                frameborder="0" 
+                marginheight="0" 
+                marginwidth="0" 
+                title="WDHC Official Submission Form">
+            </iframe>
+            <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 20px;">
+                By submitting your entry, you agree to our 
+                <a href="terms.html" style="color: var(--silver);">Terms & Conditions</a> and 
+                <a href="privacy.html" style="color: var(--silver);">Privacy Policy</a>.
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>
