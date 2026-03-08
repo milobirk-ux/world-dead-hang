@@ -617,10 +617,15 @@
         .history-item span.h-time { color: var(--gold); font-weight: 700; }
 
         @media (max-width: 900px) {
+            /* Header Spacing Fix */
+            header { padding: 30px 20px 20px; }
+            .status-pill { margin-bottom: 10px; font-size: 0.65rem; padding: 4px 15px; }
+            .subtitle { font-size: 0.8rem; margin-top: 10px; }
+
             /* Title Fix */
             .desktop-title { display: none; }
             .mobile-title { display: block; }
-            .mobile-title { font-size: 3.5rem; line-height: 1.1; }
+            .mobile-title { font-size: 3.2rem; line-height: 1.0; margin-bottom: 10px; }
 
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
@@ -706,7 +711,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 8, 2026, 2:47 PM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 8, 2026, 4:25 PM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
