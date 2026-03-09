@@ -1012,6 +1012,9 @@
             const rankClass = rank === 1 ? 'rank-1' : '';
             const tier = getTierInfo(athlete.currentPR);
             const flag = getCountryFlag(athlete.location);
+            const locationParts = parseLocation(athlete.location);
+            const displayLocation = locationParts.state ? `${locationParts.city}, ${locationParts.state}` : locationParts.city;
+            const displayDateMain = athlete.lastAttempt ? new Date(athlete.lastAttempt).toLocaleDateString('en-US', { year: '2-digit', month: 'numeric', day: 'numeric' }) : 'N/A';
             
             // Build History Tooltip
             let historyHtml = athlete.history.map(h => {
