@@ -249,6 +249,29 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
+        .lb-header {
+            display: grid;
+            grid-template-columns: 70px 100px 300px 1.5fr 1.5fr 120px 100px 100px;
+            gap: 20px;
+            padding: 18px 25px;
+            align-items: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .lb-header > div:nth-child(5),
+        .lb-header > div:nth-child(6),
+        .lb-header > div:nth-child(7) {
+            text-align: center;
+        }
+
+        .lb-header > div:nth-child(8) {
+            text-align: right;
+        }
+
         /* Mobile Expanded Row Styles */
         .mobile-details {
             display: none;
@@ -744,10 +767,10 @@
                         <div>Tier</div>
                         <div>Athlete</div>
                         <div>Background</div>
-                        <div style="text-align: center;">Location</div>
-                        <div class="date-col" style="text-align: center;">Date Set</div>
-                        <div style="text-align: center;">Time</div>
-                        <div style="text-align: right;">Watch Hang</div>
+                        <div>Location</div>
+                        <div>Date Set</div>
+                        <div>Time</div>
+                        <div>Watch Hang</div>
                     </div>
 
                     <div id="leaderboard-body">
