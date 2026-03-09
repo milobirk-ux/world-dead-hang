@@ -733,7 +733,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 9, 2026, 1:23 AM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 9, 2026, 1:45 AM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -893,7 +893,8 @@
                 "date": "2026-03-07 4:46:31",
                 "time": "1:16"
             }
-        ]
+        ],
+        "isVerified": false
     },
     {
         "id": 4,
@@ -911,7 +912,8 @@
                 "date": "2026-03-07 6:16:38",
                 "time": "4:09"
             }
-        ]
+        ],
+        "isVerified": false
     },
     {
         "id": 5,
@@ -929,7 +931,8 @@
                 "date": "2026-03-07 6:29:51",
                 "time": "0:42"
             }
-        ]
+        ],
+        "isVerified": false
     },
     {
         "id": 6,
@@ -947,7 +950,8 @@
                 "date": "2026-03-07 7:11:58",
                 "time": "1:08"
             }
-        ]
+        ],
+        "isVerified": false
     },
     {
         "id": 7,
@@ -965,11 +969,12 @@
                 "date": "2026-03-08 3:07:47",
                 "time": "3:42"
             }
-        ]
+        ],
+        "isVerified": false
     },
     {
         "id": 8,
-        "name": "Testa Longernama",
+        "name": "Testa Longername",
         "category": "Masters (40+)",
         "occupation": "Test Proffessional",
         "location": "Detroit, MI / USA",
@@ -983,7 +988,8 @@
                 "date": "2026-03-08 6:31:02",
                 "time": "2:20"
             }
-        ]
+        ],
+        "isVerified": true
     },
     {
         "id": 9,
@@ -1001,14 +1007,15 @@
                 "date": "2026-03-08 18:40:02",
                 "time": "0:30"
             }
-        ]
+        ],
+        "isVerified": false
     },
     {
         "id": 10,
         "name": "Frank S",
         "category": "Open Men",
         "occupation": "Parent",
-        "location": "Detroit, MI / US",
+        "location": "Detroit, MI",
         "country": "🇺🇸",
         "currentPR": "6:02",
         "prCount": 1,
@@ -1019,7 +1026,8 @@
                 "date": "2026-03-09 4:54:40",
                 "time": "6:02"
             }
-        ]
+        ],
+        "isVerified": false
     }
 ];
 
@@ -1099,7 +1107,7 @@
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
-                            ${getTierInfo(athlete.currentPR).label.match(/^(Pro|Elite|Legend|Freak)$/) ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
+                            ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge">
                                 <span class="pr-val">⚡ ${athlete.prCount}</span>
                             </div>
