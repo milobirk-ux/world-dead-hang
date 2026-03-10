@@ -1051,7 +1051,12 @@
 
         // Now sort based on user selection
         if (currentSort === 'time') {
-            // Already sorted by time above
+            // Re-sort by time, as it might have been sorted by date previously
+            filteredData.sort((a, b) => {
+                const timeA = parseTime(a.currentPR);
+                const timeB = parseTime(b.currentPR);
+                return timeB - timeA;
+            });
         } else {
             // Sort by recent
             filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
