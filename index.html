@@ -657,23 +657,46 @@
 
             /* Leaderboard Name Fix */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr 90px 70px; /* Rank | Athlete | Loc | Time */
-                gap: 10px;
+                grid-template-columns: 35px 60px 1fr 90px 70px; /* Rank | Tier | Athlete | Loc | Time */
+                gap: 8px;
                 padding-left: 10px;
                 padding-right: 10px;
                 align-items: center;
             }
-            .lb-header > div:nth-child(2), /* Hide Tier */
             .lb-header > div:nth-child(4), /* Hide Background */
             /* .lb-header > div:nth-child(5), Unhide Location */
             .lb-header > div:nth-child(6), /* Hide Date */
             .lb-header > div:nth-child(8), /* Hide Watch */
-            .lb-row > div:nth-child(2),
             .lb-row > div:nth-child(4),
             /* .lb-row > div:nth-child(5), Unhide Location */
             .lb-row > div:nth-child(6),
             .lb-row > div:nth-child(8) {
                 display: none;
+            }
+            
+            /* Show Tier on mobile but make it compact */
+            .lb-header > div:nth-child(2) {
+                font-size: 0.7rem;
+                text-align: center;
+                color: var(--text-dim);
+            }
+            .lb-row > div:nth-child(2) {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .lb-row > div:nth-child(2) .tier-badge {
+                transform: scale(0.85);
+                transform-origin: center;
+                display: inline-block;
+                width: auto;
+                min-width: 60px;
+                padding: 3px 6px;
+                font-size: 0.7rem;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+                text-align: center;
+                border-radius: 4px;
             }
             
             /* Specific Mobile Styles */
