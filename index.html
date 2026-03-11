@@ -691,12 +691,14 @@
             .lb-row > div:nth-child(4)::after {
                 content: '';
                 display: block;
-                width: 8px;
-                height: 8px;
+                width: 10px;
+                height: 10px;
                 border-radius: 50%;
                 position: absolute;
-                bottom: 2px;
-                right: 2px;
+                bottom: 4px;
+                right: 4px;
+                border: 1px solid rgba(255,255,255,0.3);
+                box-shadow: 0 0 3px rgba(0,0,0,0.3);
             }
             /* Tier colors */
             .lb-row[data-tier="elite"] > div:nth-child(4)::after { background-color: #FFD700; }
@@ -709,6 +711,19 @@
             .rank { font-size: 1.3rem; margin-right: 0; }
             .name { font-size: 1.0rem; white-space: normal; line-height: 1.2; } /* Allow name wrap if needed */
             .time { font-size: 1.5rem; text-align: right; }
+            
+            /* Division text under name */
+            .name-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .division {
+                font-size: 0.7rem !important;
+                color: #999 !important;
+                margin-top: 2px !important;
+                text-align: left !important;
+                line-height: 1.1;
+            }
             
             /* Location Column Mobile */
             .lb-row > div:nth-child(3) { /* Location is now 3rd column (Rank=1, Athlete=2, Location=3, Time=4) */
@@ -1169,6 +1184,9 @@
                     <div class="name-wrapper">
                         <div class="name">
                             ${athlete.name}
+                        </div>
+                        <div class="division" style="font-size: 0.7rem; color: #999; margin-top: 2px; text-align: left;">
+                            ${athlete.division || 'Open'}
                         </div>
                         <div style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
