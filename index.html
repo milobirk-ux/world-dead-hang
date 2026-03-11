@@ -342,6 +342,7 @@
             flex-direction: column;
             justify-content: center;
             overflow: hidden; /* Added to contain children */
+            min-width: 0; /* Allows text truncation */
         }
 
         .name-wrapper {
@@ -657,18 +658,18 @@
 
             /* Leaderboard Name Fix */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 30px 1fr 90px 70px; /* Rank | Tier | Athlete | Loc | Time */
+                grid-template-columns: 35px 30px 1fr 70px; /* Rank | Tier | Athlete | Time */
                 gap: 8px;
                 padding-left: 10px;
                 padding-right: 10px;
                 align-items: center;
             }
             .lb-header > div:nth-child(4), /* Hide Background */
-            /* .lb-header > div:nth-child(5), Unhide Location */
+            .lb-header > div:nth-child(5), /* Hide Location */
             .lb-header > div:nth-child(6), /* Hide Date */
             .lb-header > div:nth-child(8), /* Hide Watch */
             .lb-row > div:nth-child(4),
-            /* .lb-row > div:nth-child(5), Unhide Location */
+            .lb-row > div:nth-child(5), /* Hide Location */
             .lb-row > div:nth-child(6),
             .lb-row > div:nth-child(8) {
                 display: none;
