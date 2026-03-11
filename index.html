@@ -733,7 +733,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 10, 2026, 12:23 AM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 10, 2026, 10:42 AM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -1061,25 +1061,26 @@
             a.trueRank = index + 1;
         });
 
-        // Now sort based on user selection
+        // Create a copy for sorting and rendering to preserve the original order
+        let displayData = [...filteredData];
+
+        // Sort by the user's selection for display
         if (currentSort === 'time') {
-            // Re-sort by time, as it might have been sorted by date previously
-            filteredData.sort((a, b) => {
+            displayData.sort((a, b) => {
                 const timeA = parseTime(a.currentPR);
                 const timeB = parseTime(b.currentPR);
                 return timeB - timeA;
             });
-        } else {
-            // Sort by recent
-            filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        } else { // 'recent'
+            displayData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
         }
 
-        if (filteredData.length === 0) {
+        if (displayData.length === 0) {
             list.innerHTML = '<div style="padding:40px; text-align:center; color:#555;">No records in this division yet.</div>';
             return;
         }
 
-        filteredData.forEach((athlete) => {
+        displayData.forEach((athlete) => {
             const rank = athlete.trueRank;
             const rankClass = rank === 1 ? 'rank-1' : '';
             const tier = getTierInfo(athlete.currentPR);
