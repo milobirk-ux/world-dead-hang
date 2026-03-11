@@ -675,28 +675,37 @@
                 display: none;
             }
             
-            /* Move tier badge inline with athlete name on mobile */
+            /* Move tier badge under time column on mobile */
             .lb-header > div:nth-child(2),
             .lb-row > div:nth-child(2) {
                 display: none; /* Hide tier column */
             }
-            /* Add tier dot before athlete name */
-            .lb-row .name-wrapper::before {
+            /* Style time column to contain tier badge */
+            .lb-row .time {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                justify-content: flex-start;
+                height: 100%;
+                padding-top: 4px; /* Align time with top */
+                position: relative;
+            }
+            /* Add tier dot under time */
+            .lb-row .time::after {
                 content: '';
-                display: inline-block;
-                width: 10px;
-                height: 10px;
+                display: block;
+                width: 8px;
+                height: 8px;
                 border-radius: 50%;
-                margin-right: 6px;
                 margin-top: 2px;
-                flex-shrink: 0;
+                margin-right: 2px; /* Align with time text */
             }
             /* Tier colors */
-            .lb-row[data-tier="elite"] .name-wrapper::before { background-color: #FFD700; }
-            .lb-row[data-tier="pro"] .name-wrapper::before { background-color: #C0C0C0; }
-            .lb-row[data-tier="advanced"] .name-wrapper::before { background-color: #CD7F32; }
-            .lb-row[data-tier="intermediate"] .name-wrapper::before { background-color: #4CAF50; }
-            .lb-row[data-tier="beginner"] .name-wrapper::before { background-color: #2196F3; }
+            .lb-row[data-tier="elite"] .time::after { background-color: #FFD700; }
+            .lb-row[data-tier="pro"] .time::after { background-color: #C0C0C0; }
+            .lb-row[data-tier="advanced"] .time::after { background-color: #CD7F32; }
+            .lb-row[data-tier="intermediate"] .time::after { background-color: #4CAF50; }
+            .lb-row[data-tier="beginner"] .time::after { background-color: #2196F3; }
             
             /* Specific Mobile Styles */
             .rank { font-size: 1.3rem; margin-right: 0; }
