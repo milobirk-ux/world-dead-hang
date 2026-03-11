@@ -658,18 +658,18 @@
 
             /* Leaderboard Name Fix */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr 70px; /* Rank | Athlete | Time */
+                grid-template-columns: 35px 1fr 50px 70px; /* Rank | Athlete | Location | Time */
                 gap: 8px;
                 padding-left: 10px;
                 padding-right: 10px;
                 align-items: center;
             }
             .lb-header > div:nth-child(4), /* Hide Background */
-            .lb-header > div:nth-child(5), /* Hide Location */
+            /* .lb-header > div:nth-child(5), Location column - NOW SHOWN */
             .lb-header > div:nth-child(6), /* Hide Date */
             .lb-header > div:nth-child(8), /* Hide Watch */
             .lb-row > div:nth-child(4),
-            .lb-row > div:nth-child(5), /* Hide Location */
+            /* .lb-row > div:nth-child(5), Location column - NOW SHOWN */
             .lb-row > div:nth-child(6),
             .lb-row > div:nth-child(8) {
                 display: none;
@@ -680,32 +680,30 @@
             .lb-row > div:nth-child(2) {
                 display: none; /* Hide tier column */
             }
-            /* Style time column to contain tier badge */
-            .lb-row .time {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                justify-content: flex-start;
-                height: 100%;
-                padding-top: 4px; /* Align time with top */
+            /* Style time column (now 4th column) */
+            .lb-row > div:nth-child(4) { /* Time column */
+                text-align: right;
                 position: relative;
+                padding-top: 4px; /* Align time with top */
+                min-height: 40px; /* Ensure space for tier dot below */
             }
             /* Add tier dot under time */
-            .lb-row .time::after {
+            .lb-row > div:nth-child(4)::after {
                 content: '';
                 display: block;
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
-                margin-top: 2px;
-                margin-right: 2px; /* Align with time text */
+                position: absolute;
+                bottom: 2px;
+                right: 2px;
             }
             /* Tier colors */
-            .lb-row[data-tier="elite"] .time::after { background-color: #FFD700; }
-            .lb-row[data-tier="pro"] .time::after { background-color: #C0C0C0; }
-            .lb-row[data-tier="advanced"] .time::after { background-color: #CD7F32; }
-            .lb-row[data-tier="intermediate"] .time::after { background-color: #4CAF50; }
-            .lb-row[data-tier="beginner"] .time::after { background-color: #2196F3; }
+            .lb-row[data-tier="elite"] > div:nth-child(4)::after { background-color: #FFD700; }
+            .lb-row[data-tier="pro"] > div:nth-child(4)::after { background-color: #C0C0C0; }
+            .lb-row[data-tier="advanced"] > div:nth-child(4)::after { background-color: #CD7F32; }
+            .lb-row[data-tier="intermediate"] > div:nth-child(4)::after { background-color: #4CAF50; }
+            .lb-row[data-tier="beginner"] > div:nth-child(4)::after { background-color: #2196F3; }
             
             /* Specific Mobile Styles */
             .rank { font-size: 1.3rem; margin-right: 0; }
@@ -713,7 +711,7 @@
             .time { font-size: 1.5rem; text-align: right; }
             
             /* Location Column Mobile */
-            .lb-row > div:nth-child(5) {
+            .lb-row > div:nth-child(3) { /* Location is now 3rd column (Rank=1, Athlete=2, Location=3, Time=4) */
                 display: block !important;
                 font-size: 0.7rem !important;
                 line-height: 1.1;
@@ -721,7 +719,7 @@
                 white-space: normal;
                 overflow: hidden;
             }
-            .lb-header > div:nth-child(5) {
+            .lb-header > div:nth-child(3) { /* Location header */
                 display: block !important;
                 text-align: center !important;
                 font-size: 0.6rem;
