@@ -1153,12 +1153,22 @@
             list.appendChild(row);
 
             // Create the details row (hidden by default)
+            let mobileHistoryHtml = '';
+            if (athlete.history && athlete.history.length > 0) {
+                const historyList = athlete.history.map(h => {
+                    const d = h.date.split(' ')[0];
+                    return `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa; margin-bottom:4px;"><span>${d}</span><span style="color:var(--gold); font-weight:bold;">${h.time}</span></div>`;
+                }).join('');
+                mobileHistoryHtml = `<div style="margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;"><strong>PR History:</strong><div style="margin-top:5px;">${historyList}</div></div>`;
+            }
+
             const detailsRow = document.createElement('div');
             detailsRow.className = 'mobile-details';
             detailsRow.innerHTML = `
                 <div><strong>Tier:</strong> <span class="tier-badge ${tier.class}" style="transform:scale(0.8); transform-origin:left center; display:inline-block;">${tier.label}</span></div>
                 <div><strong>Occupation:</strong> ${athlete.occupation}</div>
                 <div><strong>Date Set:</strong> ${displayDateMain}</div>
+                ${mobileHistoryHtml}
                 <div style="margin-top:10px;"><a href="${athlete.video}" target="_blank" style="color: var(--gold); font-weight:bold;">▶ Watch Video Proof</a></div>
             `;
             list.appendChild(detailsRow);
