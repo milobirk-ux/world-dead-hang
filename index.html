@@ -384,6 +384,8 @@
             color: var(--silver);
             line-height: 1.1;
             flex-shrink: 0; /* Prevent badge from shrinking */
+            position: relative;
+            cursor: help;
         }
         .pr-badge .pr-val {
             font-size: 1rem;
@@ -600,8 +602,9 @@
             padding: 15px;
             position: absolute;
             z-index: 100;
-            bottom: 100%;
-            left: 0;
+            bottom: 120%;
+            left: 50%;
+            margin-left: -120px;
             width: 240px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             border: 1px solid #333;
@@ -612,7 +615,7 @@
             font-family: 'Roboto Mono', monospace;
         }
         
-        .name:hover .tooltip {
+        .pr-badge:hover .tooltip {
             visibility: visible;
             opacity: 1;
             transform: translateY(0);
@@ -1125,15 +1128,15 @@
                     <div class="name-wrapper">
                         <div class="name">
                             ${athlete.name}
-                            <div class="tooltip">
-                                <div style="color:#fff; margin-bottom:5px; border-bottom:1px solid #333; padding-bottom:5px; font-weight:700;">HISTORY</div>
-                                ${historyHtml}
-                            </div>
                         </div>
                         <div style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge">
                                 <span class="pr-val">⚡ ${athlete.prCount}</span>
+                                <div class="tooltip">
+                                    <div style="color:#fff; margin-bottom:5px; border-bottom:1px solid #333; padding-bottom:5px; font-weight:700;">HISTORY</div>
+                                    ${historyHtml}
+                                </div>
                             </div>
                         </div>
                     </div>
