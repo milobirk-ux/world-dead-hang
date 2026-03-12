@@ -714,10 +714,18 @@
             
             /* Division text under name */
             .name-wrapper {
-                flex-direction: column;
-                align-items: flex-start;
+                display: flex; /* Ensure it's a flex container */
+                flex-wrap: wrap; /* Allow items to wrap */
+                align-items: baseline;
+            }
+            .name { order: 1; }
+            .badges-wrapper { 
+                order: 2; 
+                padding-left: 8px; /* Add some space */
             }
             .division {
+                order: 3;
+                flex-basis: 100%; /* Force to new line */
                 font-size: 0.7rem !important;
                 color: #999 !important;
                 margin-top: 2px !important;
@@ -1188,7 +1196,7 @@
                         <div class="division" style="font-size: 0.7rem; color: #999; margin-top: 2px; text-align: left;">
                             ${athlete.division || 'Open'}
                         </div>
-                        <div style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
+                        <div class="badges-wrapper" style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge">
                                 <span class="pr-val">⚡ ${athlete.prCount}</span>
@@ -1198,6 +1206,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div style="font-size: 0.75rem; color: #888; font-family: 'Roboto Mono', monospace; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.5px;">
                         ${athlete.category}
