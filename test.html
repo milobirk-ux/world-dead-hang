@@ -644,7 +644,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 13, 2026, 12:42 AM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 8, 2026, 1:55 AM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -789,191 +789,216 @@
     // Data
     const athletes = [
     {
-        "name": "Frank S",
-        "category": "Open Men",
-        "location": "Detriot, MI / USA / DETRIOT, MI / USA",
-        "occupation": "Parent",
-        "country": "🇺🇸",
-        "currentPR": "6:02",
-        "lastAttempt": "2026-03-03",
+        "id": 8,
         "history": [
             {
-                "date": "2026-03-03",
+                "date": "2026-03-09 4:54:40",
                 "time": "6:02"
             }
         ],
+        "name": "Frank S",
+        "currentPR": "6:02",
+        "location": "detriot, MI, USA",
+        "country": "🌎",
         "isVerified": false,
+        "lastAttempt": "2026-03-09 4:54:40",
         "video": "https://www.google.com/search?q=apple+tv+shows&sca_esv=04b991333a83f57d&biw=3440&bih=1317&sxsrf=ANbL-n6ZlOQC8LWXniSttjtOKwb90iyI-w%3A1773029359104&ei=70euabKKBsucptQP2OWzsQk&oq=apple&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWFwcGxlKgIIATIWEC4YgAQYsQMY0QMYQxiDARjHARiKBTIOEAAYgAQYkQIYsQMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyExAuGIAEGLEDGNEDGEMYxwEYigUyFBAuGIAEGLEDGNEDGIMBGMcBGIoFSLY8UKMPWNwVcAR4AJABAJgBlgGgAc4FqgEDMS41uAEDyAEA-AEBmAILoAK9RcICChAAGLADGNYEGEfCAgQQIxgnwgIKECMYgAQYJxiKBcICDRAjGIAEGCcYyQIYigXCAgsQLhiABBiRAhiKBcICERAuGIAEGLEDGNEDGIMBGMcBwgILEAAYgAQYsQMYgwHCAg4QLhiABBixAxjRAxjHAcICCxAAGIAEGJECGIoFwgIlEC4YgAQYsQMY0QMYQxiDARjHARiKBRiXBRjcBBjeBBjgBNgBAZgDAIgGAZAGCLoGBggBEAEYFJIHBzQuNS45LTKgB9ZPsgcDMC41uAeKBcIHBTAuNy40yAcigAgA&sclient=gws-wiz-serp",
+        "occupation": "Parent",
+        "category": "Open Men",
         "prCount": 1
     },
     {
-        "name": "Milo Birk",
-        "category": "Open Men",
-        "location": "Detroit, MI / USA / DETROIT, MI / USA",
-        "occupation": "Athlete",
-        "country": "🇺🇸",
-        "currentPR": "4:10",
-        "lastAttempt": "2026-03-07 6:16:38",
+        "id": 2,
         "history": [
             {
                 "date": "2026-03-07 6:16:38",
                 "time": "4:09"
             },
             {
-                "date": "2026-03-09",
-                "time": "4:10"
+                "date": "2026-03-10 4:06:52",
+                "time": "4:01"
             }
         ],
-        "isVerified": true,
+        "name": "Milo Birk",
+        "currentPR": "4:09",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
+        "isVerified": false,
+        "lastAttempt": "2026-03-07 6:16:38",
         "video": "https://www.reddit.com/r/Advice/comments/1huk5e3/what_sources_you_guys_watch_for_movies_can_u_guys/",
+        "occupation": "Athlete",
+        "category": "Open Women",
         "prCount": 2
     },
     {
-        "name": "Random R",
-        "category": "Open Men",
-        "location": "Detroit, MI / USA / DETROIT, MI / USA",
-        "occupation": "Contractor",
-        "country": "🇺🇸",
-        "currentPR": "3:42",
-        "lastAttempt": "2026-03-08 3:07:47",
+        "id": 5,
         "history": [
             {
                 "date": "2026-03-08 3:07:47",
                 "time": "3:42"
             }
         ],
+        "name": "Random R",
+        "currentPR": "3:42",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
+        "lastAttempt": "2026-03-08 3:07:47",
         "video": "https://aistudio.google.com/api-keys?project=gen-lang-client-0688610786",
+        "occupation": "Contractor",
+        "category": "Open Women",
         "prCount": 1
     },
     {
-        "name": "Bryant Garcia",
-        "category": "Open Men",
-        "location": "Detroit, MI / USA",
-        "occupation": "Athlete",
-        "country": "🇺🇸",
-        "currentPR": "3:01",
-        "lastAttempt": "2026-03-10",
+        "id": 10,
         "history": [
             {
-                "date": "2026-03-10",
+                "date": "2026-03-11 3:53:28",
                 "time": "3:01"
             }
         ],
-        "isVerified": true,
+        "name": "Bryant Garcia",
+        "currentPR": "3:01",
+        "location": "Unknown, USA",
+        "country": "🇺🇸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-11 3:53:28",
         "video": "https://tally.so/forms/RGzOe4/edit",
+        "occupation": "Athlete",
+        "category": "Open Men",
         "prCount": 1
     },
     {
-        "name": "Testa Longername",
-        "category": "Masters Male",
-        "location": "Detroit, MI / USA / DETROIT, MI / USA",
-        "occupation": "Test Proffessional",
-        "country": "🇺🇸",
+        "id": 9,
+        "history": [
+            {
+                "date": "2026-03-09 5:40:29",
+                "time": "2:35"
+            }
+        ],
+        "name": "Testa longername",
         "currentPR": "2:35",
-        "lastAttempt": "2026-03-08 6:31:02",
+        "location": "Unknown, USA",
+        "country": "🇺🇸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-09 5:40:29",
+        "video": "https://docs.google.com/spreadsheets/d/1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s/edit?gid=0#gid=0",
+        "occupation": "Tester",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 6,
         "history": [
             {
                 "date": "2026-03-08 6:31:02",
                 "time": "2:20"
-            },
-            {
-                "date": "2026-03-09",
-                "time": "2:35"
             }
         ],
+        "name": "Testa Longername",
+        "currentPR": "2:20",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
+        "lastAttempt": "2026-03-08 6:31:02",
         "video": "https://www.youtube.com/",
-        "prCount": 2
+        "occupation": "Test Proffessional",
+        "category": "Open Women",
+        "prCount": 1
     },
     {
-        "name": "Markie Mullins",
-        "category": "Open Women",
-        "location": "Detroit, MI / USA / DETROIT, MI / USA",
-        "occupation": "Athlete",
-        "country": "🇺🇸",
-        "currentPR": "1:16",
-        "lastAttempt": "2026-03-07 4:46:31",
+        "id": 1,
         "history": [
             {
                 "date": "2026-03-07 4:46:31",
                 "time": "1:16"
             }
         ],
+        "name": "Markie Mullins",
+        "currentPR": "1:16",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
+        "lastAttempt": "2026-03-07 4:46:31",
         "video": "https://webhook.site/#!/view/efa2a342-0c51-4b94-a9f1-e9ea586f996a/d44730c2-bf62-40b9-97a3-e9ff278f561e/1",
+        "occupation": "Athlete",
+        "category": "Open Women",
         "prCount": 1
     },
     {
-        "name": "Venus M",
-        "category": "Open Women",
-        "location": "Detroit, MI / USA / DETROIT, MI / USA",
-        "occupation": "Astrologer",
-        "country": "🇺🇸",
-        "currentPR": "1:08",
-        "lastAttempt": "2026-03-07 7:11:58",
+        "id": 4,
         "history": [
             {
                 "date": "2026-03-07 7:11:58",
                 "time": "1:08"
             }
         ],
+        "name": "Venus M",
+        "currentPR": "1:08",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
+        "lastAttempt": "2026-03-07 7:11:58",
         "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "occupation": "Astrologer",
+        "category": "Open Women",
         "prCount": 1
     },
     {
-        "name": "Joshua Taylor",
-        "category": "Masters Female",
-        "location": "Detroit, MI / USA",
-        "occupation": "Community Outreach",
-        "country": "🇺🇸",
-        "currentPR": "0:50",
-        "lastAttempt": "2026-03-11",
+        "id": 11,
         "history": [
             {
-                "date": "2026-03-11",
+                "date": "2026-03-12 1:58:59",
                 "time": "0:50"
             }
         ],
+        "name": "Joshua Taylor",
+        "currentPR": "0:50",
+        "location": "Unknown, USA",
+        "country": "🇺🇸",
         "isVerified": false,
+        "lastAttempt": "2026-03-12 1:58:59",
         "video": "https://www.mulerouter.ai/app/api-keys",
+        "occupation": "Community Outreach",
+        "category": "Masters Female",
         "prCount": 1
     },
     {
-        "name": "Otis B",
-        "category": "Open Men",
-        "location": "Detroit, MI / USA / DETROIT, MI / USA",
-        "occupation": "Athlete",
-        "country": "🇺🇸",
-        "currentPR": "0:42",
-        "lastAttempt": "2026-03-07 6:29:51",
+        "id": 3,
         "history": [
             {
                 "date": "2026-03-07 6:29:51",
                 "time": "0:42"
             }
         ],
+        "name": "Otis B",
+        "currentPR": "0:42",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
+        "lastAttempt": "2026-03-07 6:29:51",
         "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "occupation": "Athlete",
+        "category": "Open Women",
         "prCount": 1
     },
     {
-        "name": "Pepper Chonie",
-        "category": "Open Men",
-        "location": "Detroit, MI / USA / DETROIT, MI / USA",
-        "occupation": "Security",
-        "country": "🇺🇸",
-        "currentPR": "0:30",
-        "lastAttempt": "2026-03-08 18:40:02",
+        "id": 7,
         "history": [
             {
                 "date": "2026-03-08 18:40:02",
                 "time": "0:30"
             }
         ],
+        "name": "Pepper Chonie",
+        "currentPR": "0:30",
+        "location": "detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
+        "lastAttempt": "2026-03-08 18:40:02",
         "video": "https://www.youtube.com/",
+        "occupation": "Security",
+        "category": "Open Women",
         "prCount": 1
     }
 ];
