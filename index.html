@@ -62,20 +62,12 @@
         .nav-logo { 
             display: flex;
             align-items: center;
-            gap: 10px;
         }
         
         .nav-logo img {
             height: 40px;
             width: auto;
             filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
-        }
-        
-        .nav-logo span {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.5rem;
-            color: #fff;
-            letter-spacing: 1px;
         }
         
         .nav-links a {
@@ -97,9 +89,6 @@
             position: relative;
         }
 
-        .desktop-title { display: block; }
-        .mobile-title { display: none; }
-
         .status-pill {
             display: inline-block;
             background: transparent;
@@ -118,7 +107,7 @@
 
         h1 {
             font-family: 'Oswald', sans-serif;
-            font-size: 6.5rem;
+            font-size: 7.5rem;
             font-weight: 700;
             text-transform: uppercase;
             line-height: 0.95;
@@ -139,7 +128,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px 80px;
             flex-grow: 1;
@@ -148,8 +137,8 @@
         /* Layout Grid */
         .content-grid {
             display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 50px;
+            grid-template-columns: 1fr 320px;
+            gap: 40px;
             align-items: start;
         }
 
@@ -249,52 +238,27 @@
 
         .lb-header {
             display: grid;
-            grid-template-columns: 60px 100px 240px 1.5fr 1.5fr 100px 90px 100px;
-            gap: 15px;
-            padding: 18px 25px;
-            align-items: center;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.75rem;
+            grid-template-columns: 70px 100px 300px 1.5fr 1.5fr 120px 100px 100px;
+            gap: 20px;
+            padding: 15px 25px;
+            font-size: 0.7rem;
             color: var(--text-dim);
             text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            background: #080808;
             letter-spacing: 1px;
+            font-family: 'Roboto Mono', monospace;
         }
-
-        .lb-header > div:nth-child(5),
-        .lb-header > div:nth-child(6),
-        .lb-header > div:nth-child(7) {
-            text-align: center;
-        }
-
-        .lb-header > div:nth-child(8) {
-            text-align: right;
-        }
-
-        /* Mobile Expanded Row Styles */
-        .mobile-details {
-            display: none;
-            background: #111;
-            padding: 15px;
-            border-top: 1px solid #222;
-            font-size: 0.9rem;
-            color: #ccc;
-            grid-column: 1 / -1; /* Span full width */
-        }
-        
-        .mobile-details div { margin-bottom: 8px; }
-        .mobile-details strong { color: #fff; text-transform: uppercase; font-size: 0.75rem; margin-right: 8px; color: var(--text-dim); }
-        .mobile-details a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold); }
 
         .lb-row {
             display: grid;
-            grid-template-columns: 60px 100px 240px 1.5fr 1.5fr 100px 90px 100px;
-            gap: 15px;
+            grid-template-columns: 70px 100px 300px 1.5fr 1.5fr 120px 100px 100px;
+            gap: 20px;
             padding: 18px 25px;
             border-bottom: 1px solid var(--border);
             align-items: center;
             transition: all 0.2s ease;
             position: relative;
-            cursor: pointer; /* Indicate clickable */
         }
 
         .lb-row:hover { 
@@ -342,7 +306,6 @@
             flex-direction: column;
             justify-content: center;
             overflow: hidden; /* Added to contain children */
-            min-width: 0; /* Allows text truncation */
         }
 
         .name-wrapper {
@@ -393,8 +356,6 @@
             color: var(--silver);
             line-height: 1.1;
             flex-shrink: 0; /* Prevent badge from shrinking */
-            position: relative;
-            cursor: help;
         }
         .pr-badge .pr-val {
             font-size: 1rem;
@@ -611,9 +572,8 @@
             padding: 15px;
             position: absolute;
             z-index: 100;
-            bottom: 120%;
-            left: 50%;
-            margin-left: -120px;
+            bottom: 100%;
+            left: 0;
             width: 240px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             border: 1px solid #333;
@@ -624,7 +584,7 @@
             font-family: 'Roboto Mono', monospace;
         }
         
-        .pr-badge:hover .tooltip {
+        .name:hover .tooltip {
             visibility: visible;
             opacity: 1;
             transform: translateY(0);
@@ -642,133 +602,23 @@
         .history-item span.h-time { color: var(--gold); font-weight: 700; }
 
         @media (max-width: 900px) {
-            /* Header Spacing Fix */
-            header { padding: 30px 20px 20px; }
-            .status-pill { margin-bottom: 10px; font-size: 0.65rem; padding: 4px 15px; }
-            .subtitle { font-size: 0.8rem; margin-top: 10px; }
-
-            /* Title Fix */
-            .desktop-title { display: none; }
-            .mobile-title { display: block; }
-            .mobile-title { font-size: 3.2rem; line-height: 1.0; margin-bottom: 10px; }
-
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
+            h1 { font-size: 4rem; }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-
-            /* Leaderboard Name Fix */
-            .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr 50px 70px; /* Rank | Athlete | Location | Time */
-                gap: 8px;
-                padding-left: 10px;
-                padding-right: 10px;
-                align-items: center;
-            }
-            .lb-header > div:nth-child(4), /* Hide Background */
-            /* .lb-header > div:nth-child(5), Location column - NOW SHOWN */
-            .lb-header > div:nth-child(6), /* Hide Date */
-            .lb-header > div:nth-child(8), /* Hide Watch */
-            .lb-row > div:nth-child(4),
-            /* .lb-row > div:nth-child(5), Location column - NOW SHOWN */
-            .lb-row > div:nth-child(6),
-            .lb-row > div:nth-child(8) {
-                display: none;
-            }
-            
-            /* Move tier badge under time column on mobile */
-            .lb-header > div:nth-child(2),
-            .lb-row > div:nth-child(2) {
-                display: none; /* Hide tier column */
-            }
-            /* Style time column (now 4th column) */
-            .lb-row > div:nth-child(4) { /* Time column */
-                text-align: right;
-                position: relative;
-                padding-top: 4px; /* Align time with top */
-                min-height: 40px; /* Ensure space for tier dot below */
-            }
-            /* Add tier dot under time */
-            .lb-row > div:nth-child(4)::after {
-                content: '';
-                display: block;
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                position: absolute;
-                bottom: 4px;
-                right: 4px;
-                border: 1px solid rgba(255,255,255,0.3);
-                box-shadow: 0 0 3px rgba(0,0,0,0.3);
-            }
-            /* Tier colors */
-            .lb-row[data-tier="elite"] > div:nth-child(4)::after { background-color: #FFD700; }
-            .lb-row[data-tier="pro"] > div:nth-child(4)::after { background-color: #C0C0C0; }
-            .lb-row[data-tier="advanced"] > div:nth-child(4)::after { background-color: #CD7F32; }
-            .lb-row[data-tier="intermediate"] > div:nth-child(4)::after { background-color: #4CAF50; }
-            .lb-row[data-tier="beginner"] > div:nth-child(4)::after { background-color: #2196F3; }
-            
-            /* Specific Mobile Styles */
-            .rank { font-size: 1.3rem; margin-right: 0; }
-            .name { font-size: 1.0rem; white-space: normal; line-height: 1.2; } /* Allow name wrap if needed */
-            .time { font-size: 1.5rem; text-align: right; }
-            
-            /* Division text under name */
-            .name-wrapper {
-                display: flex; /* Ensure it's a flex container */
-                flex-wrap: wrap; /* Allow items to wrap */
-                align-items: baseline;
-            }
-            .name { order: 1; }
-            .badges-wrapper { 
-                order: 2; 
-                padding-left: 8px; /* Add some space */
-            }
-            .division {
-                order: 3;
-                flex-basis: 100%; /* Force to new line */
-                font-size: 0.7rem !important;
-                color: #999 !important;
-                margin-top: 2px !important;
-                text-align: left !important;
-                line-height: 1.1;
-            }
-            
-            /* Location Column Mobile */
-            .lb-row > div:nth-child(3) { /* Location is now 3rd column (Rank=1, Athlete=2, Location=3, Time=4) */
-                display: block !important;
-                font-size: 0.7rem !important;
-                line-height: 1.1;
-                text-align: center !important;
-                white-space: normal;
-                overflow: hidden;
-            }
-            .lb-header > div:nth-child(3) { /* Location header */
-                display: block !important;
-                text-align: center !important;
-                font-size: 0.6rem;
-            }
-
+            .lb-header, .lb-row { grid-template-columns: 50px 80px 1fr 100px; }
+            .video-btn { display: none; } 
+            .location { display: none; } 
+            .country-col, .date-col { display: none; }
             .cta-section { flex-direction: column; text-align: center; gap: 30px; }
             .cta-section::before { width: 100%; height: 4px; bottom: auto; }
-            
-            /* Force CTA title to 3 lines on mobile */
-            .cta-text h3 { 
-                font-size: 1.5rem; 
-                line-height: 1.2; 
-                max-width: 100%; 
-                margin-left: auto; 
-                margin-right: auto;
-            }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="nav-logo">
-            <a href="index.html"><img src="media/full_logo_footer.jpg" alt="WDHC Logo"></a>
-            <span>WDHC</span>
-        </div>
+        <div class="nav-logo">WDHC<span>.</span></div>
         <div class="nav-links">
             <a href="index.html">Leaderboard</a>
             <a href="rules.html">Rulebook</a>
@@ -778,13 +628,8 @@
 
     <header>
         <div class="status-pill" style="margin-bottom: 20px;">OFFICIAL 2026 SEASON LIVE</div>
-        <h1 class="desktop-title">
+        <h1>
             <span style="color: var(--gold);">WORLD</span> DEAD HANG<br>
-            <span style="color: var(--gold);">CHAMPIONSHIP</span>
-        </h1>
-        <h1 class="mobile-title">
-            <span style="color: var(--gold);">WORLD</span><br>
-            DEAD HANG<br>
             <span style="color: var(--gold);">CHAMPIONSHIP</span>
         </h1>
         <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
@@ -799,7 +644,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 11, 2026, 10:04 PM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 8, 2026, 1:55 AM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -810,7 +655,10 @@
                     </div>
                     <div class="sort-row">
                         <div id="current-cat-display" style="font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: #fff; letter-spacing: 1px; text-transform: uppercase;">ALL</div>
-                        
+                        <div class="division-tabs" style="transform: scale(0.85); transform-origin: right center;">
+                            <button class="sort-btn active" onclick="toggleSort('recent')" id="btn-sort-recent">Most Recent</button>
+                            <button class="sort-btn" onclick="toggleSort('time')" id="btn-sort-time">Longest Time</button>
+                        </div>
                     </div>
                 </div>
 
@@ -820,10 +668,10 @@
                         <div>Tier</div>
                         <div>Athlete</div>
                         <div>Background</div>
-                        <div>Location</div>
-                        <div>Date Set</div>
-                        <div>Time</div>
-                        <div>Watch Hang</div>
+                        <div style="text-align: center;">Location</div>
+                        <div class="date-col" style="text-align: center;">Date Set</div>
+                        <div style="text-align: center;">Time</div>
+                        <div style="text-align: right;">Watch Hang</div>
                     </div>
 
                     <div id="leaderboard-body">
@@ -924,7 +772,7 @@
 
         <div class="cta-section">
             <div class="cta-text">
-                <h3>If your life was on the line,<br>could you hang on?</h3>
+                <h3>Compete and find your limit</h3>
                 <p>Set up your camera, hang until you drop, and claim your official ranking on the world's first sanctioned dead hang leaderboard.</p>
             </div>
             <a href="submit.html" class="cta-btn">Submit Your Hang</a>
@@ -941,103 +789,217 @@
     // Data
     const athletes = [
     {
-        "name": "Milo Birk",
-        "currentPR": "4:09",
-        "location": "Detroit, Michigan, USA",
+        "id": 8,
+        "history": [
+            {
+                "date": "2026-03-09 4:54:40",
+                "time": "10:02"
+            }
+        ],
+        "name": "Frank S",
+        "currentPR": "10:02",
+        "location": "detriot, MI, USA",
+        "country": "🌎",
         "isVerified": false,
-        "gender": "",
-        "age": null,
-        "video": "https://www.reddit.com/r/Advice/comments/1huk5e3/what_sources_you_guys_watch_for_movies_can_u_guys/"
+        "lastAttempt": "2026-03-09 4:54:40",
+        "video": "https://www.google.com/search?q=apple+tv+shows&sca_esv=04b991333a83f57d&biw=3440&bih=1317&sxsrf=ANbL-n6ZlOQC8LWXniSttjtOKwb90iyI-w%3A1773029359104&ei=70euabKKBsucptQP2OWzsQk&oq=apple&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWFwcGxlKgIIATIWEC4YgAQYsQMY0QMYQxiDARjHARiKBTIOEAAYgAQYkQIYsQMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyExAuGIAEGLEDGNEDGEMYxwEYigUyFBAuGIAEGLEDGNEDGIMBGMcBGIoFSLY8UKMPWNwVcAR4AJABAJgBlgGgAc4FqgEDMS41uAEDyAEA-AEBmAILoAK9RcICChAAGLADGNYEGEfCAgQQIxgnwgIKECMYgAQYJxiKBcICDRAjGIAEGCcYyQIYigXCAgsQLhiABBiRAhiKBcICERAuGIAEGLEDGNEDGIMBGMcBwgILEAAYgAQYsQMYgwHCAg4QLhiABBixAxjRAxjHAcICCxAAGIAEGJECGIoFwgIlEC4YgAQYsQMY0QMYQxiDARjHARiKBRiXBRjcBBjeBBjgBNgBAZgDAIgGAZAGCLoGBggBEAEYFJIHBzQuNS45LTKgB9ZPsgcDMC41uAeKBcIHBTAuNy40yAcigAgA&sclient=gws-wiz-serp",
+        "occupation": "Parent",
+        "category": "Open Men",
+        "prCount": 1
     },
     {
+        "id": 2,
+        "history": [
+            {
+                "date": "2026-03-07 6:16:38",
+                "time": "4:09"
+            },
+            {
+                "date": "2026-03-10 4:06:52",
+                "time": "6:50"
+            }
+        ],
+        "name": "Milo Birk",
+        "currentPR": "6:50",
+        "location": "Unknown, USA",
+        "country": "🇺🇸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-10 4:06:52",
+        "video": "https://mail.google.com/mail/u/0/#drafts?compose=CqMvqmcpdxDbfBSpHdfJtgMcQggpZwrVxnPrmsgLPBlmhvmhwDgRWdxXFglcnmZBmwwXtBDMZVVd",
+        "occupation": "Home Inspector",
+        "category": "Open Men",
+        "prCount": 2
+    },
+    {
+        "id": 10,
+        "history": [
+            {
+                "date": "2026-03-11 3:53:28",
+                "time": "5:01"
+            }
+        ],
+        "name": "Bryant Garcia",
+        "currentPR": "5:01",
+        "location": "Unknown, USA",
+        "country": "🇺🇸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-11 3:53:28",
+        "video": "https://tally.so/forms/RGzOe4/edit",
+        "occupation": "Athlete",
+        "category": "Open Men",
+        "prCount": 1
+    },
+    {
+        "id": 9,
+        "history": [
+            {
+                "date": "2026-03-09 5:40:29",
+                "time": "3:55"
+            }
+        ],
+        "name": "Testa longername",
+        "currentPR": "3:55",
+        "location": "Unknown, USA",
+        "country": "🇺🇸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-09 5:40:29",
+        "video": "https://docs.google.com/spreadsheets/d/1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s/edit?gid=0#gid=0",
+        "occupation": "Tester",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 5,
+        "history": [
+            {
+                "date": "2026-03-08 3:07:47",
+                "time": "3:42"
+            }
+        ],
         "name": "Random R",
         "currentPR": "3:42",
-        "location": "Detroit, Michigan, USA",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
-        "gender": "",
-        "age": null,
-        "video": "https://aistudio.google.com/api-keys?project=gen-lang-client-0688610786"
+        "lastAttempt": "2026-03-08 3:07:47",
+        "video": "https://aistudio.google.com/api-keys?project=gen-lang-client-0688610786",
+        "occupation": "Contractor",
+        "category": "Open Women",
+        "prCount": 1
     },
     {
+        "id": 6,
+        "history": [
+            {
+                "date": "2026-03-08 6:31:02",
+                "time": "2:20"
+            }
+        ],
         "name": "Testa Longername",
         "currentPR": "2:20",
-        "location": "Detroit, Michigan, USA",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
-        "gender": "",
-        "age": null,
-        "video": "https://www.youtube.com/"
+        "lastAttempt": "2026-03-08 6:31:02",
+        "video": "https://www.youtube.com/",
+        "occupation": "Test Proffessional",
+        "category": "Open Women",
+        "prCount": 1
     },
     {
+        "id": 1,
+        "history": [
+            {
+                "date": "2026-03-07 4:46:31",
+                "time": "1:16"
+            }
+        ],
         "name": "Markie Mullins",
         "currentPR": "1:16",
-        "location": "Detroit, Michigan, USA",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
-        "gender": "",
-        "age": null,
-        "video": "https://webhook.site/#!/view/efa2a342-0c51-4b94-a9f1-e9ea586f996a/d44730c2-bf62-40b9-97a3-e9ff278f561e/1"
+        "lastAttempt": "2026-03-07 4:46:31",
+        "video": "https://webhook.site/#!/view/efa2a342-0c51-4b94-a9f1-e9ea586f996a/d44730c2-bf62-40b9-97a3-e9ff278f561e/1",
+        "occupation": "Athlete",
+        "category": "Open Women",
+        "prCount": 1
     },
     {
+        "id": 4,
+        "history": [
+            {
+                "date": "2026-03-07 7:11:58",
+                "time": "1:08"
+            }
+        ],
         "name": "Venus M",
         "currentPR": "1:08",
-        "location": "Detroit, Michigan, USA",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
         "isVerified": false,
-        "gender": "",
-        "age": null,
-        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic"
+        "lastAttempt": "2026-03-07 7:11:58",
+        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "occupation": "Astrologer",
+        "category": "Open Women",
+        "prCount": 1
     },
     {
-        "name": "Otis B",
-        "currentPR": "0.42",
-        "location": "Detroit, Michigan, USA",
-        "isVerified": false,
-        "gender": "",
-        "age": null,
-        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic"
-    },
-    {
-        "name": "Pepper Chonie",
-        "currentPR": "0.3",
-        "location": "detroit, Michigan, USA",
-        "isVerified": false,
-        "gender": "",
-        "age": null,
-        "video": "https://www.youtube.com/"
-    },
-    {
-        "name": "Frank S",
-        "currentPR": "0:00",
-        "location": "detriot, Michigan, USA",
-        "isVerified": false,
-        "gender": "Male",
-        "age": 0,
-        "video": "https://www.google.com/search?q=apple+tv+shows&sca_esv=04b991333a83f57d&biw=3440&bih=1317&sxsrf=ANbL-n6ZlOQC8LWXniSttjtOKwb90iyI-w%3A1773029359104&ei=70euabKKBsucptQP2OWzsQk&oq=apple&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWFwcGxlKgIIATIWEC4YgAQYsQMY0QMYQxiDARjHARiKBTIOEAAYgAQYkQIYsQMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyExAuGIAEGLEDGNEDGEMYxwEYigUyFBAuGIAEGLEDGNEDGIMBGMcBGIoFSLY8UKMPWNwVcAR4AJABAJgBlgGgAc4FqgEDMS41uAEDyAEA-AEBmAILoAK9RcICChAAGLADGNYEGEfCAgQQIxgnwgIKECMYgAQYJxiKBcICDRAjGIAEGCcYyQIYigXCAgsQLhiABBiRAhiKBcICERAuGIAEGLEDGNEDGIMBGMcBwgILEAAYgAQYsQMYgwHCAg4QLhiABBixAxjRAxjHAcICCxAAGIAEGJECGIoFwgIlEC4YgAQYsQMY0QMYQxiDARjHARiKBRiXBRjcBBjeBBjgBNgBAZgDAIgGAZAGCLoGBggBEAEYFJIHBzQuNS45LTKgB9ZPsgcDMC41uAeKBcIHBTAuNy40yAcigAgA&sclient=gws-wiz-serp"
-    },
-    {
-        "name": "Testa longername",
-        "currentPR": "0:00",
-        "location": "Unknown, USA",
-        "isVerified": false,
-        "gender": "Female",
-        "age": 31,
-        "video": "https://docs.google.com/spreadsheets/d/1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s/edit?gid=0#gid=0"
-    },
-    {
-        "name": "Bryant Garcia",
-        "currentPR": "0:00",
-        "location": "Unknown, USA",
-        "isVerified": false,
-        "gender": "Male",
-        "age": 35,
-        "video": "https://tally.so/forms/RGzOe4/edit"
-    },
-    {
+        "id": 11,
+        "history": [
+            {
+                "date": "2026-03-12 1:58:59",
+                "time": "0:50"
+            }
+        ],
         "name": "Joshua Taylor",
-        "currentPR": "0:00",
+        "currentPR": "0:50",
         "location": "Unknown, USA",
+        "country": "🇺🇸",
         "isVerified": false,
-        "gender": "Female",
-        "age": 58,
-        "video": "https://www.mulerouter.ai/app/api-keys"
+        "lastAttempt": "2026-03-12 1:58:59",
+        "video": "https://www.mulerouter.ai/app/api-keys",
+        "occupation": "Community Outreach",
+        "category": "Masters Female",
+        "prCount": 1
+    },
+    {
+        "id": 3,
+        "history": [
+            {
+                "date": "2026-03-07 6:29:51",
+                "time": "0:42"
+            }
+        ],
+        "name": "Otis B",
+        "currentPR": "0:42",
+        "location": "Detroit, MI, USA",
+        "country": "🌎",
+        "isVerified": false,
+        "lastAttempt": "2026-03-07 6:29:51",
+        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "occupation": "Athlete",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 7,
+        "history": [
+            {
+                "date": "2026-03-08 18:40:02",
+                "time": "0:30"
+            }
+        ],
+        "name": "Pepper Chonie",
+        "currentPR": "0:30",
+        "location": "detroit, MI, USA",
+        "country": "🌎",
+        "isVerified": false,
+        "lastAttempt": "2026-03-08 18:40:02",
+        "video": "https://www.youtube.com/",
+        "occupation": "Security",
+        "category": "Open Women",
+        "prCount": 1
     }
 ];
 
@@ -1071,33 +1033,24 @@
             a.trueRank = index + 1;
         });
 
-        // Create a copy for sorting and rendering to preserve the original order
-        let displayData = [...filteredData];
-
-        // Sort by the user's selection for display
+        // Now sort based on user selection
         if (currentSort === 'time') {
-            displayData.sort((a, b) => {
-                const timeA = parseTime(a.currentPR);
-                const timeB = parseTime(b.currentPR);
-                return timeB - timeA;
-            });
-        } else { // 'recent'
-            displayData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+            // Already sorted by time above
+        } else {
+            // Sort by recent
+            filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
         }
 
-        if (displayData.length === 0) {
+        if (filteredData.length === 0) {
             list.innerHTML = '<div style="padding:40px; text-align:center; color:#555;">No records in this division yet.</div>';
             return;
         }
 
-        displayData.forEach((athlete) => {
+        filteredData.forEach((athlete) => {
             const rank = athlete.trueRank;
             const rankClass = rank === 1 ? 'rank-1' : '';
             const tier = getTierInfo(athlete.currentPR);
             const flag = getCountryFlag(athlete.location);
-            const locationParts = parseLocation(athlete.location);
-            const displayLocation = locationParts.state ? `${locationParts.city}, ${locationParts.state}` : locationParts.city;
-            const displayDateMain = athlete.lastAttempt ? new Date(athlete.lastAttempt).toLocaleDateString('en-US', { year: '2-digit', month: 'numeric', day: 'numeric' }) : 'N/A';
             
             // Build History Tooltip
             let historyHtml = athlete.history.map(h => {
@@ -1105,84 +1058,40 @@
                 return `<div class="history-item"><span>${displayDate}</span><span class="h-time">${h.time}</span></div>`
             }).join('');
 
-            // Create the main row
             const row = document.createElement('div');
             row.className = 'lb-row';
-            row.setAttribute('data-tier', tier.id);
-            row.onclick = function() { toggleMobileDetails(this); };
-            
+            const displayDateMain = athlete.lastAttempt.split(' ')[0];
+            const displayLocation = athlete.location.split('/')[0].trim();
             row.innerHTML = `
                 <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
-                <div><span class="tier-badge ${tier.class}" title="${tier.label}">${tier.label}</span></div>
+                <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                 <div class="name-cell">
                     <div class="name-wrapper">
                         <div class="name">
                             ${athlete.name}
+                            <div class="tooltip">
+                                <div style="color:#fff; margin-bottom:5px; border-bottom:1px solid #333; padding-bottom:5px; font-weight:700;">HISTORY</div>
+                                ${historyHtml}
+                            </div>
                         </div>
-                        <div class="badges-wrapper" style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
+                        <div style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge">
                                 <span class="pr-val">⚡ ${athlete.prCount}</span>
-                                <div class="tooltip">
-                                    <div style="color:#fff; margin-bottom:5px; border-bottom:1px solid #333; padding-bottom:5px; font-weight:700;">HISTORY</div>
-                                    ${historyHtml}
-                                </div>
                             </div>
                         </div>
-
-                    </div>
-                    <div style="font-size: 0.75rem; color: #888; font-family: 'Roboto Mono', monospace; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.5px;">
-                        ${athlete.category}
                     </div>
                 </div>
                 <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
                 <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
                 <div style="text-align: center; color: #999; font-family: 'Roboto Mono', monospace; font-size: 0.85rem;">${displayDateMain}</div>
-                <div class="time" style="text-align: center;">${athlete.currentPR}</div>
+                <div class="time" style-align: center;">${athlete.currentPR}</div>
                 <div style="text-align: right;"><a href="${athlete.video}" class="video-btn">Watch</a></div>
             `;
             list.appendChild(row);
-
-            // Create the details row (hidden by default)
-            let mobileHistoryHtml = '';
-            if (athlete.history && athlete.history.length > 0) {
-                const historyList = athlete.history.map(h => {
-                    const d = h.date.split(' ')[0];
-                    return `<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa; margin-bottom:4px;"><span>${d}</span><span style="color:var(--gold); font-weight:bold;">${h.time}</span></div>`;
-                }).join('');
-                mobileHistoryHtml = `<div style="margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;"><strong>PR History:</strong><div style="margin-top:5px;">${historyList}</div></div>`;
-            }
-
-            const detailsRow = document.createElement('div');
-            detailsRow.className = 'mobile-details';
-            detailsRow.innerHTML = `
-                <div><strong>Tier:</strong> <span class="tier-badge ${tier.class}" style="transform:scale(0.8); transform-origin:left center; display:inline-block;">${tier.label}</span></div>
-                <div><strong>Occupation:</strong> ${athlete.occupation}</div>
-                <div><strong>Date Set:</strong> ${displayDateMain}</div>
-                ${mobileHistoryHtml}
-                <div style="margin-top:10px;"><a href="${athlete.video}" target="_blank" style="color: var(--gold); font-weight:bold;">▶ Watch</a></div>
-            `;
-            list.appendChild(detailsRow);
         });
         
         renderSidebar();
-    }
-    
-    function toggleMobileDetails(rowElement) {
-        // Only trigger on mobile screens
-        if (window.innerWidth > 900) return;
-        
-        // The details row is the immediate next sibling
-        const details = rowElement.nextElementSibling;
-        if (details && details.classList.contains('mobile-details')) {
-            if (details.style.display === 'block') {
-                details.style.display = 'none';
-                rowElement.style.background = '';
-            } else {
-                details.style.display = 'block';
-                rowElement.style.background = '#111';
-            }
-        }
     }
     
     function renderSidebar() {
