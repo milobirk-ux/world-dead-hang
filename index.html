@@ -878,11 +878,23 @@
                                 <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Independently reviewed and certified by WDHC. This record stands.</div>
                             </div>
                         </div>
-                        <div style="display: flex; align-items: flex-start; gap: 15px;">
+                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 12px;">
                             <span style="font-size: 1.2rem; color: var(--silver); line-height: 1.2; width: 20px; text-align: center;">⚡</span>
                             <div>
                                 <div style="color: #ddd;">Total Personal Records</div>
                                 <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Times athlete has set a new personal record.</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 15px;">
+                            <span style="font-size: 1.2rem; color: #66b3ff; line-height: 1.2; width: 20px; text-align: center;">♂</span>
+                            <div>
+                                <div style="color: #ddd;">Male Division</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-top: 8px;">
+                            <span style="font-size: 1.2rem; color: #ff66b3; line-height: 1.2; width: 20px; text-align: center;">♀</span>
+                            <div>
+                                <div style="color: #ddd;">Female Division</div>
                             </div>
                         </div>
                     </div>
@@ -1255,6 +1267,8 @@
             const flag = getCountryFlag(athlete.location);
             const gripAge = calculateGripAge(athlete);
             const displayLocation = athlete.location.split('/')[0].trim();
+            const isFemale = athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female');
+            const genderIcon = isFemale ? '<span style="color: #ff66b3;">♀</span>' : '<span style="color: #66b3ff;">♂</span>';
             
             // Create wrapper for the row and its details
             const wrapper = document.createElement('div');
@@ -1270,6 +1284,7 @@
                     <div class="name-wrapper">
                         <div class="name" style="flex-grow: 1;">${athlete.name}</div>
                         <div style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
+                            <span style="font-size: 1rem; margin-right: 8px;">${genderIcon}</span>
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
                         </div>
