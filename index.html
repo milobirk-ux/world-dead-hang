@@ -1189,41 +1189,44 @@
 
         const isFemale = category.toLowerCase().includes('women') || category.toLowerCase().includes('female');
         const actualTime = parseTime(currentPR);
-        const actualWeight = bodyweight;
+        const actualWeight = parseFloat(bodyweight);
 
-        // Step 1: Get Baseline Expected Time (in seconds)
-        const menNorms = { '20-29': 86, '30-39': 72, '40-49': 62, '50-59': 50, '60-69': 38, '70+': 27 };
-        const womenNorms = { '20-29': 54, '30-39': 48, '40-49': 39, '50-59': 32, '60-69': 25, '70+': 17 };
-        
-        let ageGroup;
-        if (chronologicalAge <= 29) ageGroup = '20-29';
-        else if (chronologicalAge <= 39) ageGroup = '30-39';
-        else if (chronologicalAge <= 49) ageGroup = '40-49';
-        else if (chronologicalAge <= 59) ageGroup = '50-59';
-        else if (chronologicalAge <= 69) ageGroup = '60-69';
-        else ageGroup = '70+';
+        if (isNaN(actualWeight) || actualWeight <= 0) return null;
 
-        const baseExpectedTime = isFemale ? womenNorms[ageGroup] : menNorms[ageGroup];
+        // Step 1: Base Expected Time
+        let baseExpectedTime;
+        if (chronologicalAge <= 29) baseExpectedTime = isFemale ? 80 : 105;
+        else if (chronologicalAge <= 39) baseExpectedTime = isFemale ? 65 : 85;
+        else if (chronologicalAge <= 49) baseExpectedTime = isFemale ? 50 : 65;
+        else if (chronologicalAge <= 59) baseExpectedTime = isFemale ? 38 : 50;
+        else if (chronologicalAge <= 69) baseExpectedTime = isFemale ? 28 : 38;
+        else baseExpectedTime = isFemale ? 20 : 28;
 
-        // Step 2: Apply Bodyweight Adjustment
+        // Step 2: Bodyweight Adjustment
         const refWeight = isFemale ? 135 : 175;
-        if (actualWeight <= 0) return null; // Avoid division by zero
-        const adjustedExpectedTime = baseExpectedTime * (refWeight / actualWeight) * 0.7 + baseExpectedTime * 0.3;
+        const adjustedExpectedTime = (baseExpectedTime * (refWeight / actualWeight) * 0.7) + (baseExpectedTime * 0.3);
 
         // Step 3: Calculate Performance Ratio
         if (adjustedExpectedTime <= 0) return null;
         const performanceRatio = actualTime / adjustedExpectedTime;
 
         // Step 4: Convert to Grip Age
-        let gripAge = chronologicalAge - ((performanceRatio - 1.0) * 50);
+        let gripAgeRaw = chronologicalAge - ((performanceRatio - 1.0) * 25);
 
-        // Step 5: Apply Caps and Floors
-        gripAge = Math.max(chronologicalAge - 25, gripAge);
-        gripAge = Math.min(chronologicalAge + 25, gripAge);
-        gripAge = Math.max(16, gripAge);
+        // Step 5: Apply Caps
+        let gripAge = Math.max(16, gripAgeRaw);
         gripAge = Math.min(85, gripAge);
+        gripAge = Math.max(chronologicalAge - 15, gripAge);
+        gripAge = Math.min(chronologicalAge + 15, gripAge);
 
-        return Math.round(gripAge);
+        const roundedGripAge = Math.round(gripAge);
+
+        return {
+            age: roundedGripAge,
+            chronologicalAge: chronologicalAge,
+            isYounger: roundedGripAge < chronologicalAge,
+            baseline: Math.round(adjustedExpectedTime)
+        };
     }
 
     function renderLeaderboard() {
@@ -1295,13 +1298,23 @@
             const detailsPanel = document.createElement('div');
             detailsPanel.className = 'details-panel';
             if (gripAge !== null) {
-                detailsPanel.innerHTML = `
-                    <div>
-                        <strong>GRIP AGE™: ${gripAge}</strong> 
-                        (Chronological Age: ${getChronologicalAge(athlete.dob)})
-                    </div>
-                    <p>Your WDHC Grip Age™ reflects how your dead hang performance compares to population norms for your age, sex, and bodyweight. It is a fitness index, not a clinical assessment.</p>
-                `;
+                if (gripAge.isYounger) {
+                    detailsPanel.innerHTML = `
+                        <div>
+                            <strong>GRIP AGE™: ${gripAge.age}</strong> 
+                            (Chronological Age: ${gripAge.chronologicalAge})
+                        </div>
+                        <p>Your WDHC Grip Age™ reflects how your dead hang performance compares to population norms for your age, sex, and bodyweight. It is a fitness index, not a clinical assessment.</p>
+                    `;
+                } else {
+                    detailsPanel.innerHTML = `
+                        <div>
+                            <strong>GRIP AGE™: Baseline Established</strong> 
+                            (Chronological Age: ${gripAge.chronologicalAge})
+                        </div>
+                        <p>Keep training! Your current performance sets your baseline. Your WDHC Grip Age™ reflects how your dead hang performance compares to population norms for your age, sex, and bodyweight.</p>
+                    `;
+                }
             } else {
                 detailsPanel.innerHTML = `<p>Not enough data to calculate Grip Age™. Date of Birth and Bodyweight are required.</p>`;
             }
