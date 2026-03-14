@@ -743,52 +743,59 @@
             h1 { font-size: 4rem; }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             
-            /* COMPLETELY REDONE MOBILE LEADERBOARD */
+            /* COMPLETELY REDONE MOBILE LEADERBOARD - CLEAN VERSION */
             .leaderboard {
                 margin: 0 8px;
+                overflow-x: auto;
             }
-            .lb-header, .lb-row {
-                grid-template-columns: 25px 50px 1fr 60px !important;
-                gap: 4px !important;
-                padding: 3px 6px !important;
-            }
-            .lb-header {
-                font-size: 0.55rem !important;
-                padding: 4px 6px !important;
-            }
-            .lb-row {
-                font-size: 0.7rem !important;
-                min-height: 32px !important;
-            }
-            .name {
-                font-size: 0.75rem !important;
-                line-height: 1.1 !important;
-            }
-            .gender-label {
-                font-size: 0.55rem !important;
-                padding: 1px 3px !important;
-                margin-left: 3px !important;
-            }
-            .video-btn { display: none; }
-            .location { display: none; }
-            .country-col, .date-col { display: none; }
-        }65rem;
-            }
-            .lb-row {
-                font-size: 0.85rem;
-            }
-            .video-btn { display: none; } 
-            .location { display: none; } 
-            .country-col, .date-col { display: none; }
-            .cta-section { flex-direction: column; text-align: center; gap: 30px; }
-            .cta-section::before { width: 100%; height: 4px; bottom: auto; }
             
-            /* Fix for mobile name cutoff */
-            .name-cell {
-                overflow: visible;
-                white-space: normal;
-                word-break: break-word;
-                min-width: 0;
+            /* Force mobile grid layout */
+            .lb-header, .lb-row {
+                grid-template-columns: 30px 60px 1fr 70px !important;
+                gap: 6px !important;
+                padding: 4px 8px !important;
+            }
+            
+            .lb-header {
+                font-size: 0.6rem !important;
+                padding: 6px 8px !important;
+            }
+            
+            .lb-row {
+                font-size: 0.75rem !important;
+                min-height: 36px !important;
+            }
+            
+            .name {
+                font-size: 0.8rem !important;
+                line-height: 1.2 !important;
+                white-space: normal !important;
+                word-break: break-word !important;
+            }
+            
+            .gender-label {
+                font-size: 0.6rem !important;
+                padding: 1px 4px !important;
+                margin-left: 4px !important;
+            }
+            
+            /* Hide desktop-only columns */
+            .video-btn, .location, .country-col, .date-col { 
+                display: none !important; 
+            }
+            
+            .cta-section { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 30px; 
+            }
+            
+            .cta-section::before { 
+                width: 100%; 
+                height: 4px; 
+                bottom: auto; 
+            }
+        }
             }
             .name-wrapper {
                 display: flex;
