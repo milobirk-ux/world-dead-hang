@@ -908,7 +908,7 @@
 
         <div class="cta-section">
             <div class="cta-text">
-                <h3>Compete and find your limit</h3>
+                <h3>If your life depended on it, how long could you hang on?</h3>
                 <p>Set up your camera, hang until you drop, and claim your official ranking on the world's first sanctioned dead hang leaderboard.</p>
             </div>
             <a href="submit.html" class="cta-btn">Submit Your Hang</a>
@@ -1302,31 +1302,34 @@
             // Create the details panel
             const detailsPanel = document.createElement('div');
             detailsPanel.className = 'details-panel';
+            const labelStyle = 'font-size: 0.8rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;';
+            const valStyle = 'font-size: 1.15rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
+            
             if (gripAge !== null) {
                 if (gripAge.isYounger) {
                     detailsPanel.innerHTML = `
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9rem;">
-                            <div><strong>Grip Age:</strong> ${gripAge.age}</div>
-                            <div><strong>Chronological Age:</strong> ${gripAge.chronologicalAge}</div>
-                            <div><strong>Division:</strong> ${athlete.category}</div>
-                            <div><strong>Bodyweight:</strong> ${athlete.bodyweight} lbs</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}">${gripAge.age}</span></div>
+                            <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                            <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
+                            <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
                         </div>
                     `;
                 } else {
                     detailsPanel.innerHTML = `
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9rem;">
-                            <div><strong>Grip Age:</strong> Baseline Established</div>
-                            <div><strong>Chronological Age:</strong> ${gripAge.chronologicalAge}</div>
-                            <div><strong>Division:</strong> ${athlete.category}</div>
-                            <div><strong>Bodyweight:</strong> ${athlete.bodyweight} lbs</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}; font-size: 0.9rem;">Baseline Established</span></div>
+                            <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                            <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
+                            <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
                         </div>
                     `;
                 }
             } else {
                 detailsPanel.innerHTML = `
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9rem;">
-                            <div style="grid-column: span 2;"><strong>Division:</strong> ${athlete.category}</div>
-                            <div style="grid-column: span 2;"><strong>Bodyweight:</strong> ${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
                         </div>
                 `;
             }
