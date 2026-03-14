@@ -1218,13 +1218,11 @@
         const performanceRatio = actualTime / adjustedExpectedTime;
 
         // Step 4: Convert to Grip Age
-        let gripAgeRaw = chronologicalAge - ((performanceRatio - 1.0) * 25);
+        let gripAgeRaw = chronologicalAge - (Math.log(performanceRatio) * 19);
 
         // Step 5: Apply Caps
         let gripAge = Math.max(16, gripAgeRaw);
         gripAge = Math.min(85, gripAge);
-        gripAge = Math.max(chronologicalAge - 15, gripAge);
-        gripAge = Math.min(chronologicalAge + 15, gripAge);
 
         const roundedGripAge = Math.round(gripAge);
 
