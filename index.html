@@ -268,7 +268,7 @@
 
         .lb-header {
             display: grid;
-            grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
+            grid-template-columns: 70px 100px 1fr 120px 100px;
             gap: 12px;
             padding: 8px 20px;
             font-size: 0.7rem;
@@ -282,7 +282,7 @@
 
         .lb-row {
             display: grid;
-            grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
+            grid-template-columns: 70px 100px 1fr 120px 100px;
             gap: 12px;
             padding: 8px 20px;
             /* border-bottom is now on the wrapper */
@@ -359,8 +359,9 @@
 
         .name-cell {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 10px;
             overflow: hidden; /* Added to contain children */
         }
 
@@ -394,7 +395,7 @@
             font-size: 0.75rem;
             color: #666;
             text-transform: uppercase;
-            margin-top: 2px;
+            margin-top: 0;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -748,6 +749,10 @@
         .history-item span.h-time { color: var(--gold); font-weight: 700; }
 
         @media (max-width: 900px) {
+            /* NEW RULE TO HIDE THE TIER BADGE COLUMN ON MOBILE */
+            .lb-row > div:nth-child(2) {
+                display: none !important;
+            }
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
             h1 { font-size: 4rem; }
@@ -923,7 +928,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 13, 2026, 8:46 PM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 14, 2026, 1:49 PM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -942,7 +947,7 @@
                 </div>
 
                 <div class="leaderboard">
-                    <div class="lb-header" style="grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;">
+                    <div class="lb-header" style="grid-template-columns: 70px 100px 1fr 120px 100px;">
                         <div>Rank</div>
                         <div>Tier</div>
                         <div>Athlete</div>
@@ -1165,7 +1170,7 @@
     },
     {
         "name": "Testa Longername",
-        "category": "Open Women",
+        "category": "Open Men",
         "location": "Detroit, MI / USA / DETROIT, MI / USA",
         "occupation": "Test Proffessional",
         "bodyweight": 120,
@@ -1447,22 +1452,23 @@
             // Create the main row
             const row = document.createElement('div');
             row.className = 'lb-row';
+            
+            const displayName = athlete.name.replace(/ ([^ ]*)$/, '&nbsp;$1');
             row.innerHTML = `
                 <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
                 <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                 <div class="name-cell">
                     <div class="name-wrapper">
-                        <div class="name" style="flex-grow: 1;">${athlete.name}</div>
+                        <div class="name" style="flex-grow: 1;">${displayName}</div>
                         <div style="display: flex; align-items: center; flex-shrink: 0;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                            <div class="location" style="margin-left: 10px;">${displayLocation} ${flag}</div>
                         </div>
                     </div>
                     <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
                     <div class="time mobile-time">${athlete.currentPR}</div>
                 </div>
-                <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
-                <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
                 <div class="time desktop-time">${athlete.currentPR}</div>
                 <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
             `;
@@ -1481,6 +1487,7 @@
                             <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
                             <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Background:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.occupation}</span></div>
                         </div>
                     `;
                 } else {
@@ -1490,6 +1497,7 @@
                             <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
                             <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Background:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.occupation}</span></div>
                         </div>
                     `;
                 }
@@ -1498,6 +1506,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Background:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.occupation}</span></div>
                         </div>
                 `;
             }
