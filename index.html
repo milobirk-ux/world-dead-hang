@@ -780,15 +780,14 @@
                 min-height: 50px !important;
                 border-bottom: 1px solid var(--border) !important;
             }
-            
+
             .name {
                 font-size: 1rem !important;
-                line-height: 1.4 !important;
-                white-space: normal !important;
-                overflow-wrap: normal !important;
-                word-wrap: normal !important;
-                hyphens: none !important;
                 font-weight: 600 !important;
+                white-space: nowrap !important; /* Prevent wrapping */
+                overflow: hidden !important; /* Hide overflow */
+                text-overflow: ellipsis !important; /* Add ... */
+                line-height: 1.4 !important;
             }
             
             .gender-label {
