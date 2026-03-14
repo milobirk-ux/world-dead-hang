@@ -763,9 +763,9 @@
                 margin: 0 8px;
             }
             
-            /* Optimized 3-column layout for mobile */
+            /* Optimized 2-column layout for mobile */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr 60px !important;
+                grid-template-columns: 35px 1fr !important;
                 gap: 10px !important;
                 padding: 8px 12px !important;
             }
@@ -829,20 +829,7 @@
             .desktop-time {
                 display: none !important;
             }
-            
 
-            
-            /* Add expandable details indicator */
-            .lb-row::after {
-                content: "?";
-                color: var(--text-dim);
-                font-size: 1.2rem;
-                position: absolute;
-                right: 10px;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            
             .cta-section { 
                 flex-direction: column; 
                 text-align: center; 
