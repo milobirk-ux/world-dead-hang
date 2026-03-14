@@ -504,14 +504,29 @@
         }
 
         /* Sidebar - Top 10 Card */
+        .sidebar-column {
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+        .sidebar-column::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-column::-webkit-scrollbar-thumb {
+            background-color: var(--border);
+            border-radius: 4px;
+        }
+
         .sidebar-card {
             background: #080808;
             border: 1px solid var(--border);
             border-radius: 6px;
             padding: 0;
-            position: sticky;
-            top: 100px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
         }
 
         .sidebar-header {
@@ -824,7 +839,7 @@
                 </div>
 
                 <!-- Tier Legend Card -->
-                <div class="sidebar-card" style="margin-top: 20px; padding-bottom: 10px;">
+                <div class="sidebar-card" style="padding-bottom: 10px;">
                     <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
                         <h3 class="sidebar-title" style="color: var(--text-dim);">TIER CLASSIFICATIONS</h3>
                     </div>
@@ -875,7 +890,7 @@
                 </div>
                 
                 <!-- Icon Legend Card -->
-                <div class="sidebar-card" style="margin-top: 20px; font-size: 1.0rem;">
+                <div class="sidebar-card" style="font-size: 1.0rem;">
                     <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
                         <h3 class="sidebar-title" style="color: var(--text-dim);">ICON LEGEND</h3>
                     </div>
