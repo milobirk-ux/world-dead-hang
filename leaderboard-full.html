@@ -265,12 +265,6 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        
-        @media (max-width: 900px) {
-            .leaderboard {
-                margin: 0 8px;
-            }
-        }
 
         .lb-header {
             display: grid;
@@ -748,28 +742,37 @@
             .sidebar-card { position: static; margin-top: 40px; }
             h1 { font-size: 4rem; }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .lb-header, .lb-row { 
-                grid-template-columns: 30px 60px 1fr 70px;
-                gap: 6px;
-                padding: 4px 8px;
+            
+            /* COMPLETELY REDONE MOBILE LEADERBOARD */
+            .leaderboard {
+                margin: 0 8px;
+            }
+            .lb-header, .lb-row {
+                grid-template-columns: 25px 50px 1fr 60px !important;
+                gap: 4px !important;
+                padding: 3px 6px !important;
             }
             .lb-header {
-                font-size: 0.6rem;
-                padding: 6px 8px;
+                font-size: 0.55rem !important;
+                padding: 4px 6px !important;
             }
             .lb-row {
-                font-size: 0.75rem;
-                min-height: 36px;
+                font-size: 0.7rem !important;
+                min-height: 32px !important;
             }
             .name {
-                font-size: 0.8rem;
-                line-height: 1.2;
+                font-size: 0.75rem !important;
+                line-height: 1.1 !important;
             }
             .gender-label {
-                font-size: 0.6rem !important;
-                padding: 1px 4px !important;
-                margin-left: 4px !important;
+                font-size: 0.55rem !important;
+                padding: 1px 3px !important;
+                margin-left: 3px !important;
             }
+            .video-btn { display: none; }
+            .location { display: none; }
+            .country-col, .date-col { display: none; }
+        }
                 font-size: 0.65rem;
             }
             .lb-row {
