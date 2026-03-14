@@ -738,7 +738,7 @@
             .sidebar-card { position: static; margin-top: 40px; }
             h1 { font-size: 4rem; }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .lb-header, .lb-row { grid-template-columns: 50px 80px 1fr 100px; }
+            .lb-header, .lb-row { grid-template-columns: 40px 70px 2fr 80px; }
             .video-btn { display: none; } 
             .location { display: none; } 
             .country-col, .date-col { display: none; }
@@ -761,9 +761,10 @@
             .name {
                 flex: 1;
                 min-width: 0;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+                overflow: visible;
+                white-space: normal;
+                word-break: break-word;
+                font-size: 0.95rem; /* Slightly larger for mobile readability */
             }
             .time {
                 text-align: right;
@@ -771,6 +772,7 @@
                 color: var(--gold);
                 font-family: 'Oswald', sans-serif;
                 letter-spacing: 0.5px;
+                font-size: 0.95rem; /* Consistent with name size */
             }
         }
     </style>
