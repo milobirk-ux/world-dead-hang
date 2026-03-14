@@ -758,36 +758,37 @@
                 margin: 0 8px;
             }
             
-            /* Simplified 3-column layout for mobile */
+            /* Optimized 3-column layout for mobile */
             .lb-header, .lb-row {
-                grid-template-columns: 40px 1fr 70px !important;
-                gap: 8px !important;
-                padding: 6px 10px !important;
+                grid-template-columns: 35px 1fr 60px !important;
+                gap: 10px !important;
+                padding: 8px 12px !important;
             }
             
             .lb-header {
-                font-size: 0.7rem !important;
-                padding: 8px 10px !important;
+                font-size: 0.75rem !important;
+                padding: 10px 12px !important;
             }
             
             .lb-row {
-                font-size: 0.85rem !important;
-                min-height: 44px !important;
+                font-size: 0.9rem !important;
+                min-height: 50px !important;
                 border-bottom: 1px solid var(--border) !important;
             }
             
             .name {
-                font-size: 0.9rem !important;
-                line-height: 1.3 !important;
+                font-size: 1rem !important;
+                line-height: 1.4 !important;
                 white-space: normal !important;
                 word-break: normal !important;
                 overflow-wrap: normal !important;
                 word-wrap: normal !important;
                 hyphens: none !important;
+                font-weight: 600 !important;
             }
             
             .gender-label {
-                font-size: 0.65rem !important;
+                font-size: 0.7rem !important;
                 padding: 2px 6px !important;
                 margin-left: 6px !important;
             }
@@ -797,13 +798,22 @@
                 display: none !important; 
             }
             
-            /* Show time in the name column on mobile */
+            /* Make tier badge smaller on mobile */
+            .tier-badge {
+                font-size: 0.65rem !important;
+                padding: 2px 6px !important;
+                min-width: 40px !important;
+            }
+            
+            /* Make dead hang time larger and better positioned */
             .mobile-time {
                 display: block !important;
-                font-size: 0.75rem !important;
+                font-size: 0.9rem !important;
                 color: var(--gold) !important;
-                font-weight: 600 !important;
-                margin-top: 2px !important;
+                font-weight: 700 !important;
+                margin-top: 4px !important;
+                font-family: 'Oswald', sans-serif !important;
+                letter-spacing: 0.5px !important;
             }
             
             .desktop-time {
