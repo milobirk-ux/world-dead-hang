@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Dead Hang Championship | WDHC</title>
+    <title>Full Leaderboard | World Dead Hang Championship</title>
     <link rel="icon" type="image/jpeg" href="media/full_logo_footer.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
@@ -847,11 +847,9 @@
                     <div id="leaderboard-body">
                         <!-- JS Populated -->
                     </div>
-                    <div id="pagination-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px; background: #080808; border-top: 1px solid var(--border);">
-                        <!-- JS Populated -->
-                    </div>
+                    <!-- No pagination controls on full leaderboard page -->
                     <div style="text-align: center; padding: 20px; border-top: 1px solid var(--border);">
-                        <a href="leaderboard-full.html" style="color: var(--gold); text-decoration: none; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">View Full Leaderboard →</a>
+                        <a href="index.html" style="color: var(--gold); text-decoration: none; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">← Back to Top 10 Leaderboard</a>
                     </div>
                 </div>
             </div>
@@ -1203,8 +1201,8 @@
 
     let currentCategory = 'All';
     let currentSort = 'recent';
-    let currentPage = 1;
-    const itemsPerPage = 10; 
+    // No pagination on full leaderboard page - show all athletes
+    const itemsPerPage = 1000; // Large number to show all 
 
     function getTierInfo(timeStr) {
         const seconds = parseTime(timeStr);
@@ -1308,22 +1306,12 @@
             filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
         }
 
-        const paginationControls = document.getElementById('pagination-controls');
-
         if (filteredData.length === 0) {
             list.innerHTML = '<div style="padding:40px; text-align:center; color:#555;">No records in this division yet.</div>';
-            if(paginationControls) paginationControls.style.display = 'none';
             return;
         }
 
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const pageData = filteredData.slice(startIndex, endIndex);
-
-        pageData.forEach((athlete) => {
+        filteredData.forEach((athlete) => {
             const rank = athlete.trueRank;
             const rankClass = rank === 1 ? 'rank-1' : '';
             const tier = getTierInfo(athlete.currentPR);
@@ -1399,42 +1387,7 @@
             list.appendChild(wrapper);
         });
         
-        renderPagination(totalPages);
         renderSidebar();
-    }
-
-    function renderPagination(totalPages) {
-        const controls = document.getElementById('pagination-controls');
-        if (!controls) return;
-        
-        controls.innerHTML = '';
-        
-        if (totalPages <= 1) {
-            controls.style.display = 'none';
-            return;
-        }
-        
-        controls.style.display = 'flex';
-        
-        const prevBtn = document.createElement('button');
-        prevBtn.textContent = '← Prev';
-        prevBtn.className = 'pagination-btn';
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderLeaderboard(); window.scrollTo({top: document.querySelector('.leaderboard').offsetTop - 120, behavior: 'smooth'}); } };
-        
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = 'Next →';
-        nextBtn.className = 'pagination-btn';
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderLeaderboard(); window.scrollTo({top: document.querySelector('.leaderboard').offsetTop - 120, behavior: 'smooth'}); } };
-        
-        const pageInfo = document.createElement('span');
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-        pageInfo.style.cssText = "font-family: 'Roboto Mono', monospace; font-size: 0.9rem; color: var(--text-dim);";
-        
-        controls.appendChild(prevBtn);
-        controls.appendChild(pageInfo);
-        controls.appendChild(nextBtn);
     }
     
     function getChronologicalAge(dob) {
