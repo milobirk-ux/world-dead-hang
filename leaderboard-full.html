@@ -381,11 +381,12 @@
             position: relative;
             cursor: help;
             
-            /* Truncation properties */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-width: 0; /* Important for flexbox truncation */
+            /* Flexible text handling */
+            white-space: normal;
+            overflow: visible;
+            min-width: 0; /* Important for flexbox */
+            word-break: normal;
+            overflow-wrap: normal;
         }
         
         .location {
@@ -781,6 +782,8 @@
                 white-space: normal !important;
                 word-break: normal !important;
                 overflow-wrap: normal !important;
+                word-wrap: normal !important;
+                hyphens: none !important;
             }
             
             .gender-label {
