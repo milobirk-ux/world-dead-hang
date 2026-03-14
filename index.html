@@ -265,6 +265,12 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
+        
+        @media (max-width: 900px) {
+            .leaderboard {
+                margin: 0 8px;
+            }
+        }
 
         .lb-header {
             display: grid;
@@ -743,15 +749,26 @@
             h1 { font-size: 4rem; }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .lb-header, .lb-row { 
-                grid-template-columns: 40px 70px 2fr 80px;
-                gap: 8px;
-                padding: 6px 12px;
+                grid-template-columns: 30px 60px 1fr 70px;
+                gap: 6px;
+                padding: 4px 8px;
             }
             .lb-header {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
+                padding: 6px 8px;
             }
             .lb-row {
-                font-size: 0.85rem;
+                font-size: 0.75rem;
+                min-height: 36px;
+            }
+            .name {
+                font-size: 0.8rem;
+                line-height: 1.2;
+            }
+            .gender-label {
+                font-size: 0.6rem !important;
+                padding: 1px 4px !important;
+                margin-left: 4px !important;
             }
                 font-size: 0.65rem;
             }
