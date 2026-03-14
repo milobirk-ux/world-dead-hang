@@ -269,8 +269,8 @@
         .lb-header {
             display: grid;
             grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
-            gap: 15px;
-            padding: 12px 25px;
+            gap: 12px;
+            padding: 8px 20px;
             font-size: 0.7rem;
             color: var(--text-dim);
             text-transform: uppercase;
@@ -283,12 +283,12 @@
         .lb-row {
             display: grid;
             grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
-            gap: 15px;
-            padding: 12px 25px;
+            gap: 12px;
+            padding: 8px 20px;
             /* border-bottom is now on the wrapper */
             align-items: center;
             transition: all 0.2s ease;
-            min-height: 50px;
+            min-height: 40px;
             position: relative;
         }
 
@@ -744,8 +744,14 @@
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .lb-header, .lb-row { 
                 grid-template-columns: 40px 70px 2fr 80px;
-                gap: 10px;
-                padding: 10px 16px;
+                gap: 8px;
+                padding: 6px 12px;
+            }
+            .lb-header {
+                font-size: 0.65rem;
+            }
+            .lb-row {
+                font-size: 0.85rem;
             }
             .video-btn { display: none; } 
             .location { display: none; } 
