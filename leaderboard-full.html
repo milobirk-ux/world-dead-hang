@@ -445,6 +445,14 @@
             text-align: right;
         }
         
+        /* Hide mobile-time on desktop, show desktop-time */
+        .mobile-time {
+            display: none;
+        }
+        .desktop-time {
+            display: block;
+        }
+        
         .video-btn {
             display: inline-flex;
             align-items: center;
@@ -743,45 +751,69 @@
             h1 { font-size: 4rem; }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             
-            /* COMPLETELY REDONE MOBILE LEADERBOARD - CLEAN VERSION */
+            /* MOBILE-OPTIMIZED LEADERBOARD WITH EXPANDABLE DETAILS */
             .leaderboard {
                 margin: 0 8px;
-                overflow-x: auto;
             }
             
-            /* Force mobile grid layout */
+            /* Simplified 3-column layout for mobile */
             .lb-header, .lb-row {
-                grid-template-columns: 30px 60px 1fr 70px !important;
-                gap: 6px !important;
-                padding: 4px 8px !important;
+                grid-template-columns: 40px 1fr 70px !important;
+                gap: 8px !important;
+                padding: 6px 10px !important;
             }
             
             .lb-header {
-                font-size: 0.6rem !important;
-                padding: 6px 8px !important;
+                font-size: 0.7rem !important;
+                padding: 8px 10px !important;
             }
             
             .lb-row {
-                font-size: 0.75rem !important;
-                min-height: 36px !important;
+                font-size: 0.85rem !important;
+                min-height: 44px !important;
+                border-bottom: 1px solid var(--border) !important;
             }
             
             .name {
-                font-size: 0.8rem !important;
-                line-height: 1.2 !important;
+                font-size: 0.9rem !important;
+                line-height: 1.3 !important;
                 white-space: normal !important;
                 word-break: break-word !important;
             }
             
             .gender-label {
-                font-size: 0.6rem !important;
-                padding: 1px 4px !important;
-                margin-left: 4px !important;
+                font-size: 0.65rem !important;
+                padding: 2px 6px !important;
+                margin-left: 6px !important;
             }
             
-            /* Hide desktop-only columns */
-            .video-btn, .location, .country-col, .date-col { 
+            /* Hide all non-essential columns on mobile */
+            .video-btn, .location, .country-col, .date-col, .time-col { 
                 display: none !important; 
+            }
+            
+            /* Show time in the name column on mobile */
+            .mobile-time {
+                display: block !important;
+                font-size: 0.75rem !important;
+                color: var(--gold) !important;
+                font-weight: 600 !important;
+                margin-top: 2px !important;
+            }
+            
+            .desktop-time {
+                display: none !important;
+            }
+            
+            /* Add expandable details indicator */
+            .lb-row::after {
+                content: "⋯";
+                color: var(--text-dim);
+                font-size: 1.2rem;
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
             }
             
             .cta-section { 
@@ -1409,10 +1441,11 @@
                         </div>
                     </div>
                     <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
+                    <div class="time mobile-time">${athlete.currentPR}</div>
                 </div>
                 <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
                 <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
-                <div class="time">${athlete.currentPR}</div>
+                <div class="time desktop-time">${athlete.currentPR}</div>
                 <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
             `;
             
