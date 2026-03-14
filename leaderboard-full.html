@@ -798,22 +798,28 @@
                 display: none !important; 
             }
             
-            /* Make tier badge smaller on mobile */
+            /* Make tier badge much smaller on mobile */
             .tier-badge {
-                font-size: 0.65rem !important;
-                padding: 2px 6px !important;
-                min-width: 40px !important;
+                font-size: 0.55rem !important;
+                padding: 1px 4px !important;
+                min-width: 35px !important;
+                max-width: 35px !important;
+                text-align: center !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
             }
             
-            /* Make dead hang time larger and better positioned */
+            /* Make dead hang time much larger with more space */
             .mobile-time {
                 display: block !important;
-                font-size: 0.9rem !important;
+                font-size: 1.1rem !important;
                 color: var(--gold) !important;
-                font-weight: 700 !important;
-                margin-top: 4px !important;
+                font-weight: 800 !important;
+                margin-top: 6px !important;
+                margin-bottom: 4px !important;
                 font-family: 'Oswald', sans-serif !important;
-                letter-spacing: 0.5px !important;
+                letter-spacing: 1px !important;
+                line-height: 1.2 !important;
             }
             
             .desktop-time {
