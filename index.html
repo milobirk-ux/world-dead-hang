@@ -403,7 +403,10 @@
             font-size: 0.75rem;
             color: #888;
             text-transform: uppercase;
-            margin-top: 2px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 6px;
+            line-height: 1;
         }
 
         .pr-badge {
@@ -755,8 +758,8 @@
             .name-wrapper {
                 display: flex;
                 align-items: center;
-                flex-wrap: wrap;
-                gap: 8px;
+                flex-wrap: nowrap; /* Prevent gender from wrapping to new line */
+                gap: 6px;
             }
             .name {
                 flex: 1;
@@ -765,6 +768,12 @@
                 white-space: normal;
                 word-break: break-word;
                 font-size: 0.95rem; /* Slightly larger for mobile readability */
+            }
+            .gender-label {
+                font-size: 0.7rem !important; /* Smaller on mobile */
+                padding: 1px 4px !important;
+                margin-left: 4px !important;
+                white-space: nowrap; /* Keep gender on one line */
             }
             .time {
                 text-align: right;
