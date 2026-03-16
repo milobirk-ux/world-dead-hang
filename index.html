@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Dead Hang Championship | WDHC</title>
+    <title>Full Leaderboard | World Dead Hang Championship</title>
     <link rel="icon" type="image/jpeg" href="media/full_logo_footer.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
@@ -268,7 +268,7 @@
 
         .lb-header {
             display: grid;
-            grid-template-columns: 70px 100px 1fr 120px 100px;
+            grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
             gap: 12px;
             padding: 8px 20px;
             font-size: 0.7rem;
@@ -282,7 +282,7 @@
 
         .lb-row {
             display: grid;
-            grid-template-columns: 70px 100px 1fr 120px 100px;
+            grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
             gap: 12px;
             padding: 8px 20px;
             /* border-bottom is now on the wrapper */
@@ -359,9 +359,8 @@
 
         .name-cell {
             display: flex;
-            flex-direction: row;
-            align-items: baseline;
-            gap: 10px;
+            flex-direction: column;
+            justify-content: center;
             overflow: hidden; /* Added to contain children */
         }
 
@@ -376,7 +375,7 @@
         .name { 
             font-family: 'Oswald', sans-serif; 
             font-weight: 500; 
-            font-size: 1.4rem; 
+            font-size: 1.6rem; 
             letter-spacing: 0.5px; 
             color: #fff;
             position: relative;
@@ -395,7 +394,7 @@
             font-size: 0.75rem;
             color: #666;
             text-transform: uppercase;
-            margin-top: 0;
+            margin-top: 2px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -442,7 +441,7 @@
 
         .time { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 2.2rem; 
+            font-size: 2.5rem; 
             color: var(--gold); 
             font-weight: 700; 
             letter-spacing: 1px; 
@@ -749,10 +748,6 @@
         .history-item span.h-time { color: var(--gold); font-weight: 700; }
 
         @media (max-width: 900px) {
-            /* NEW RULE TO HIDE THE TIER BADGE COLUMN ON MOBILE */
-            .lb-row > div:nth-child(2) {
-                display: none !important;
-            }
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
             h1 { font-size: 4rem; }
@@ -763,9 +758,9 @@
                 margin: 0 8px;
             }
             
-            /* Optimized 2-column layout for mobile */
+            /* Optimized 3-column layout for mobile */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr !important;
+                grid-template-columns: 35px 1fr 60px !important;
                 gap: 10px !important;
                 padding: 8px 12px !important;
             }
@@ -780,14 +775,16 @@
                 min-height: 50px !important;
                 border-bottom: 1px solid var(--border) !important;
             }
-
+            
             .name {
-                font-size: 1rem !important;
-                font-weight: 600 !important;
-                white-space: nowrap !important; /* Prevent wrapping */
-                overflow: hidden !important; /* Hide overflow */
-                text-overflow: ellipsis !important; /* Add ... */
+                font-size: 1.2rem !important;
                 line-height: 1.4 !important;
+                white-space: normal !important;
+                word-break: normal !important;
+                overflow-wrap: normal !important;
+                word-wrap: normal !important;
+                hyphens: none !important;
+                font-weight: 600 !important;
             }
             
             .gender-label {
@@ -828,7 +825,18 @@
             .desktop-time {
                 display: none !important;
             }
-
+            
+            /* Add expandable details indicator */
+            .lb-row::after {
+                content: "?";
+                color: var(--text-dim);
+                font-size: 1.2rem;
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            
             .cta-section { 
                 flex-direction: column; 
                 text-align: center; 
@@ -841,6 +849,23 @@
                 bottom: auto; 
             }
         }
+                font-size: 0.65rem;
+            }
+            .lb-row {
+                font-size: 0.85rem;
+            }
+            .video-btn { display: none; } 
+            .location { display: none; } 
+            .country-col, .date-col { display: none; }
+            .cta-section { flex-direction: column; text-align: center; gap: 30px; }
+            .cta-section::before { width: 100%; height: 4px; bottom: auto; }
+            
+            /* Fix for mobile name cutoff */
+            .name-cell {
+                overflow: visible;
+                white-space: normal;
+                word-break: break-word;
+                min-width: 0;
             }
             .name-wrapper {
                 display: flex;
@@ -868,7 +893,7 @@
                 color: var(--gold);
                 font-family: 'Oswald', sans-serif;
                 letter-spacing: 0.5px;
-                font-size: 0.95rem; /* Consistent with name size */
+                font-size: 1.1rem; /* Consistent with name size */
             }
         }
     </style>
@@ -886,12 +911,10 @@
 
     <div class="marquee-container">
         <div class="marquee-content">
-            <span>Every second on the bar is a victory.</span>
-            <span>Grip, grit, and glory. Submit your hang today.</span>
-            <span>Your journey to legend status starts with a single hang.</span>
-            <span>Beat your personal best. That's the real competition.</span>
-            <span>From challenger to champion, every attempt counts.</span>
-            <span>The clock is your opponent. Your grip is your weapon.</span>
+            <span>1 — Authority: 🌍 The world's first sanctioned dead hang championship — officially open</span>
+            <span>2 — Inclusivity: ⏱️ No minimum time. Every hang is official.</span>
+            <span>3 — Science hook: 💪 Grip strength predicts lifespan. Dead hang measures it. What's your Grip Age?</span>
+            <span>4 — Low time encouragement: ⚡ 30 seconds puts you ahead of most people on earth. Submit yours and start your journey.</span>
         </div>
     </div>
 
@@ -913,7 +936,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 14, 2026, 1:53 PM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 15, 2026, 9:30 PM EDT</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -932,7 +955,7 @@
                 </div>
 
                 <div class="leaderboard">
-                    <div class="lb-header" style="grid-template-columns: 70px 100px 1fr 120px 100px;">
+                    <div class="lb-header" style="grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;">
                         <div>Rank</div>
                         <div>Tier</div>
                         <div>Athlete</div>
@@ -945,11 +968,9 @@
                     <div id="leaderboard-body">
                         <!-- JS Populated -->
                     </div>
-                    <div id="pagination-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px; background: #080808; border-top: 1px solid var(--border);">
-                        <!-- JS Populated -->
-                    </div>
+                    <!-- No pagination controls on full leaderboard page -->
                     <div style="text-align: center; padding: 20px; border-top: 1px solid var(--border);">
-                        <a href="leaderboard-full.html" style="color: var(--gold); text-decoration: none; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">View Full Leaderboard ?</a>
+                        <a href="index.html" style="color: var(--gold); text-decoration: none; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">? Back to Top 10 Leaderboard</a>
                     </div>
                 </div>
             </div>
@@ -1155,7 +1176,7 @@
     },
     {
         "name": "Testa Longername",
-        "category": "Open Men",
+        "category": "Open Women",
         "location": "Detroit, MI / USA / DETROIT, MI / USA",
         "occupation": "Test Proffessional",
         "bodyweight": 120,
@@ -1176,26 +1197,6 @@
         "isVerified": false,
         "video": "https://www.youtube.com/",
         "prCount": 2
-    },
-    {
-        "name": "Megan Mullins",
-        "category": "Open Women",
-        "location": "Mount Pleasant, MI / USA",
-        "occupation": "Bank teller",
-        "bodyweight": 125,
-        "dob": "1998-12-09",
-        "country": "🇺🇸",
-        "currentPR": "1:30",
-        "lastAttempt": "2026-03-14",
-        "history": [
-            {
-                "date": "2026-03-14",
-                "time": "1:30"
-            }
-        ],
-        "isVerified": false,
-        "video": "https://drive.google.com/file/d/13WbYyva3Yl44kUeMZNiv7Y6fJHOvR98E/view?usp=drivesdk",
-        "prCount": 1
     },
     {
         "name": "Zak Mullins",
@@ -1321,8 +1322,8 @@
 
     let currentCategory = 'All';
     let currentSort = 'recent';
-    let currentPage = 1;
-    const itemsPerPage = 10; 
+    // No pagination on full leaderboard page - show all athletes
+    const itemsPerPage = 1000; // Large number to show all 
 
     function getTierInfo(timeStr) {
         const seconds = parseTime(timeStr);
@@ -1377,6 +1378,7 @@
         else baseExpectedTime = isFemale ? 20 : 28;
 
         // Step 2: Bodyweight Adjustment
+
         const refWeight = isFemale ? 135 : 175;
         const adjustedExpectedTime = (baseExpectedTime * (refWeight / actualWeight) * 0.7) + (baseExpectedTime * 0.3);
 
@@ -1426,22 +1428,12 @@
             filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
         }
 
-        const paginationControls = document.getElementById('pagination-controls');
-
         if (filteredData.length === 0) {
             list.innerHTML = '<div style="padding:40px; text-align:center; color:#555;">No records in this division yet.</div>';
-            if(paginationControls) paginationControls.style.display = 'none';
             return;
         }
 
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const pageData = filteredData.slice(startIndex, endIndex);
-
-        pageData.forEach((athlete) => {
+        filteredData.forEach((athlete) => {
             const rank = athlete.trueRank;
             const rankClass = rank === 1 ? 'rank-1' : '';
             const tier = getTierInfo(athlete.currentPR);
@@ -1457,23 +1449,22 @@
             // Create the main row
             const row = document.createElement('div');
             row.className = 'lb-row';
-            
-            const displayName = athlete.name.replace(/ ([^ ]*)$/, '&nbsp;$1');
             row.innerHTML = `
                 <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
                 <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                 <div class="name-cell">
                     <div class="name-wrapper">
-                        <div class="name" style="flex-grow: 1;">${displayName}</div>
+                        <div class="name" style="flex-grow: 1;">${athlete.name}</div>
                         <div style="display: flex; align-items: center; flex-shrink: 0;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
-                            <div class="location" style="margin-left: 10px;">${displayLocation} ${flag}</div>
                         </div>
                     </div>
                     <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
                     <div class="time mobile-time">${athlete.currentPR}</div>
                 </div>
+                <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
+                <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
                 <div class="time desktop-time">${athlete.currentPR}</div>
                 <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
             `;
@@ -1492,7 +1483,6 @@
                             <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
                             <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
-                            <div style="grid-column: span 2;"><span style="${labelStyle}">Background:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.occupation}</span></div>
                         </div>
                     `;
                 } else {
@@ -1502,7 +1492,6 @@
                             <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
                             <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
-                            <div style="grid-column: span 2;"><span style="${labelStyle}">Background:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.occupation}</span></div>
                         </div>
                     `;
                 }
@@ -1511,7 +1500,6 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
-                            <div style="grid-column: span 2;"><span style="${labelStyle}">Background:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.occupation}</span></div>
                         </div>
                 `;
             }
@@ -1522,42 +1510,7 @@
             list.appendChild(wrapper);
         });
         
-        renderPagination(totalPages);
         renderSidebar();
-    }
-
-    function renderPagination(totalPages) {
-        const controls = document.getElementById('pagination-controls');
-        if (!controls) return;
-        
-        controls.innerHTML = '';
-        
-        if (totalPages <= 1) {
-            controls.style.display = 'none';
-            return;
-        }
-        
-        controls.style.display = 'flex';
-        
-        const prevBtn = document.createElement('button');
-        prevBtn.textContent = '? Prev';
-        prevBtn.className = 'pagination-btn';
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderLeaderboard(); window.scrollTo({top: document.querySelector('.leaderboard').offsetTop - 120, behavior: 'smooth'}); } };
-        
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = 'Next ?';
-        nextBtn.className = 'pagination-btn';
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderLeaderboard(); window.scrollTo({top: document.querySelector('.leaderboard').offsetTop - 120, behavior: 'smooth'}); } };
-        
-        const pageInfo = document.createElement('span');
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-        pageInfo.style.cssText = "font-family: 'Roboto Mono', monospace; font-size: 0.9rem; color: var(--text-dim);";
-        
-        controls.appendChild(prevBtn);
-        controls.appendChild(pageInfo);
-        controls.appendChild(nextBtn);
     }
     
     function getChronologicalAge(dob) {
@@ -1694,5 +1647,4 @@
 
 </body>
 </html>
-
 
