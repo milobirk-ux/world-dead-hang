@@ -874,43 +874,6 @@
             .cta-section { flex-direction: column; text-align: center; gap: 30px; }
             .cta-section::before { width: 100%; height: 4px; bottom: auto; }
         }
-            
-            /* Fix for mobile name cutoff */
-            .name-cell {
-                overflow: visible;
-                white-space: normal;
-                word-break: break-word;
-                min-width: 0;
-            }
-            .name-wrapper {
-                display: flex;
-                align-items: center;
-                flex-wrap: nowrap; /* Prevent gender from wrapping to new line */
-                gap: 6px;
-            }
-            .name {
-                flex: 1;
-                min-width: 0;
-                overflow: visible;
-                white-space: normal;
-                word-break: break-word;
-                font-size: 1.1rem; /* Larger for mobile readability */
-            }
-            .gender-label {
-                font-size: 0.7rem !important; /* Smaller on mobile */
-                padding: 1px 4px !important;
-                margin-left: 4px !important;
-                white-space: nowrap; /* Keep gender on one line */
-            }
-            .time {
-                text-align: right;
-                font-weight: 700;
-                color: var(--gold);
-                font-family: 'Oswald', sans-serif;
-                letter-spacing: 0.5px;
-                font-size: 0.95rem; /* Consistent with name size */
-            }
-        }
     </style>
 </head>
 <body>
