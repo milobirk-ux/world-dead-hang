@@ -347,7 +347,7 @@
 
         .rank { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 2.4rem; 
+            font-size: 3.2rem; 
             font-weight: 700; 
             color: #333; 
             line-height: 1;
@@ -368,14 +368,14 @@
             display: flex;
             align-items: center;
             width: 100%;
-            gap: 8px;
+            gap: 2px;
             flex-wrap: nowrap;
         }
 
         .name { 
             font-family: 'Oswald', sans-serif; 
             font-weight: 500; 
-            font-size: 2.5rem; 
+            font-size: 4.8rem; 
             letter-spacing: 0.5px; 
             color: #fff;
             position: relative;
@@ -441,7 +441,7 @@
 
         .time { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 3.6rem; 
+            font-size: 6.2rem; 
             color: var(--gold); 
             font-weight: 700; 
             letter-spacing: 1px; 
@@ -786,7 +786,7 @@
             }
             
             .name {
-                font-size: 1.2rem !important;
+                font-size: 2.8rem !important;
                 line-height: 1.4 !important;
                 white-space: normal !important;
                 word-break: normal !important;
@@ -821,7 +821,7 @@
             /* Make dead hang time much larger with more space */
             .mobile-time {
                 display: block !important;
-                font-size: 1.3rem !important;
+                font-size: 3.2rem !important;
                 color: var(--gold) !important;
                 font-weight: 800 !important;
                 margin-top: 6px !important;
@@ -891,7 +891,7 @@
                 overflow: visible;
                 white-space: normal;
                 word-break: break-word;
-                font-size: 0.95rem; /* Slightly larger for mobile readability */
+                font-size: 1.1rem; /* Larger for mobile readability */
             }
             .gender-label {
                 font-size: 0.7rem !important; /* Smaller on mobile */
@@ -923,10 +923,12 @@
 
     <div class="marquee-container">
         <div class="marquee-content">
-            <span>🌍 The world's first sanctioned dead hang championship — officially open</span>
-            <span>⏱️ No minimum time. Every hang is official.</span>
-            <span>💪 Grip strength predicts lifespan. Dead hang measures it. What's your Grip Age?</span>
-            <span>⚡ 30 seconds puts you in the top half of the global population. Submit yours and start your journey.</span>
+            <span>Every second on the bar is a victory.</span>
+            <span>Grip, grit, and glory. Submit your hang today.</span>
+            <span>Your journey to legend status starts with a single hang.</span>
+            <span>Beat your personal best. That's the real competition.</span>
+            <span>From challenger to champion, every attempt counts.</span>
+            <span>The clock is your opponent. Your grip is your weapon.</span>
         </div>
     </div>
 
@@ -1466,8 +1468,8 @@
                 <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                 <div class="name-cell">
                     <div class="name-wrapper">
-                        <div class="name" style="flex-grow: 1;">${athlete.name}</div>
-                        <div style="display: flex; align-items: center; flex-shrink: 0;">
+                        <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                        <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: -2px;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
                             <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
                         </div>
@@ -1477,7 +1479,7 @@
                 </div>
                 <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
                 <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
-                <div class="time desktop-time">${athlete.currentPR}</div>
+                <div class="time desktop-time" style="justify-self: center; padding-left: 8px;">${athlete.currentPR}</div>
                 <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
             `;
             
