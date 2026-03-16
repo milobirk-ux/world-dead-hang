@@ -478,6 +478,15 @@
             color: #000;
             border-color: #fff;
         }
+        
+        @media (max-width: 900px) {
+            .video-btn {
+                font-size: 0.65rem;
+                padding: 4px 8px;
+                min-width: 45px;
+                text-align: center;
+            }
+        }
 
         .verified-badge {
             display: inline-block;
@@ -758,9 +767,9 @@
                 margin: 0 8px;
             }
             
-            /* Optimized 3-column layout for mobile */
+            /* Optimized 4-column layout for mobile (Rank, Name, Time, Watch) */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr 60px !important;
+                grid-template-columns: 35px 1fr 60px 50px !important;
                 gap: 10px !important;
                 padding: 8px 12px !important;
             }
@@ -794,7 +803,7 @@
             }
             
             /* Hide all non-essential columns on mobile */
-            .video-btn, .location, .country-col, .date-col, .time-col { 
+            .location, .country-col, .date-col, .time-col { 
                 display: none !important; 
             }
             
@@ -849,16 +858,19 @@
                 bottom: auto; 
             }
         }
+        
+        @media (max-width: 600px) {
+            .lb-header {
                 font-size: 0.65rem;
             }
             .lb-row {
                 font-size: 0.85rem;
             }
-            .video-btn { display: none; } 
             .location { display: none; } 
             .country-col, .date-col { display: none; }
             .cta-section { flex-direction: column; text-align: center; gap: 30px; }
             .cta-section::before { width: 100%; height: 4px; bottom: auto; }
+        }
             
             /* Fix for mobile name cutoff */
             .name-cell {
