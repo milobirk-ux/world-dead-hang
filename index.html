@@ -303,15 +303,15 @@
         /* Tier Badges */
         .tier-badge {
             display: inline-block;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 4px;
             font-family: 'Roboto Mono', monospace;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-align: center;
-            width: 120px; /* Fixed width increased from 100px to 120px */
+            width: 110px; /* Slightly smaller width */
         }
         .tier-freak { background: #9900ff; color: #fff; box-shadow: 0 0 10px rgba(153, 0, 255, 0.4); } 
         .tier-legend { background: var(--gold); color: #000; box-shadow: 0 0 10px var(--gold-glow); } 
@@ -347,7 +347,7 @@
 
         .rank { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 3.2rem; 
+            font-size: 2.5rem; 
             font-weight: 700; 
             color: #333; 
             line-height: 1;
@@ -375,8 +375,8 @@
         .name { 
             font-family: 'Oswald', sans-serif; 
             font-weight: 500; 
-            font-size: 2.2rem; 
-            letter-spacing: -0.3px; 
+            font-size: 1.8rem; 
+            letter-spacing: -0.2px; 
             color: #fff;
             position: relative;
             cursor: help;
@@ -434,12 +434,7 @@
             font-weight: 700;
             font-family: 'Oswald', sans-serif;
         }
-        .pr-badge .pr-label {
-            font-size: 0.65rem;
-            font-family: 'Roboto Mono', monospace;
-            text-transform: uppercase;
-            color: #777;
-        }
+
 
         .time { 
             font-family: 'Oswald', sans-serif; 
@@ -669,6 +664,12 @@
             color: #fff;
             line-height: 1;
         }
+        @media (max-width: 900px) {
+            .cta-text h3 {
+                font-size: 1.5rem !important; /* Adjust font size for mobile */
+                line-height: 1.2 !important; /* Adjust line height for better spacing */
+            }
+        }
         .cta-text p {
             color: var(--text-dim);
             max-width: 500px;
@@ -761,7 +762,12 @@
         @media (max-width: 900px) {
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
-            h1 { font-size: 4rem; }
+            h1 {
+                font-size: 3.5rem;
+                text-align: center;
+                width: 100%;
+                display: block;
+            }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             
             /* MOBILE-OPTIMIZED LEADERBOARD WITH EXPANDABLE DETAILS */
@@ -771,32 +777,47 @@
             
             /* Optimized 4-column layout for mobile (Rank, Name, Time, Watch) */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr 60px 50px !important;
-                gap: 10px !important;
-                padding: 8px 12px !important;
+                grid-template-columns: 30px 1fr 50px 55px !important;
+                gap: 8px !important;
+                padding: 8px 10px !important;
             }
             
             .lb-header {
-                font-size: 0.75rem !important;
-                padding: 10px 12px !important;
+                font-size: 0.7rem !important;
+                padding: 8px 10px !important;
             }
             
             .lb-row {
-                font-size: 0.9rem !important;
-                min-height: 50px !important;
+                font-size: 0.85rem !important;
+                min-height: 45px !important;
                 border-bottom: 1px solid var(--border) !important;
             }
             
+            .name-wrapper {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                gap: 2px;
+                flex-wrap: wrap; /* Allow wrapping of name and badges */
+            }
             .name {
-                font-size: 4.5rem !important;
-                line-height: 0.9 !important;
+                font-size: 1.0rem !important;
+                line-height: 1.2 !important;
                 white-space: normal !important;
                 word-break: normal !important;
                 overflow-wrap: normal !important;
                 word-wrap: normal !important;
                 hyphens: none !important;
                 font-weight: 600 !important;
-                margin-bottom: 5px !important;
+                margin-bottom: 0px !important; /* Reduce margin */
+            }
+            .pr-badge {
+                padding: 2px 4px !important; /* Smaller padding */
+                min-width: 40px !important;
+                line-height: 1;
+            }
+            .pr-badge .pr-val {
+                font-size: 0.8rem !important; /* Smaller text */
             }
             
             .gender-label {
@@ -805,10 +826,7 @@
                 margin-left: 6px !important;
             }
             
-            /* Hide all non-essential columns on mobile */
-            .location, .country-col, .date-col, .time-col { 
-                display: none !important; 
-            }
+            /* Mobile generates its own 4-column HTML, so no need to hide columns */
             
             /* Make tier badge much smaller on mobile */
             .tier-badge {
@@ -824,13 +842,13 @@
             /* Make dead hang time much larger with more space */
             .mobile-time {
                 display: block !important;
-                font-size: 3.2rem !important;
+                font-size: 1.4rem !important;
                 color: var(--gold) !important;
                 font-weight: 800 !important;
-                margin-top: 6px !important;
-                margin-bottom: 4px !important;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
                 font-family: 'Oswald', sans-serif !important;
-                letter-spacing: 1px !important;
+                letter-spacing: 0.5px !important;
                 line-height: 1.2 !important;
             }
             
@@ -838,16 +856,14 @@
                 display: none !important;
             }
             
-            /* Add expandable details indicator */
-            .lb-row::after {
-                content: "?";
-                color: var(--text-dim);
-                font-size: 1.2rem;
-                position: absolute;
-                right: 10px;
-                top: 50%;
-                transform: translateY(-50%);
+            /* Mobile rank styling - smaller */
+            .rank {
+                font-size: 1.0rem !important;
+                font-weight: 700 !important;
+                line-height: 1 !important;
             }
+            
+
             
             .cta-section { 
                 flex-direction: column; 
@@ -860,19 +876,28 @@
                 height: 4px; 
                 bottom: auto; 
             }
+            
+            .details-panel {
+                padding: 0 15px !important; /* Smaller horizontal padding for mobile */
+                font-size: 0.8rem !important; /* Smaller base font size for mobile */
+            }
+            .lb-row-wrapper:hover .details-panel {
+                padding: 10px 15px !important; /* Smaller padding when expanded */
+            }
+            .details-panel strong {
+                font-size: 1.2rem !important; /* Smaller strong text for mobile */
+                margin-right: 10px !important;
+            }
+            .details-panel p {
+                font-size: 0.7rem !important; /* Smaller paragraph text for mobile */
+            }
+            .details-panel > div {
+                gap: 8px !important; /* Smaller gap for grid items */
+            }
         }
         
         @media (max-width: 600px) {
-            .lb-header {
-                font-size: 0.65rem;
-            }
-            .lb-row {
-                font-size: 0.85rem;
-            }
-            .location { display: none; } 
-            .country-col, .date-col { display: none; }
-            .cta-section { flex-direction: column; text-align: center; gap: 30px; }
-            .cta-section::before { width: 100%; height: 4px; bottom: auto; }
+            /* Remove conflicting mobile styles - use only the 900px media query */
         }
     </style>
 </head>
@@ -889,19 +914,17 @@
 
     <div class="marquee-container">
         <div class="marquee-content">
-            <span>Every second on the bar is a victory.</span>
-            <span>Grip, grit, and glory. Submit your hang today.</span>
-            <span>Your journey to legend status starts with a single hang.</span>
-            <span>Beat your personal best. That's the real competition.</span>
-            <span>From challenger to champion, every attempt counts.</span>
-            <span>The clock is your opponent. Your grip is your weapon.</span>
+            <span>🌍 The world's first sanctioned dead hang championship — officially open</span>
+            <span>⏱️ No minimum time. Every hang is official.</span>
+            <span>💪 Grip strength predicts lifespan & dead hang measures it. What's your Grip Age?</span>
+            <span>⚡ 30 seconds puts you in the top half of the global population. Submit yours and start your journey!</span>
         </div>
     </div>
 
     <header>
         <div class="status-pill" style="margin-bottom: 20px;">OFFICIAL 2026 SEASON LIVE</div>
         <h1>
-            <span style="color: var(--gold);">WORLD</span> DEAD HANG<br>
+            <span style="color: var(--gold);">WORLD</span> <span style="color: var(--text);">DEAD HANG</span><br>
             <span style="color: var(--gold);">CHAMPIONSHIP</span>
         </h1>
         <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
@@ -916,7 +939,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 15, 2026, 9:30 PM EDT</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 17, 2026, 12:50 AM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -935,15 +958,6 @@
                 </div>
 
                 <div class="leaderboard">
-                    <div class="lb-header" style="grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;">
-                        <div>Rank</div>
-                        <div>Tier</div>
-                        <div>Athlete</div>
-                        <div>Background</div>
-                        <div style="text-align: center;">Location</div>
-                        <div style="text-align: center;">Time</div>
-                        <div style="text-align: center;">Watch</div>
-                    </div>
 
                     <div id="leaderboard-body">
                         <!-- JS Populated -->
@@ -1054,7 +1068,7 @@
 
         <div class="cta-section">
             <div class="cta-text">
-                <h3>If your life depended on it,<br>how long could you hang on?</h3>
+                <h3>If your life was on the line, <br>Could you hang on?</h3>
                 <p>Set up your camera, hang until you drop, and claim your official ranking on the world's first sanctioned dead hang leaderboard.</p>
             </div>
             <a href="submit.html" class="cta-btn">Submit Your Hang</a>
@@ -1156,7 +1170,7 @@
     },
     {
         "name": "Testa Longername",
-        "category": "Open Women",
+        "category": "Open Men",
         "location": "Detroit, MI / USA / DETROIT, MI / USA",
         "occupation": "Test Proffessional",
         "bodyweight": 120,
@@ -1177,6 +1191,26 @@
         "isVerified": false,
         "video": "https://www.youtube.com/",
         "prCount": 2
+    },
+    {
+        "name": "Megan Mullins",
+        "category": "Open Women",
+        "location": "Mount Pleasant, MI / USA",
+        "occupation": "Bank teller",
+        "bodyweight": 125,
+        "dob": "1998-12-09",
+        "country": "🇺🇸",
+        "currentPR": "1:30",
+        "lastAttempt": "2026-03-14",
+        "history": [
+            {
+                "date": "2026-03-14",
+                "time": "1:30"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://drive.google.com/file/d/13WbYyva3Yl44kUeMZNiv7Y6fJHOvR98E/view?usp=drivesdk",
+        "prCount": 1
     },
     {
         "name": "Zak Mullins",
@@ -1408,8 +1442,36 @@
             filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
         }
 
+        // Create header dynamically
+        const header = document.createElement('div');
+        header.className = 'lb-header';
+        const isMobile = window.innerWidth <= 900;
+        
+        if (isMobile) {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div>Name</div>
+                <div>Time</div>
+                <div>Watch</div>
+            `;
+        } else {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div>Tier</div>
+                <div>Athlete</div>
+                <div>Background</div>
+                <div style="text-align: center;">Location</div>
+                <div style="text-align: center;">Time</div>
+                <div style="text-align: center;">Watch</div>
+            `;
+        }
+        list.appendChild(header);
+
         if (filteredData.length === 0) {
-            list.innerHTML = '<div style="padding:40px; text-align:center; color:#555;">No records in this division yet.</div>';
+            const noRecordsDiv = document.createElement('div');
+            noRecordsDiv.style = "padding:40px; text-align:center; color:#555;";
+            noRecordsDiv.innerText = "No records in this division yet.";
+            list.appendChild(noRecordsDiv);
             return;
         }
 
@@ -1429,31 +1491,60 @@
             // Create the main row
             const row = document.createElement('div');
             row.className = 'lb-row';
-            row.innerHTML = `
-                <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
-                <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
-                <div class="name-cell">
-                    <div class="name-wrapper">
-                        <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
-                        <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: -2px;">
-                            ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
-                            <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+            // Check if mobile
+            const isMobile = window.innerWidth <= 900;
+            
+            if (isMobile) {
+                // MOBILE: 4 columns (Rank, Name, Time, Watch)
+                row.innerHTML = `
+                    <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: -2px;">
+                                ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
+                                <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                            </div>
+                        </div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
+                        <div style="font-size: 0.6rem; color: #666; margin-top: 2px; display: flex; align-items: center; gap: 4px;">
+                            <span>${displayLocation}</span>
+                            <span class="flag">${flag}</span>
                         </div>
                     </div>
-                    <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
                     <div class="time mobile-time">${athlete.currentPR}</div>
-                </div>
-                <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
-                <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
-                <div class="time desktop-time" style="justify-self: center; padding-left: 8px;">${athlete.currentPR}</div>
-                <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
-            `;
+                    <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
+                `;
+            } else {
+                // DESKTOP: 7 columns
+                row.innerHTML = `
+                    <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
+                    <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: -2px;">
+                                ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✔</span>` : ''}
+                                <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                            </div>
+                        </div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
+                    </div>
+                    <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
+                    <div style="color: #bbb; font-size: 0.9rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <span>${displayLocation}</span>
+                        <span class="flag">${flag}</span>
+                    </div>
+                    <div class="time desktop-time" style="justify-self: center; padding-left: 8px;">${athlete.currentPR}</div>
+                    <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
+                `;
+            }
             
             // Create the details panel
             const detailsPanel = document.createElement('div');
             detailsPanel.className = 'details-panel';
-            const labelStyle = 'font-size: 0.8rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;';
-            const valStyle = 'font-size: 1.15rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
+            const labelStyle = 'font-size: 0.7rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;';
+            const valStyle = 'font-size: 0.9rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
             
             if (gripAge !== null) {
                 if (gripAge.isYounger) {
@@ -1613,6 +1704,11 @@
     }
 
     renderLeaderboard();
+    
+    // Re-render on window resize
+    window.addEventListener('resize', function() {
+        renderLeaderboard();
+    });
 </script>
 
 <script>
