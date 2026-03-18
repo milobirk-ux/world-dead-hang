@@ -897,6 +897,10 @@
                 width: 100%;
                 display: block;
             }
+            .dead-hang-text {
+                white-space: nowrap; /* Prevent "DEAD HANG" from breaking */
+                display: inline-block;
+            }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             
             /* MOBILE-OPTIMIZED LEADERBOARD WITH EXPANDABLE DETAILS */
@@ -1053,7 +1057,8 @@
     <header>
         <div class="status-pill" style="margin-bottom: 20px;">OFFICIAL 2026 SEASON LIVE</div>
         <h1>
-            <span style="color: var(--gold);">WORLD</span> <span style="color: var(--text);">DEAD HANG</span><br>
+            <span style="color: var(--gold);">WORLD</span><br>
+            <span class="dead-hang-text" style="color: var(--text);">DEAD HANG</span><br>
             <span style="color: var(--gold);">CHAMPIONSHIP</span>
         </h1>
         <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
