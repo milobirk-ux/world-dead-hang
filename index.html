@@ -579,6 +579,13 @@
         .tiktok-preview:hover { border-color: #000000; }
         .generic-preview:hover { border-color: var(--gold); }
         
+        /* Desktop-only: Title on two lines - World Dead Hang / CHAMPIONSHIP */
+        @media (min-width: 901px) {
+            h1 .dead-hang-text {
+                color: var(--text) !important;
+            }
+        }
+        
         /* Mobile adjustments */
         @media (max-width: 900px) {
             .video-preview {
@@ -1067,8 +1074,7 @@
     <header>
         <div class="status-pill" style="margin-bottom: 20px;">OFFICIAL 2026 SEASON LIVE</div>
         <h1>
-            <span style="color: var(--gold);">WORLD</span><br>
-            <span class="dead-hang-text" style="color: var(--text);">DEAD HANG</span><br>
+            <span style="color: var(--gold);">World </span><span class="dead-hang-text" style="color: var(--text);">Dead Hang</span><br>
             <span style="color: var(--gold);">CHAMPIONSHIP</span>
         </h1>
         <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
