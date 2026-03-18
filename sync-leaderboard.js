@@ -5,7 +5,7 @@ const fs = require('fs').promises;
 // --- CONFIGURATION ---
 const SPREADSHEET_ID = '1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s';
 const KEYFILE_PATH = path.join(__dirname, '..', 'credentials', 'google-service-account.json');
-const HTML_FILE_PATH = path.join(__dirname, 'index.html');
+const DATA_FILE_PATH = path.join(__dirname, 'leaderboard-data.js');
 
 async function syncLeaderboard() {
     try {
@@ -29,23 +29,7 @@ async function syncLeaderboard() {
 
         const headers = rows.shift();
         
-        // --- NEW: Approval Workflow ---
-        const approvedIndex = headers.indexOf('Approved');
-        if (approvedIndex === -1) {
-            throw new Error("The 'Approved' column was not found in the Google Sheet.");
-        }
-        
-        const approvedRows = rows.filter(row => row[approvedIndex] && row[approvedIndex].toLowerCase() === 'yes');
-        console.log(`Found ${rows.length} total submissions, with ${approvedRows.length} approved.`);
-
-        if (approvedRows.length === 0) {
-            console.log("No approved submissions to sync.");
-            return;
-        }
-        // --- END: Approval Workflow ---
-
-        // 2. Process the Data
-        console.log(`Processing ${approvedRows.length} approved submissions...`);
+        console.log(`Processing ${rows.length} submissions...`);
         const athletesData = {};
         
         const nameIndex = headers.indexOf('Athlete Name');
@@ -54,8 +38,10 @@ async function syncLeaderboard() {
         const categoryIndex = headers.indexOf('Division');
         const locationIndex = headers.indexOf('City, State / Country');
         const dateIndex = headers.indexOf('Submitted at');
+        const backgroundIndex = headers.findIndex(h => h.toString().toLowerCase().includes('background'));
+        const verifiedIndex = headers.indexOf('Verified'); // Will be -1 if not found, which is fine
 
-        approvedRows.forEach((row, i) => {
+        rows.forEach((row, i) => {
             const name = row[nameIndex];
             const time = row[timeIndex];
             const date = new Date(row[dateIndex]).toISOString().split('T')[0];
@@ -67,13 +53,13 @@ async function syncLeaderboard() {
                     id: i + 1,
                     name: name,
                     category: row[categoryIndex],
-                    occupation: "Athlete",
-                    location: row[locationIndex] ? row[locationIndex].split('/')[0].trim() : "Unknown",
-                    country: "🇺🇸",
+                    background: backgroundIndex !== -1 ? row[backgroundIndex] : "N/A",
+                    location: row[locationIndex] ? row[locationIndex] : "Unknown",
                     currentPR: "0:00",
                     prCount: 0,
                     lastAttempt: "1970-01-01",
                     video: "#",
+                    verified: verifiedIndex !== -1 && row[verifiedIndex] && row[verifiedIndex].toLowerCase() === 'yes',
                     history: []
                 };
             }
@@ -94,24 +80,10 @@ async function syncLeaderboard() {
         
         const finalAthletesArray = Object.values(athletesData);
 
-        // 3. Read the HTML file
-        console.log("Reading index.html file...");
-        let htmlContent = await fs.readFile(HTML_FILE_PATH, 'utf-8');
-
-        // 4. Inject the new data
-        console.log("Injecting new athlete data into HTML...");
-        const athletesRegex = /const athletes = \[[\s\S]*?\];/;
+        // 3. Write the new data file
+        console.log("Writing leaderboard-data.js file...");
         const newAthletesDataString = `const athletes = ${JSON.stringify(finalAthletesArray, null, 4)};`;
-
-        if (!athletesRegex.test(htmlContent)) {
-            throw new Error("Could not find 'const athletes' array in the HTML file.");
-        }
-
-        htmlContent = htmlContent.replace(athletesRegex, newAthletesDataString);
-
-        // 5. Write the updated HTML
-        console.log("Writing updated index.html file...");
-        await fs.writeFile(HTML_FILE_PATH, htmlContent, 'utf-8');
+        await fs.writeFile(DATA_FILE_PATH, newAthletesDataString, 'utf-8');
 
         console.log("✅✅✅ Leaderboard sync complete!");
 

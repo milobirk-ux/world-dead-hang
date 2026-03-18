@@ -58,7 +58,7 @@
 
         .marquee-content {
             display: inline-block;
-            animation: marquee 40s linear infinite;
+            animation: marquee 30s linear infinite;
             font-family: 'Oswald', sans-serif;
             font-size: 1.1rem;
             text-transform: uppercase;
@@ -66,7 +66,7 @@
         }
 
         .marquee-content span {
-            margin: 0 20px;
+            margin: 0 40px;
             font-weight: 600;
         }
 
@@ -268,10 +268,10 @@
 
         .lb-header {
             display: grid;
-            grid-template-columns: 80px 120px 300px 1.5fr 1fr 140px 120px;
-            gap: 16px;
-            padding: 12px 24px;
-            font-size: 0.8rem;
+            grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
+            gap: 12px;
+            padding: 8px 20px;
+            font-size: 0.7rem;
             color: var(--text-dim);
             text-transform: uppercase;
             border-bottom: 1px solid var(--border);
@@ -282,13 +282,13 @@
 
         .lb-row {
             display: grid;
-            grid-template-columns: 80px 120px 300px 1.5fr 1fr 140px 120px;
-            gap: 16px;
-            padding: 12px 24px;
+            grid-template-columns: 70px 100px 250px 1.5fr 1fr 120px 100px;
+            gap: 12px;
+            padding: 8px 20px;
             /* border-bottom is now on the wrapper */
             align-items: center;
             transition: all 0.2s ease;
-            min-height: 60px;
+            min-height: 40px;
             position: relative;
         }
 
@@ -303,15 +303,15 @@
         /* Tier Badges */
         .tier-badge {
             display: inline-block;
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 4px;
             font-family: 'Roboto Mono', monospace;
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-align: center;
-            width: 110px; /* Slightly smaller width */
+            width: 100px; /* Fixed width increased from 80px to 100px */
         }
         .tier-freak { background: #9900ff; color: #fff; box-shadow: 0 0 10px rgba(153, 0, 255, 0.4); } 
         .tier-legend { background: var(--gold); color: #000; box-shadow: 0 0 10px var(--gold-glow); } 
@@ -347,7 +347,7 @@
 
         .rank { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 2.0rem; 
+            font-size: 2rem; 
             font-weight: 700; 
             color: #333; 
             line-height: 1;
@@ -368,15 +368,15 @@
             display: flex;
             align-items: center;
             width: 100%;
-            gap: 2px;
+            gap: 8px;
             flex-wrap: nowrap;
         }
 
         .name { 
             font-family: 'Oswald', sans-serif; 
             font-weight: 500; 
-            font-size: 3.0rem; 
-            letter-spacing: 0.4px; 
+            font-size: 1.4rem; 
+            letter-spacing: 0.5px; 
             color: #fff;
             position: relative;
             cursor: help;
@@ -391,10 +391,10 @@
         
         .location {
             font-family: 'Roboto Mono', monospace;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #666;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 2px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -404,7 +404,7 @@
 
         .gender-label {
             font-family: 'Roboto Mono', monospace;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #888;
             text-transform: uppercase;
             display: inline-block;
@@ -441,11 +441,11 @@
 
         .time { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 5.2rem; 
+            font-size: 2.2rem; 
             color: var(--gold); 
             font-weight: 700; 
             letter-spacing: 1px; 
-            text-align: center;
+            text-align: right;
         }
         
         /* Hide mobile-time on desktop, show desktop-time */
@@ -477,15 +477,6 @@
             background: #fff; 
             color: #000;
             border-color: #fff;
-        }
-        
-        @media (max-width: 900px) {
-            .video-btn {
-                font-size: 0.65rem;
-                padding: 4px 8px;
-                min-width: 45px;
-                text-align: center;
-            }
         }
 
         .verified-badge {
@@ -767,9 +758,9 @@
                 margin: 0 8px;
             }
             
-            /* Optimized 4-column layout for mobile (Rank, Name, Time, Watch) */
+            /* Optimized 3-column layout for mobile */
             .lb-header, .lb-row {
-                grid-template-columns: 35px 1fr 60px 50px !important;
+                grid-template-columns: 35px 1fr 60px !important;
                 gap: 10px !important;
                 padding: 8px 12px !important;
             }
@@ -786,7 +777,7 @@
             }
             
             .name {
-                font-size: 1.9rem !important;
+                font-size: 1rem !important;
                 line-height: 1.4 !important;
                 white-space: normal !important;
                 word-break: normal !important;
@@ -803,7 +794,7 @@
             }
             
             /* Hide all non-essential columns on mobile */
-            .location, .country-col, .date-col, .time-col { 
+            .video-btn, .location, .country-col, .date-col, .time-col { 
                 display: none !important; 
             }
             
@@ -821,7 +812,7 @@
             /* Make dead hang time much larger with more space */
             .mobile-time {
                 display: block !important;
-                font-size: 2.1rem !important;
+                font-size: 1.1rem !important;
                 color: var(--gold) !important;
                 font-weight: 800 !important;
                 margin-top: 6px !important;
@@ -858,19 +849,16 @@
                 bottom: auto; 
             }
         }
-        
-        @media (max-width: 600px) {
-            .lb-header {
                 font-size: 0.65rem;
             }
             .lb-row {
                 font-size: 0.85rem;
             }
+            .video-btn { display: none; } 
             .location { display: none; } 
             .country-col, .date-col { display: none; }
             .cta-section { flex-direction: column; text-align: center; gap: 30px; }
             .cta-section::before { width: 100%; height: 4px; bottom: auto; }
-        }
             
             /* Fix for mobile name cutoff */
             .name-cell {
@@ -891,7 +879,7 @@
                 overflow: visible;
                 white-space: normal;
                 word-break: break-word;
-                font-size: 1.1rem; /* Larger for mobile readability */
+                font-size: 0.95rem; /* Slightly larger for mobile readability */
             }
             .gender-label {
                 font-size: 0.7rem !important; /* Smaller on mobile */
@@ -905,7 +893,7 @@
                 color: var(--gold);
                 font-family: 'Oswald', sans-serif;
                 letter-spacing: 0.5px;
-                font-size: 1.1rem; /* Consistent with name size */
+                font-size: 0.95rem; /* Consistent with name size */
             }
         }
     </style>
@@ -1392,6 +1380,7 @@
         else baseExpectedTime = isFemale ? 20 : 28;
 
         // Step 2: Bodyweight Adjustment
+
         const refWeight = isFemale ? 135 : 175;
         const adjustedExpectedTime = (baseExpectedTime * (refWeight / actualWeight) * 0.7) + (baseExpectedTime * 0.3);
 
@@ -1467,8 +1456,8 @@
                 <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                 <div class="name-cell">
                     <div class="name-wrapper">
-                        <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
-                        <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: -2px;">
+                        <div class="name" style="flex-grow: 1;">${athlete.name}</div>
+                        <div style="display: flex; align-items: center; flex-shrink: 0;">
                             ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">âœ”</span>` : ''}
                             <div class="pr-badge"><span class="pr-val">âš¡ ${athlete.prCount}</span></div>
                         </div>
@@ -1478,7 +1467,7 @@
                 </div>
                 <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
                 <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
-                <div class="time desktop-time" style="justify-self: center; padding-left: 8px;">${athlete.currentPR}</div>
+                <div class="time desktop-time">${athlete.currentPR}</div>
                 <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
             `;
             
@@ -1660,6 +1649,5 @@
 
 </body>
 </html>
-
 
 

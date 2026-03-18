@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submission Rules | WDHC</title>
-    <link rel="icon" type="image/jpeg" href="media/new_wdhc_logo.jpg">
+    <link rel="icon" type="image/jpeg" href="media/full_logo_footer.jpg">
     <link rel="stylesheet" href="style.css"> <!-- Assuming we use the same stylesheet -->
     <style>
         /* Re-using styles from index.html for consistency */
@@ -145,7 +145,7 @@
         }
         
         ul li::before {
-            content: 'âœ“';
+            content: '✓';
             position: absolute;
             left: 0;
             color: var(--gold);
@@ -179,7 +179,8 @@
 <body>
     <nav>
         <div class="nav-logo">
-            <a href="index.html"><img src="media/new_wdhc_logo.jpg" alt="WDHC Logo"></a>
+            <a href="index.html"><img src="media/full_logo_footer.jpg" alt="WDHC Logo"></a>
+            <span>WDHC</span>
         </div>
         <div class="nav-links">
             <a href="index.html">Leaderboard</a>
@@ -209,9 +210,9 @@
         <!-- Pro-Level Verification Tier -->
         <div class="submission-tier" style="border-left-color: var(--gold); margin-bottom: 30px;">
              <h2>
-                <span>Verified Submission (For '<span style="color:var(--gold);">âœ”</span>' Badge)</span>
+                <span>Verified Submission (For '<span style="color:var(--gold);">✔</span>' Badge)</span>
             </h2>
-            <p>For athletes seeking the highest level of validation, the Verified Submission tier provides a path to earn the âœ” badge on the leaderboard. All Standard rules apply, plus the following must be demonstrated in a single unedited video:</p>
+            <p>For athletes seeking the highest level of validation, the Verified Submission tier provides a path to earn the ✔ badge on the leaderboard. All Standard rules apply, plus the following must be demonstrated in a single unedited video:</p>
             <ul>
                 <li><strong>Bar Measurement:</strong> Provide a close-up of the bar with a tape measure showing 1.25" (32mm) diameter, or state bar brand and model in submission notes for independent verification.</li>
                 <li><strong>Bar Surface Check:</strong> Before the hang, provide a clear close-up of the entire bar surface confirming it is free of tape, grooves, or residue.</li>
@@ -226,8 +227,8 @@
             <!-- How to Upload Instructions -->
             <div class="upload-instructions" style="max-width: 800px; margin: 0 auto 40px auto; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
                 <button class="instructions-toggle" style="width: 100%; background: var(--surface); color: var(--text); border: none; padding: 20px; font-size: 1.2rem; font-weight: 700; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Rajdhani', sans-serif;">
-                    <span>ðŸ“¹ How to Upload Your Video (Click to Expand)</span>
-                    <span class="toggle-icon" style="font-size: 1.5rem;">â–¼</span>
+                    <span>📹 How to Upload Your Video (Click to Expand)</span>
+                    <span class="toggle-icon" style="font-size: 1.5rem;">▼</span>
                 </button>
                 
                 <div class="instructions-content" style="display: none; padding: 30px; border-top: 1px solid var(--border);">
@@ -238,7 +239,7 @@
                         <!-- YouTube -->
                         <div class="platform-card" style="background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 6px; padding: 20px;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <div style="font-size: 1.5rem;">â–¶ï¸</div>
+                                <div style="font-size: 1.5rem;">▶️</div>
                                 <h4 style="color: #FF0000; margin: 0;">YouTube</h4>
                             </div>
                             <ol style="text-align: left; padding-left: 20px; color: var(--silver); font-size: 0.9rem;">
@@ -255,12 +256,12 @@
                         <!-- Google Drive -->
                         <div class="platform-card" style="background: rgba(66, 133, 244, 0.1); border: 1px solid rgba(66, 133, 244, 0.3); border-radius: 6px; padding: 20px;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <div style="font-size: 1.5rem;">ðŸ“</div>
+                                <div style="font-size: 1.5rem;">📁</div>
                                 <h4 style="color: #4285F4; margin: 0;">Google Drive</h4>
                             </div>
                             <ol style="text-align: left; padding-left: 20px; color: var(--silver); font-size: 0.9rem;">
                                 <li>Upload video to Google Drive</li>
-                                <li>Right-click â†’ "Get link"</li>
+                                <li>Right-click → "Get link"</li>
                                 <li>Set sharing to "Anyone with the link"</li>
                                 <li>Copy the link and paste below</li>
                             </ol>
@@ -272,7 +273,7 @@
                         <!-- Reddit -->
                         <div class="platform-card" style="background: rgba(255, 69, 0, 0.1); border: 1px solid rgba(255, 69, 0, 0.3); border-radius: 6px; padding: 20px;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <div style="font-size: 1.5rem;">ðŸ‘½</div>
+                                <div style="font-size: 1.5rem;">👽</div>
                                 <h4 style="color: #FF4500; margin: 0;">Reddit</h4>
                             </div>
                             <ol style="text-align: left; padding-left: 20px; color: var(--silver); font-size: 0.9rem;">
@@ -288,12 +289,12 @@
                         <!-- Instagram -->
                         <div class="platform-card" style="background: rgba(228, 64, 95, 0.1); border: 1px solid rgba(228, 64, 95, 0.3); border-radius: 6px; padding: 20px;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <div style="font-size: 1.5rem;">ðŸ“¸</div>
+                                <div style="font-size: 1.5rem;">📸</div>
                                 <h4 style="color: #E4405F; margin: 0;">Instagram</h4>
                             </div>
                             <ol style="text-align: left; padding-left: 20px; color: var(--silver); font-size: 0.9rem;">
                                 <li>Post video as Reel or Feed post</li>
-                                <li>Tap "..." â†’ "Copy link"</li>
+                                <li>Tap "..." → "Copy link"</li>
                                 <li>Paste the link below</li>
                             </ol>
                             <div style="margin-top: 10px; font-size: 0.8rem; color: var(--text-dim);">
@@ -304,12 +305,12 @@
                         <!-- TikTok -->
                         <div class="platform-card" style="background: rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 6px; padding: 20px;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <div style="font-size: 1.5rem;">ðŸŽµ</div>
+                                <div style="font-size: 1.5rem;">🎵</div>
                                 <h4 style="color: #000000; margin: 0;">TikTok</h4>
                             </div>
                             <ol style="text-align: left; padding-left: 20px; color: var(--silver); font-size: 0.9rem;">
                                 <li>Upload video to TikTok</li>
-                                <li>Tap "Share" â†’ "Copy link"</li>
+                                <li>Tap "Share" → "Copy link"</li>
                                 <li>Paste the link below</li>
                             </ol>
                             <div style="margin-top: 10px; font-size: 0.8rem; color: var(--text-dim);">
@@ -320,7 +321,7 @@
                         <!-- Other Platforms -->
                         <div class="platform-card" style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 6px; padding: 20px;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <div style="font-size: 1.5rem;">ðŸŒ</div>
+                                <div style="font-size: 1.5rem;">🌐</div>
                                 <h4 style="color: var(--gold); margin: 0;">Other Platforms</h4>
                             </div>
                             <p style="text-align: left; color: var(--silver); font-size: 0.9rem;">
@@ -335,7 +336,7 @@
                     </div>
                     
                     <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); border-radius: 6px; padding: 20px; margin-top: 20px;">
-                        <h4 style="color: var(--gold); margin-bottom: 10px;">ðŸ“‹ Important Notes:</h4>
+                        <h4 style="color: var(--gold); margin-bottom: 10px;">📋 Important Notes:</h4>
                         <ul style="text-align: left; padding-left: 20px; color: var(--silver); font-size: 0.9rem;">
                             <li><strong>Video must be unedited</strong> from start to finish</li>
                             <li><strong>Timer must be visible</strong> throughout the entire hang</li>
@@ -364,15 +365,15 @@
                     toggleBtn.addEventListener('click', function() {
                         const isHidden = content.style.display === 'none';
                         content.style.display = isHidden ? 'block' : 'none';
-                        toggleIcon.textContent = isHidden ? 'â–²' : 'â–¼';
+                        toggleIcon.textContent = isHidden ? '▲' : '▼';
                         toggleBtn.querySelector('span:first-child').textContent = 
-                            isHidden ? 'ðŸ“¹ How to Upload Your Video (Click to Collapse)' : 'ðŸ“¹ How to Upload Your Video (Click to Expand)';
+                            isHidden ? '📹 How to Upload Your Video (Click to Collapse)' : '📹 How to Upload Your Video (Click to Expand)';
                     });
                     
                     closeBtn.addEventListener('click', function() {
                         content.style.display = 'none';
-                        toggleIcon.textContent = 'â–¼';
-                        toggleBtn.querySelector('span:first-child').textContent = 'ðŸ“¹ How to Upload Your Video (Click to Expand)';
+                        toggleIcon.textContent = '▼';
+                        toggleBtn.querySelector('span:first-child').textContent = '📹 How to Upload Your Video (Click to Expand)';
                     });
                 });
             </script>
@@ -396,4 +397,3 @@
     </div>
 </body>
 </html>
-
