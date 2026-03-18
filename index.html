@@ -138,7 +138,7 @@
 
         h1 {
             font-family: 'Oswald', sans-serif;
-            font-size: 7.5rem;
+            font-size: 7rem;
             font-weight: 700;
             text-transform: uppercase;
             line-height: 0.95;
@@ -584,6 +584,13 @@
         @media (min-width: 901px) {
             h1 .dead-hang-text {
                 color: var(--text) !important;
+            }
+            h1 {
+                white-space: nowrap;
+            }
+            h1 span:first-child, h1 .dead-hang-text {
+                display: inline;
+                white-space: nowrap;
             }
         }
         
