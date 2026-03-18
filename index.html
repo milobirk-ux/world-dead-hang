@@ -899,10 +899,11 @@
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
             h1 {
-                font-size: 3.5rem;
+                font-size: 3rem;
                 text-align: center;
                 width: 100%;
                 display: block;
+                margin-bottom: 5px;
             }
             .dead-hang-text {
                 white-space: nowrap; /* Prevent "DEAD HANG" from breaking */
@@ -912,11 +913,12 @@
             /* Ensure title breaks correctly on mobile */
             h1 span {
                 display: block;
-                line-height: 1.1;
+                line-height: 0.9;
             }
             h1 span.dead-hang-text {
                 display: block;
                 white-space: nowrap;
+                line-height: 0.9;
             }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             
