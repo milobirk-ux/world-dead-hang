@@ -485,6 +485,134 @@
             }
         }
 
+        /* Smart Video Preview Styles */
+        .video-preview {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            transition: all 0.2s;
+            border: 1px solid #333;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-preview:hover {
+            border-color: var(--gold);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* YouTube Preview */
+        .youtube-preview {
+            width: 120px;
+            height: 68px;
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        /* Platform Previews (Drive, Reddit, Instagram, TikTok, Generic) */
+        .drive-preview, .reddit-preview, .instagram-preview, 
+        .tiktok-preview, .generic-preview {
+            width: 120px;
+            height: 40px;
+            padding: 8px 12px;
+            gap: 8px;
+        }
+        
+        .platform-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .platform-text {
+            font-size: 0.7rem;
+            color: var(--silver);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .platform-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 0.5rem;
+            color: var(--gold);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Platform-specific colors */
+        .drive-preview:hover { border-color: #4285F4; }
+        .reddit-preview:hover { border-color: #FF4500; }
+        .instagram-preview:hover { border-color: #E4405F; }
+        .tiktok-preview:hover { border-color: #000000; }
+        .generic-preview:hover { border-color: var(--gold); }
+        
+        /* Mobile adjustments */
+        @media (max-width: 900px) {
+            .video-preview {
+                width: 80px;
+                height: 30px;
+            }
+            
+            .youtube-preview {
+                width: 80px;
+                height: 45px;
+            }
+            
+            .drive-preview, .reddit-preview, .instagram-preview, 
+            .tiktok-preview, .generic-preview {
+                width: 80px;
+                height: 30px;
+                padding: 4px 6px;
+                gap: 4px;
+            }
+            
+            .platform-icon {
+                font-size: 0.9rem;
+            }
+            
+            .platform-text {
+                font-size: 0.55rem;
+            }
+            
+            .play-button {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+        }
+
         .verified-badge {
             display: inline-block;
             color: var(--gold);
@@ -939,7 +1067,7 @@
                 <div class="controls">
                     <div class="controls-header">
                         <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 17, 2026, 12:50 AM EST</div>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 17, 2026, 11:18 PM EST</div>
                     </div>
                     <div class="division-tabs">
                         <button class="active" onclick="switchCategory('All')">All</button>
@@ -1146,6 +1274,26 @@
         ],
         "isVerified": false,
         "video": "https://aistudio.google.com/api-keys?project=gen-lang-client-0688610786",
+        "prCount": 1
+    },
+    {
+        "name": "Leonard Stevens",
+        "category": "Masters Male",
+        "location": "Detroit, MI / USA",
+        "occupation": "Doctor",
+        "bodyweight": 140,
+        "dob": "1972-03-10",
+        "country": "🇺🇸",
+        "currentPR": "3:12",
+        "lastAttempt": "2026-03-13",
+        "history": [
+            {
+                "date": "2026-03-13",
+                "time": "3:12"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://app.spectora.com/inspection/544427e3-e565-4ac4-9e65-4b51f8738350/editf",
         "prCount": 1
     },
     {
@@ -1417,6 +1565,90 @@
         };
     }
 
+    // Smart Video Preview System
+    function getVideoPreview(videoUrl) {
+        if (!videoUrl) {
+            return `<a href="#" class="video-btn" style="opacity: 0.5;">No Video</a>`;
+        }
+        
+        const url = videoUrl.toLowerCase();
+        
+        // YouTube
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            let videoId = '';
+            if (url.includes('youtube.com/watch?v=')) {
+                videoId = url.split('v=')[1]?.split('&')[0] || '';
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
+            }
+            
+            if (videoId) {
+                return `
+                    <a href="${videoUrl}" target="_blank" class="video-preview youtube-preview" title="Watch on YouTube">
+                        <img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" 
+                             alt="YouTube video preview" 
+                             class="video-thumbnail">
+                        <div class="play-button">▶</div>
+                        <div class="platform-badge">YouTube</div>
+                    </a>
+                `;
+            }
+        }
+        
+        // Google Drive
+        if (url.includes('drive.google.com')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview drive-preview" title="Watch on Google Drive">
+                    <div class="platform-icon">📁</div>
+                    <div class="platform-text">Watch on Drive</div>
+                    <div class="platform-badge">Drive</div>
+                </a>
+            `;
+        }
+        
+        // Reddit
+        if (url.includes('reddit.com') || url.includes('redd.it')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview reddit-preview" title="Watch on Reddit">
+                    <div class="platform-icon">👽</div>
+                    <div class="platform-text">Watch on Reddit</div>
+                    <div class="platform-badge">Reddit</div>
+                </a>
+            `;
+        }
+        
+        // Instagram
+        if (url.includes('instagram.com') || url.includes('instagr.am')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview instagram-preview" title="Watch on Instagram">
+                    <div class="platform-icon">📸</div>
+                    <div class="platform-text">Watch on Instagram</div>
+                    <div class="platform-badge">Instagram</div>
+                </a>
+            `;
+        }
+        
+        // TikTok
+        if (url.includes('tiktok.com')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview tiktok-preview" title="Watch on TikTok">
+                    <div class="platform-icon">🎵</div>
+                    <div class="platform-text">Watch on TikTok</div>
+                    <div class="platform-badge">TikTok</div>
+                </a>
+            `;
+        }
+        
+        // Generic video link
+        return `
+            <a href="${videoUrl}" target="_blank" class="video-preview generic-preview" title="Watch Video">
+                <div class="platform-icon">▶</div>
+                <div class="platform-text">Watch Video</div>
+                <div class="platform-badge">Video</div>
+            </a>
+        `;
+    }
+
     function renderLeaderboard() {
         const list = document.getElementById('leaderboard-body');
         list.innerHTML = '';
@@ -1513,7 +1745,7 @@
                         </div>
                     </div>
                     <div class="time mobile-time">${athlete.currentPR}</div>
-                    <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
+                    <div style="text-align: center;">${getVideoPreview(athlete.video)}</div>
                 `;
             } else {
                 // DESKTOP: 7 columns
@@ -1536,7 +1768,7 @@
                         <span class="flag">${flag}</span>
                     </div>
                     <div class="time desktop-time" style="justify-self: center; padding-left: 8px;">${athlete.currentPR}</div>
-                    <div style="text-align: center;"><a href="${athlete.video}" target="_blank" class="video-btn">Watch</a></div>
+                    <div style="text-align: center;">${getVideoPreview(athlete.video)}</div>
                 `;
             }
             
