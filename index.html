@@ -901,6 +901,16 @@
                 white-space: nowrap; /* Prevent "DEAD HANG" from breaking */
                 display: inline-block;
             }
+            
+            /* Ensure title breaks correctly on mobile */
+            h1 span {
+                display: block;
+                line-height: 1.1;
+            }
+            h1 span.dead-hang-text {
+                display: block;
+                white-space: nowrap;
+            }
             .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             
             /* MOBILE-OPTIMIZED LEADERBOARD WITH EXPANDABLE DETAILS */
