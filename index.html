@@ -494,6 +494,13 @@
             .marquee-content {
                 animation-duration: 60s; /* Slower than desktop (40s) */
             }
+            
+            /* Make marquee banner sticky below nav on mobile */
+            .marquee-container {
+                position: sticky;
+                top: 60px; /* Height of nav (40px logo + 10px top + 10px bottom padding) */
+                z-index: 90; /* Below nav's z-index: 100 */
+            }
         }
 
         /* Smart Video Preview Styles */
