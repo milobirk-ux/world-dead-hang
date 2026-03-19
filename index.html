@@ -416,6 +416,8 @@
         .tier-challenger { 
             border: 1px solid #1E8449; 
             color: #1E8449; 
+            width: 120px; /* Extra width for longer text */
+            letter-spacing: 0.3px; /* Reduce spacing to fit better */
         }
 
         /* Pagination Buttons */
@@ -1195,8 +1197,8 @@
             /* Special wider badges for longer tier names (CONTENDER, CHALLENGER) */
             .sidebar-card .tier-contender,
             .sidebar-card .tier-challenger {
-                min-width: 95px !important;
-                max-width: 95px !important;
+                min-width: 100px !important;
+                max-width: 100px !important;
             }
             
             /* Make dropdown tier badges larger with full text on mobile */
@@ -1213,8 +1215,8 @@
             /* Special wider badges for longer tier names in dropdown */
             .details-panel .tier-contender,
             .details-panel .tier-challenger {
-                min-width: 95px !important;
-                max-width: 95px !important;
+                min-width: 100px !important;
+                max-width: 100px !important;
             }
             
             /* Make dead hang time much larger with more space */
@@ -1344,9 +1346,9 @@
                     <!-- Search Bar -->
                     <div class="search-row">
                         <div class="search-container">
-                            <input type="text" id="athlete-search" placeholder="Search athlete name..." class="search-input">
+                            <input type="text" id="athlete-search" placeholder="Search athlete name..." class="search-input" aria-label="Search athlete names">
                             <div class="search-icon">🔍</div>
-                            <button id="clear-search" class="clear-search-btn" style="display: none;">✕</button>
+                            <button id="clear-search" class="clear-search-btn" style="display: none;" aria-label="Clear search">✕</button>
                         </div>
                         <div id="search-count" class="search-count" style="display: none;"></div>
                     </div>
