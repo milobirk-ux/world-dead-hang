@@ -1820,9 +1820,6 @@
                             <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
                             <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
-                            <div style="grid-column: span 2; text-align: center; margin-top: 8px;">
-                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
-                            </div>
                         </div>
                     `;
                 } else {
@@ -1832,9 +1829,6 @@
                             <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
                             <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight} lbs</span></div>
-                            <div style="grid-column: span 2; text-align: center; margin-top: 8px;">
-                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
-                            </div>
                         </div>
                     `;
                 }
@@ -1843,9 +1837,6 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.category}</span></div>
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}; font-size: 1rem;">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
-                            <div style="grid-column: span 2; text-align: center; margin-top: 8px;">
-                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
-                            </div>
                         </div>
                 `;
             }
