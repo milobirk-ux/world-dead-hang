@@ -1012,6 +1012,31 @@
                 white-space: nowrap !important;
             }
             
+            /* Special wider badges for longer tier names (CONTENDER, CHALLENGER) */
+            .sidebar-card .tier-contender,
+            .sidebar-card .tier-challenger {
+                min-width: 95px !important;
+                max-width: 95px !important;
+            }
+            
+            /* Make dropdown tier badges larger with full text on mobile */
+            .details-panel .tier-badge {
+                font-size: 0.85rem !important;
+                padding: 3px 8px !important;
+                min-width: 80px !important;
+                max-width: 80px !important;
+                overflow: visible !important;
+                text-overflow: clip !important;
+                white-space: nowrap !important;
+            }
+            
+            /* Special wider badges for longer tier names in dropdown */
+            .details-panel .tier-contender,
+            .details-panel .tier-challenger {
+                min-width: 95px !important;
+                max-width: 95px !important;
+            }
+            
             /* Make dead hang time much larger with more space */
             .mobile-time {
                 display: block !important;
