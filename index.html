@@ -713,6 +713,13 @@
             padding: 20px 25px;
             border-left: 3px solid var(--gold-dim);
         }
+        
+        /* Click-based details visibility (for mobile) */
+        .lb-row-wrapper.details-visible .details-panel {
+            max-height: 200px;
+            padding: 20px 25px;
+            border-left: 3px solid var(--gold-dim);
+        }
         .details-panel strong {
             color: var(--gold);
             font-family: 'Oswald', sans-serif;
@@ -1145,6 +1152,20 @@
             }
             .lb-row-wrapper:hover .details-panel {
                 padding: 10px 15px !important; /* Smaller padding when expanded */
+            }
+            
+            /* Click-based details visibility for mobile */
+            .lb-row-wrapper.details-visible .details-panel {
+                max-height: 200px !important;
+                padding: 10px 15px !important;
+                border-left: 3px solid var(--gold-dim) !important;
+            }
+            
+            /* Disable hover behavior on mobile - use click instead */
+            .lb-row-wrapper:hover .details-panel {
+                max-height: 0 !important;
+                padding: 0 15px !important;
+                border-left: 3px solid transparent !important;
             }
             .details-panel strong {
                 font-size: 1.2rem !important; /* Smaller strong text for mobile */
@@ -1954,6 +1975,27 @@
             wrapper.appendChild(row);
             wrapper.appendChild(detailsPanel);
             list.appendChild(wrapper);
+            
+            // Make row clickable on mobile to toggle details
+            if (isMobile) {
+                row.style.cursor = 'pointer';
+                row.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on a video link
+                    if (e.target.closest('.video-preview')) {
+                        return;
+                    }
+                    
+                    // Close all other open details
+                    document.querySelectorAll('.lb-row-wrapper.details-visible').forEach(otherWrapper => {
+                        if (otherWrapper !== wrapper) {
+                            otherWrapper.classList.remove('details-visible');
+                        }
+                    });
+                    
+                    // Toggle this wrapper
+                    wrapper.classList.toggle('details-visible');
+                });
+            }
         });
         
         renderSidebar();
