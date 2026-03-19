@@ -1160,13 +1160,6 @@
                 padding: 10px 15px !important;
                 border-left: 3px solid var(--gold-dim) !important;
             }
-            
-            /* Disable hover behavior on mobile - use click instead */
-            .lb-row-wrapper:hover .details-panel {
-                max-height: 0 !important;
-                padding: 0 15px !important;
-                border-left: 3px solid transparent !important;
-            }
             .details-panel strong {
                 font-size: 1.2rem !important; /* Smaller strong text for mobile */
                 margin-right: 10px !important;
@@ -1976,26 +1969,8 @@
             wrapper.appendChild(detailsPanel);
             list.appendChild(wrapper);
             
-            // Make row clickable on mobile to toggle details
-            if (isMobile) {
-                row.style.cursor = 'pointer';
-                row.addEventListener('click', function(e) {
-                    // Don't trigger if clicking on a video link
-                    if (e.target.closest('.video-preview')) {
-                        return;
-                    }
-                    
-                    // Close all other open details
-                    document.querySelectorAll('.lb-row-wrapper.details-visible').forEach(otherWrapper => {
-                        if (otherWrapper !== wrapper) {
-                            otherWrapper.classList.remove('details-visible');
-                        }
-                    });
-                    
-                    // Toggle this wrapper
-                    wrapper.classList.toggle('details-visible');
-                });
-            }
+            // All rows get pointer cursor for consistency
+            row.style.cursor = 'pointer';
         });
         
         renderSidebar();
@@ -2125,6 +2100,46 @@
     // Re-render on window resize
     window.addEventListener('resize', function() {
         renderLeaderboard();
+    });
+    
+    // Mobile dropdown click handling (event delegation)
+    document.addEventListener('click', function(e) {
+        // Check if we're on mobile
+        const isMobile = window.innerWidth <= 900;
+        if (!isMobile) {
+            return; // Only handle on mobile
+        }
+        
+        // Find the clicked row
+        const row = e.target.closest('.lb-row');
+        if (!row) {
+            return; // Not clicking on a row
+        }
+        
+        // Don't trigger if clicking on a video link
+        if (e.target.closest('.video-preview')) {
+            return;
+        }
+        
+        // Find the wrapper
+        const wrapper = row.closest('.lb-row-wrapper');
+        if (!wrapper) {
+            return;
+        }
+        
+        // Close all other open details
+        document.querySelectorAll('.lb-row-wrapper.details-visible').forEach(otherWrapper => {
+            if (otherWrapper !== wrapper) {
+                otherWrapper.classList.remove('details-visible');
+            }
+        });
+        
+        // Toggle this wrapper
+        wrapper.classList.toggle('details-visible');
+        
+        // Prevent default to avoid any issues
+        e.preventDefault();
+        e.stopPropagation();
     });
 </script>
 
