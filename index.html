@@ -994,6 +994,20 @@
                 padding: 8px 10px !important;
             }
             
+            /* Center Time and Watch columns under their headers */
+            .lb-row > *:nth-child(3), /* Time column */
+            .lb-row > *:nth-child(4) { /* Watch column */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .lb-header > *:nth-child(3), /* Time header */
+            .lb-header > *:nth-child(4) { /* Watch header */
+                text-align: center !important;
+            }
+            
             .lb-header {
                 font-size: 0.7rem !important;
                 padding: 8px 10px !important;
