@@ -258,6 +258,100 @@
         
         .sort-toggle:hover { color: var(--gold); }
 
+        /* Search Bar */
+        .search-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px var(--gold-glow);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-dim);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            pointer-events: none;
+        }
+        
+        .clear-search-btn {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        
+        .clear-search-btn:hover {
+            color: var(--text);
+        }
+        
+        .search-count {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 900px) {
+            .search-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .search-count {
+                margin-left: 0;
+                text-align: center;
+            }
+        }
+
         /* Leaderboard Table */
         .leaderboard {
             background: var(--surface);
@@ -1246,6 +1340,16 @@
                             <button class="sort-btn" onclick="toggleSort('time')" id="btn-sort-time">Longest Time</button>
                         </div>
                     </div>
+                    
+                    <!-- Search Bar -->
+                    <div class="search-row">
+                        <div class="search-container">
+                            <input type="text" id="athlete-search" placeholder="Search athlete name..." class="search-input">
+                            <div class="search-icon">🔍</div>
+                            <button id="clear-search" class="clear-search-btn" style="display: none;">✕</button>
+                        </div>
+                        <div id="search-count" class="search-count" style="display: none;"></div>
+                    </div>
                 </div>
 
                 <div class="leaderboard">
@@ -2092,7 +2196,7 @@
         
         currentCategory = cat;
         document.getElementById('current-cat-display').innerText = cat.toUpperCase();
-        renderLeaderboard();
+        window.renderLeaderboard(); // Use the overridden version
     }
     
     function toggleSort(type) {
@@ -2107,14 +2211,14 @@
             document.getElementById('btn-sort-time').classList.add('active');
         }
         
-        renderLeaderboard();
+        window.renderLeaderboard(); // Use the overridden version
     }
 
-    renderLeaderboard();
+    window.renderLeaderboard(); // Use the overridden version
     
     // Re-render on window resize
     window.addEventListener('resize', function() {
-        renderLeaderboard();
+        window.renderLeaderboard(); // Use the overridden version
     });
     
     // Mobile dropdown click handling (event delegation)
@@ -2156,6 +2260,315 @@
         e.preventDefault();
         e.stopPropagation();
     });
+    
+    // Search functionality
+    let allAthletes = []; // Will store all athletes for searching
+    let currentSearchTerm = '';
+    let isSearching = false;
+    let searchFilteredAthletes = [];
+    
+    // Initialize search after data is loaded
+    function initializeSearch() {
+        allAthletes = [...athletes]; // Copy all athletes
+        
+        const searchInput = document.getElementById('athlete-search');
+        const clearBtn = document.getElementById('clear-search');
+        const searchCount = document.getElementById('search-count');
+        
+        if (!searchInput) return;
+        
+        // Add event listeners
+        searchInput.addEventListener('input', function(e) {
+            currentSearchTerm = e.target.value.trim().toLowerCase();
+            
+            // Show/hide clear button
+            if (currentSearchTerm) {
+                clearBtn.style.display = 'flex';
+                isSearching = true;
+            } else {
+                clearBtn.style.display = 'none';
+                isSearching = false;
+            }
+            
+            // Apply search filter
+            filterAthletesBySearch();
+        });
+        
+        // Clear search button
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            currentSearchTerm = '';
+            clearBtn.style.display = 'none';
+            isSearching = false;
+            filterAthletesBySearch();
+            searchInput.focus();
+        });
+        
+        // Clear search on Escape key
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                currentSearchTerm = '';
+                clearBtn.style.display = 'none';
+                isSearching = false;
+                filterAthletesBySearch();
+            }
+        });
+    }
+    
+    // Filter athletes based on search term
+    function filterAthletesBySearch() {
+        if (!currentSearchTerm) {
+            // No search term, show all athletes
+            isSearching = false;
+            searchFilteredAthletes = [];
+            document.getElementById('search-count').style.display = 'none';
+            renderLeaderboard();
+            return;
+        }
+        
+        // Filter athletes by name (case-insensitive)
+        searchFilteredAthletes = allAthletes.filter(athlete => {
+            const name = athlete.name.toLowerCase();
+            return name.includes(currentSearchTerm);
+        });
+        
+        // Update search count display
+        const searchCount = document.getElementById('search-count');
+        searchCount.style.display = 'block';
+        searchCount.textContent = `${searchFilteredAthletes.length} athlete${searchFilteredAthletes.length !== 1 ? 's' : ''} found`;
+        
+        // Render filtered results
+        renderLeaderboard();
+    }
+    
+    // Override the existing renderLeaderboard to incorporate search
+    const originalRenderLeaderboard = window.renderLeaderboard;
+    window.renderLeaderboard = function() {
+        let dataToRender;
+        
+        if (isSearching && currentSearchTerm) {
+            // We're searching, use search-filtered data
+            dataToRender = searchFilteredAthletes;
+        } else {
+            // Not searching, use normal category filter
+            dataToRender = (currentCategory === 'All') ? athletes : athletes.filter(a => a.category === currentCategory);
+        }
+        
+        // Apply sorting
+        // Pre-calculate True Rank based on Longest Time (always)
+        dataToRender.sort((a, b) => {
+            const timeA = parseTime(a.currentPR);
+            const timeB = parseTime(b.currentPR);
+            return timeB - timeA;
+        });
+        dataToRender.forEach((a, index) => {
+            a.trueRank = index + 1;
+        });
+
+        // Now sort based on user selection
+        if (currentSort === 'time') {
+            // Already sorted by time above
+        } else {
+            // Sort by recent
+            dataToRender.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        }
+        
+        // Call the original rendering logic with our filtered data
+        renderLeaderboardWithData(dataToRender);
+    };
+    
+    // Helper function to render with specific data
+    function renderLeaderboardWithData(data) {
+        const list = document.getElementById('leaderboard-body');
+        list.innerHTML = '';
+
+        // Create header dynamically
+        const header = document.createElement('div');
+        header.className = 'lb-header';
+        const isMobile = window.innerWidth <= 900;
+        
+        if (isMobile) {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div>Name</div>
+                <div>Time</div>
+                <div>Watch</div>
+            `;
+        } else {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div>Tier</div>
+                <div>Athlete</div>
+                <div>Background</div>
+                <div style="text-align: center;">Location</div>
+                <div style="text-align: center;">Time</div>
+                <div style="text-align: center;">Watch</div>
+            `;
+        }
+        list.appendChild(header);
+
+        // Render each athlete
+        data.forEach((athlete, index) => {
+            // Use the original rendering logic from the original function
+            // (This is a simplified version - in practice we'd extract the rendering logic)
+            const time = parseTime(athlete.currentPR);
+            const tier = getTierInfo(athlete.currentPR);
+            const location = parseLocation(athlete.location);
+            const countryFlag = getCountryFlag(athlete.country);
+            const gripAge = calculateGripAge(athlete);
+            const videoPreview = getVideoPreview(athlete.videoUrl);
+            
+            // Create row wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'lb-row-wrapper';
+            
+            // Create row
+            const row = document.createElement('div');
+            row.className = 'lb-row';
+            
+            // Create details panel
+            const detailsPanel = document.createElement('div');
+            detailsPanel.className = 'details-panel';
+            
+            // Mobile layout
+            if (window.innerWidth <= 900) {
+                row.innerHTML = `
+                    <div class="rank">${athlete.trueRank}</div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name">${athlete.name}</div>
+                            ${athlete.verified ? '<span class="verified-badge">✓</span>' : ''}
+                        </div>
+                        <div class="location" style="font-size: 0.9rem; color: #888; font-weight: 500; text-transform: none;">
+                            ${location.city}, ${location.state}
+                        </div>
+                    </div>
+                    <div class="time">
+                        <div class="mobile-time">${athlete.currentPR}</div>
+                        <div class="tier-badge ${tier.class}">${tier.label}</div>
+                    </div>
+                    <div>${videoPreview}</div>
+                `;
+                
+                // Details panel for mobile
+                const labelStyle = 'font-size: 0.8rem; color: #888; font-family: \'Roboto Mono\', monospace; text-transform: uppercase;';
+                const valStyle = 'font-size: 0.9rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
+                
+                if (gripAge !== null) {
+                    if (gripAge.isYounger) {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}">${gripAge.age}</span></div>
+                                <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}; font-size: 0.9rem;">Baseline Established</span></div>
+                                <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    detailsPanel.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Make row clickable on mobile to toggle details
+                row.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on a video button
+                    if (e.target.closest('.video-btn') || e.target.closest('.video-preview')) {
+                        return;
+                    }
+                    
+                    // Close any other open details
+                    document.querySelectorAll('.lb-row-wrapper.details-visible').forEach(otherWrapper => {
+                        if (otherWrapper !== wrapper) {
+                            otherWrapper.classList.remove('details-visible');
+                        }
+                    });
+                    
+                    // Toggle this wrapper
+                    wrapper.classList.toggle('details-visible');
+                    
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+                
+            } else {
+                // Desktop layout
+                row.innerHTML = `
+                    <div class="rank">${athlete.trueRank}</div>
+                    <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name">${athlete.name}</div>
+                            ${athlete.verified ? '<span class="verified-badge">✓</span>' : ''}
+                        </div>
+                        <div class="location" style="font-size: 0.9rem; color: #888; font-weight: 500; text-transform: none;">
+                            ${location.city}, ${location.state} ${countryFlag}
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9rem; color: #ccc;">${athlete.occupation || 'Athlete'}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : ''}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.9rem; color: #ccc;">${location.city}, ${location.state}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${location.country}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="desktop-time">${athlete.currentPR}</div>
+                        ${athlete.prBadge ? `<div class="pr-badge"><span class="pr-val">${athlete.prBadge}</span></div>` : ''}
+                    </div>
+                    <div style="text-align: center;">${videoPreview}</div>
+                `;
+                
+                // Details button for desktop
+                const detailsBtn = document.createElement('button');
+                detailsBtn.className = 'details-btn';
+                detailsBtn.innerHTML = 'Details';
+                detailsBtn.onclick = function(e) {
+                    toggleDetails(this);
+                    e.stopPropagation();
+                };
+                
+                row.appendChild(detailsBtn);
+            }
+            
+            // Append row and details to the wrapper, then wrapper to the list
+            wrapper.appendChild(row);
+            if (window.innerWidth <= 900) {
+                wrapper.appendChild(detailsPanel);
+            }
+            list.appendChild(wrapper);
+        });
+        
+        // Also update the sidebar
+        renderSidebar();
+    }
+    
+    // Initialize search when DOM is ready
+    document.addEventListener('DOMContentLoaded', initializeSearch);
 </script>
 
 <script>
