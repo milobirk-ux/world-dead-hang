@@ -1,4 +1,4 @@
-// WDHC Email Automation with PR Tracking
+// WDHC Email Automation with PR Tracking - FIXED VERSION
 // This script sends personalized emails and tracks Personal Records (PRs)
 // Add to Google Sheets: Extensions > Apps Script
 
@@ -230,7 +230,7 @@ function sendWelcomeEmailOnNewRow(e) {
       ? `You're in the <strong>FREAK</strong> tier! You have officially transcended human limits.`
       : `Congrats on hitting <strong>${formattedTime}</strong>! You're in the <strong>${currentTier}</strong> tier, and you're only <strong>${formatSecondsToMinutes(gap)}</strong> away from leveling up to the <strong>${nextTier}</strong> tier. Keep going!`;
 
-    // Grip Age HTML
+    // Grip Age HTML - FIXED LINE 285
     let gripAgeHtml = '';
     let gripAgeMessage = '';
     let longevityFact = '';
@@ -276,9 +276,4 @@ function sendWelcomeEmailOnNewRow(e) {
       } catch (err) {
         console.error("Error calculating Grip Age: " + err);
         gripAgeHtml = '<div style="margin-top: 20px; padding: 15px; border-top: 1px solid #ddd;">' +
-          '<h3 style="color: #000; margin-top: 0;">Your WDHC Grip Age™</h3>' +
-          '<p>We couldn\'t calculate your grip age due to invalid data. Please make sure your Date of Birth, Gender, and Bodyweight are valid!</p>' +
-          '</div>';
-      }
-    } else {
-      gripAgeHtml = '<div style="margin-top: 20px; padding:
+          '<h3 style="color: #000;
