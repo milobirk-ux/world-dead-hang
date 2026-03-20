@@ -46,15 +46,54 @@ function sendWelcomeEmailOnNewRow(e) {
   // Helper functions
   function parseTimeToSeconds(timeStr) {
     let s = String(timeStr || '0').trim();
+    
+    // Handle colon format (e.g., "4:10" = 4 minutes, 10 seconds)
     if (s.includes(':')) {
       let p = s.split(':');
       return (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0);
     }
+    
+    // Handle decimal format - COMMON SPREADSHEET ISSUE
+    // When users type "4.1" in a time-formatted cell, it often means 4:10 (4 minutes, 10 seconds)
+    // because spreadsheets interpret .1 as 10/60 = 0.1667 hours (10 minutes)
+    // But for our purposes (minutes:seconds), we need to handle this carefully
+    if (s.includes('.')) {
+      let parts = s.split('.');
+      let minutes = parseInt(parts[0]) || 0;
+      let decimalPart = parts[1];
+      
+      // If decimal part has 1 digit (e.g., "4.1"), treat it as tenths of a minute
+      // .1 = 6 seconds, .2 = 12 seconds, .3 = 18 seconds, etc.
+      if (decimalPart.length === 1) {
+        let tenths = parseInt(decimalPart) || 0;
+        let seconds = Math.round(tenths * 6); // .1 = 6 seconds, .2 = 12 seconds, etc.
+        return minutes * 60 + seconds;
+      }
+      // If decimal part has 2 digits (e.g., "4.10"), treat it as seconds
+      // .10 = 10 seconds, .25 = 25 seconds, etc.
+      else if (decimalPart.length === 2) {
+        let seconds = parseInt(decimalPart) || 0;
+        if (seconds < 60) {
+          return minutes * 60 + seconds;
+        }
+      }
+      // For other cases, fall back to decimal minutes
+      let num = parseFloat(s);
+      if (!isNaN(num)) {
+        return Math.round(num * 60);
+      }
+    }
+    
+    // Handle plain numbers
     let num = parseFloat(s);
     if (isNaN(num)) return 0;
-    if (s.includes('.') && num < 20) {
+    
+    // If number is less than 20, assume it's minutes
+    if (num < 20) {
       return Math.round(num * 60);
     }
+    
+    // Otherwise, assume it's already in seconds
     return Math.round(num);
   }
 
