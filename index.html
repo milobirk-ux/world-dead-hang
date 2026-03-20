@@ -1840,7 +1840,7 @@
     // Smart Video Preview System
     function getVideoPreview(videoUrl) {
         if (!videoUrl) {
-            return `<a href="#" class="video-btn" style="opacity: 0.5;">No Video</a>`;
+            return `<a href="#" class="video-btn" style="opacity: 0.5; font-size: 0.8rem; padding: 4px 8px;">N/A</a>`;
         }
         
         const url = videoUrl.toLowerCase();
@@ -2422,7 +2422,7 @@
             const location = parseLocation(athlete.location);
             const countryFlag = getCountryFlag(athlete.country);
             const gripAge = calculateGripAge(athlete);
-            const videoPreview = getVideoPreview(athlete.videoUrl);
+            const videoPreview = getVideoPreview(athlete.video);
             
             // Create row wrapper
             const wrapper = document.createElement('div');
@@ -2438,22 +2438,28 @@
             
             // Mobile layout
             if (window.innerWidth <= 900) {
+                // Parse display location (just city/state, not full location)
+                const displayLocation = athlete.location ? athlete.location.split('/')[0].trim() : '';
+                const isFemale = athlete.category && (athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female'));
+                
                 row.innerHTML = `
-                    <div class="rank">${athlete.trueRank}</div>
+                    <div class="rank">${athlete.trueRank < 10 ? '0' + athlete.trueRank : athlete.trueRank}</div>
                     <div class="name-cell">
                         <div class="name-wrapper">
-                            <div class="name">${athlete.name}</div>
-                            ${athlete.verified ? '<span class="verified-badge">✓</span>' : ''}
+                            <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 4px;">
+                                ${athlete.isVerified ? '<span class="verified-badge" title="Pro-Level Verification">✓</span>' : ''}
+                                ${athlete.prCount ? `<div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>` : ''}
+                            </div>
                         </div>
-                        <div class="location" style="font-size: 0.9rem; color: #888; font-weight: 500; text-transform: none;">
-                            ${location.city}, ${location.state}
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
+                        <div style="font-size: 0.6rem; color: #666; margin-top: 2px; display: flex; align-items: center; gap: 4px;">
+                            <span>${displayLocation}</span>
+                            <span class="flag">${countryFlag}</span>
                         </div>
                     </div>
-                    <div class="time">
-                        <div class="mobile-time">${athlete.currentPR}</div>
-                        <div class="tier-badge ${tier.class}">${tier.label}</div>
-                    </div>
-                    <div>${videoPreview}</div>
+                    <div class="time mobile-time">${athlete.currentPR}</div>
+                    <div style="text-align: center;">${videoPreview}</div>
                 `;
                 
                 // Details panel for mobile
@@ -2527,7 +2533,7 @@
                     <div class="name-cell">
                         <div class="name-wrapper">
                             <div class="name">${athlete.name}</div>
-                            ${athlete.verified ? '<span class="verified-badge">✓</span>' : ''}
+                            ${athlete.isVerified ? '<span class="verified-badge">✓</span>' : ''}
                         </div>
                         <div class="location" style="font-size: 0.9rem; color: #888; font-weight: 500; text-transform: none;">
                             ${location.city}, ${location.state} ${countryFlag}
