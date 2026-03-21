@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,7 +50,7 @@
             color: #fff;
             letter-spacing: 1px;
         }
-        
+
         .nav-links a {
             color: var(--text-dim);
             text-decoration: none;
@@ -107,7 +107,6 @@
             align-items: center;
             gap: 15px;
         }
-
         h2::before {
             content: '';
             display: block;
@@ -134,7 +133,6 @@
             font-size: 1.1rem;
             color: #ccc;
         }
-
         li strong {
             color: #fff;
             text-transform: uppercase;
@@ -143,9 +141,8 @@
             display: block;
             margin-bottom: 4px;
         }
-
         li::before {
-            content: 'â†’';
+            content: '→';
             color: var(--gold);
             position: absolute;
             left: 0;
@@ -171,10 +168,14 @@
             font-size: 0.8rem;
         }
 
+        @media (min-width: 901px) {
+            .nav-logo img { height: 50px !important; width: auto; margin-top: -3px !important; }
+            .nav-links a { font-size: 1.1rem !important; margin-left: 30px !important; }
+            header { text-align: center !important; }
+        }
     </style>
 </head>
 <body>
-
     <nav>
         <div class="nav-logo">
             <a href="index.html"><img src="media/new_wdhc_logo.jpg" alt="WDHC Logo"></a>
@@ -257,10 +258,12 @@
                         To encourage participation, the WDHC uses a two-level verification system.
                         <ul>
                             <li style="font-size: 1rem; margin-top: 15px;">
-                                <strong>Standard Verification (Rookie & Contender Tiers):</strong> Submissions for these tiers do not require a caliper measurement of the bar or a close-up inspection for bar materials. The hang must simply be performed on a standard pull-up bar.
+                                <strong>Standard Verification (Rookie & Contender Tiers):</strong>
+                                Submissions for these tiers do not require a caliper measurement of the bar or a close-up inspection for bar materials. The hang must simply be performed on a standard pull-up bar.
                             </li>
                             <li style="font-size: 1rem;">
-                                <strong>Pro-Level Verification (Pro, Elite, Legend & Freak Tiers):</strong> To be ranked in these highly competitive tiers, all video evidence rules must be strictly followed, including caliper measurement of the bar diameter and close-up footage to verify the bar is free of any prohibited materials.
+                                <strong>Pro-Level Verification (Pro, Elite, Legend & Freak Tiers):</strong>
+                                To be ranked in these highly competitive tiers, all video evidence rules must be strictly followed, including caliper measurement of the bar diameter and close-up footage to verify the bar is free of any prohibited materials.
                             </li>
                         </ul>
                     </li>
@@ -273,9 +276,7 @@
     </div>
 
     <footer>
-        Â© 2026 World Dead Hang Championship
+        © 2026 World Dead Hang Championship
     </footer>
-
 </body>
 </html>
-
