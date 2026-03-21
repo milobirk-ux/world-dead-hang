@@ -1,0 +1,1200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Dead Hang Championship | WDHC</title>
+    <link rel="icon" type="image/jpeg" href="media/new_wdhc_logo.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
+        
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --surface-hover: #111;
+            
+            --gold: #D4AF37;
+            --gold-dim: #8a702a;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            
+            --silver: #E0E0E0;
+            --silver-dim: #888;
+            --silver-glow: rgba(224, 224, 224, 0.15);
+            
+            --bronze: #cd7f32;
+            --accent-red: #cc0000;
+            --accent-red-glow: rgba(204, 0, 0, 0.4);
+            
+            --text: #ffffff;
+            --text-dim: #888;
+            --border: #222;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(204, 0, 0, 0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav { padding: 5px 30px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-logo { 
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-logo img {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
+        }
+        
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+
+        /* Hero Section */
+        header { padding: 40px 20px 30px;
+            position: relative;
+            text-align: center;
+        }
+
+        .status-pill {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px var(--accent-red-glow);
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 7.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin: 0 auto 20px;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 5px 25px rgba(0,0,0,0.8);
+        }
+
+        .subtitle {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            flex-grow: 1;
+        }
+
+        /* Layout Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .controls h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            line-height: 1;
+            margin: 0;
+            background: linear-gradient(180deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .division-tabs {
+            display: flex;
+            gap: 5px;
+            background: #111;
+            padding: 4px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .division-tabs button {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 4px;
+            text-align: center; /* Center text inside button */
+            flex-grow: 1; /* Allow buttons to grow */
+        }
+        
+        .division-tabs button:hover {
+            color: #fff;
+        }
+
+        .division-tabs button.active {
+            color: #000;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .sort-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .sort-toggle {
+            cursor: pointer;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--silver);
+            transition: color 0.2s;
+        }
+        
+        .sort-toggle:hover { color: var(--gold); }
+
+        /* Leaderboard Table */
+        .leaderboard {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .lb-header {
+            display: grid;
+            grid-template-columns: 70px 100px 300px 1.5fr 1.5fr 120px 100px 100px;
+            gap: 20px;
+            padding: 15px 25px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            background: #080808;
+            letter-spacing: 1px;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .lb-row {
+            display: grid;
+            grid-template-columns: 70px 100px 300px 1.5fr 1.5fr 120px 100px 100px;
+            gap: 20px;
+            padding: 18px 25px;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .lb-row:hover { 
+            background: var(--surface-hover); 
+            border-left: 3px solid var(--gold);
+            padding-left: 22px;
+        }
+        
+        .lb-row:last-child { border-bottom: none; }
+
+        /* Tier Badges */
+        .tier-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            width: 100px; /* Fixed width increased from 80px to 100px */
+        }
+        .tier-freak { background: #9900ff; color: #fff; box-shadow: 0 0 10px rgba(153, 0, 255, 0.4); } 
+        .tier-legend { background: var(--gold); color: #000; box-shadow: 0 0 10px var(--gold-glow); } 
+        .tier-elite { background: #E0E0E0; color: #000; } 
+        .tier-pro { background: #cc0000; color: #fff; } 
+        .tier-contender { border: 1px solid #666; color: #ccc; } 
+        .tier-challenger { border: 1px solid #1E8449; color: #1E8449; } 
+
+        .rank { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 2rem; 
+            font-weight: 700; 
+            color: #333; 
+            line-height: 1;
+        }
+        .rank-1 { 
+            color: var(--gold); 
+            text-shadow: 0 0 15px var(--gold-glow); 
+        }
+
+        .name-cell {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden; /* Added to contain children */
+        }
+
+        .name-wrapper {
+            display: flex;
+            align-items: baseline;
+            width: 100%;
+        }
+
+        .name { 
+            font-family: 'Oswald', sans-serif; 
+            font-weight: 500; 
+            font-size: 1.4rem; 
+            letter-spacing: 0.5px; 
+            color: #fff;
+            position: relative;
+            cursor: help;
+            
+            /* Truncation properties */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0; /* Important for flexbox truncation */
+        }
+        
+        .location {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .flag { font-size: 1rem; filter: grayscale(0.3); }
+
+        .pr-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            padding: 4px 8px;
+            width: 60px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #333;
+            color: var(--silver);
+            line-height: 1.1;
+            flex-shrink: 0; /* Prevent badge from shrinking */
+        }
+        .pr-badge .pr-val {
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+        }
+        .pr-badge .pr-label {
+            font-size: 0.65rem;
+            font-family: 'Roboto Mono', monospace;
+            text-transform: uppercase;
+            color: #777;
+        }
+
+        .time { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 2.2rem; 
+            color: var(--gold); 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+        }
+        
+        .video-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 0.75rem;
+            background: transparent;
+            border: 1px solid #333;
+            padding: 8px 16px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            font-weight: 700; 
+            letter-spacing: 1px;
+            font-family: 'Roboto Mono', monospace;
+            transition: all 0.2s;
+        }
+        .video-btn:hover { 
+            background: #fff; 
+            color: #000;
+            border-color: #fff;
+        }
+
+        .verified-badge {
+            display: inline-block;
+            margin-left: 8px;
+            color: var(--gold);
+            font-size: 0.9rem;
+            line-height: 1;
+            font-weight: 900;
+            vertical-align: middle;
+            cursor: help;
+            flex-shrink: 0; /* Prevent badge from shrinking */
+        }
+
+        /* Sidebar - Top 10 Card */
+        .sidebar-card {
+            background: #080808;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .sidebar-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(90deg, #111 0%, #080808 100%);
+        }
+
+        .sidebar-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            color: var(--gold);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        
+        .sidebar-subtitle {
+            font-size: 0.75rem;
+            color: #555;
+            text-transform: uppercase;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .mini-list { padding: 0 10px; }
+
+        .mini-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 10px;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 1.0rem;
+            transition: background 0.2s;
+        }
+        
+        .mini-row:last-child { border-bottom: none; }
+        .mini-row:hover { background: #111; }
+
+        .mini-rank {
+            font-family: 'Oswald', sans-serif;
+            color: #444;
+            font-weight: 700;
+            width: 30px;
+            font-size: 1.2rem;
+        }
+        .mini-rank.top-3 { color: #fff; }
+
+        .mini-name {
+            flex-grow: 1;
+            color: #ccc;
+            font-weight: 600;
+        }
+        
+        .mini-time {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 500;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+        }
+
+        /* CTA Section & Footer */
+        .cta-section {
+            margin-top: 60px;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+        }
+
+        .cta-text h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem; 
+            text-transform: uppercase; 
+            margin-bottom: 10px;
+            color: #fff;
+            line-height: 1;
+        }
+        .cta-text p {
+            color: var(--text-dim);
+            max-width: 500px;
+            font-size: 1.1rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+            color: #000;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 15px 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 2px;
+            box-shadow: 0 0 20px var(--gold-glow);
+            border: 1px solid var(--gold);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px var(--gold-glow);
+            filter: brightness(1.1);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            background: #050505;
+        }
+
+        .footer-logo {
+            max-width: 150px;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo:hover {
+            opacity: 0.8;
+        }
+
+        /* History Tooltip */
+        .tooltip {
+            visibility: hidden;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            color: #eee;
+            text-align: left;
+            border-radius: 4px;
+            padding: 15px;
+            position: absolute;
+            z-index: 100;
+            bottom: 100%;
+            left: 0;
+            width: 240px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            transform: translateY(10px);
+            pointer-events: none;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .name:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .history-item {
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 4px;
+            color: #888;
+        }
+        .history-item span.h-time { color: var(--gold); font-weight: 700; }
+
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .sidebar-card { position: static; margin-top: 40px; }
+            h1 { font-size: 4rem; }
+            .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .lb-header, .lb-row { grid-template-columns: 50px 80px 1fr 100px; }
+            .video-btn { display: none; } 
+            .location { display: none; } 
+            .country-col, .date-col { display: none; }
+            .cta-section { flex-direction: column; text-align: center; gap: 30px; }
+            .cta-section::before { width: 100%; height: 4px; bottom: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo"><img src="media/new_wdhc_logo.jpg" alt="World Dead Hang Championship Logo"></div>
+        <div class="nav-links">
+            <a href="index.html">Leaderboard</a>
+            <a href="rules.html">Rulebook</a>
+            <a href="submit.html">Submit</a>
+        </div>
+    </nav>
+
+    <header>
+        <div class="status-pill" style="margin-bottom: 20px;">OFFICIAL 2026 SEASON LIVE</div>
+        <h1>
+            <span style="color: var(--gold);">WORLD</span> DEAD HANG<br>
+            <span style="color: var(--gold);">CHAMPIONSHIP</span>
+        </h1>
+        <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="content-grid">
+            
+            <!-- Main Content -->
+            <div class="main-column">
+                <div class="controls">
+                    <div class="controls-header">
+                        <h2>Global Standings</h2>
+                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 8, 2026, 1:55 AM EST</div>
+                    </div>
+                    <div class="division-tabs">
+                        <button class="active" onclick="switchCategory('All')">All</button>
+                        <button onclick="switchCategory('Open Men')">Open Men</button>
+                        <button onclick="switchCategory('Open Women')">Open Women</button>
+                        <button onclick="switchCategory('Masters Male')">Masters Male (40+)</button>
+                        <button onclick="switchCategory('Masters Female')">Masters Female (40+)</button>
+                    </div>
+                    <div class="sort-row">
+                        <div id="current-cat-display" style="font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: #fff; letter-spacing: 1px; text-transform: uppercase;">ALL</div>
+                        <div class="division-tabs" style="transform: scale(0.85); transform-origin: right center;">
+                            <button class="sort-btn active" onclick="toggleSort('recent')" id="btn-sort-recent">Most Recent</button>
+                            <button class="sort-btn" onclick="toggleSort('time')" id="btn-sort-time">Longest Time</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leaderboard">
+                    <div class="lb-header">
+                        <div>Rank</div>
+                        <div>Tier</div>
+                        <div>Athlete</div>
+                        <div>Background</div>
+                        <div style="text-align: center;">Location</div>
+                        <div class="date-col" style="text-align: center;">Date Set</div>
+                        <div style="text-align: center;">Time</div>
+                        <div style="text-align: right;">Watch Hang</div>
+                    </div>
+
+                    <div id="leaderboard-body">
+                        <!-- JS Populated -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar-column">
+                <!-- Top 10 Card -->
+                <div class="sidebar-card">
+                    <div class="sidebar-header">
+                        <h3 class="sidebar-title">ðŸ† World Leaders</h3>
+                        <div class="sidebar-subtitle">Global Top 10 â€¢ All Time</div>
+                    </div>
+                    <div id="top-10-list" class="mini-list">
+                        <!-- JS Populated -->
+                    </div>
+                </div>
+
+                <!-- Tier Legend Card -->
+                <div class="sidebar-card" style="margin-top: 20px; padding-bottom: 10px;">
+                    <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
+                        <h3 class="sidebar-title" style="color: var(--text-dim);">TIER CLASSIFICATIONS</h3>
+                    </div>
+                    <div style="padding: 0 20px 15px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="tier-badge tier-freak">FREAK</span>
+                                <span style="color: #ccc; font-weight: 700;">6:00+ min</span>
+                            </div>
+                            <span style="color: #aaa; font-weight: 600;">.001% of pop.</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="tier-badge tier-legend">LEGEND</span>
+                                <span style="color: #ccc; font-weight: 700;">4:00+ min</span>
+                            </div>
+                            <span style="color: #aaa; font-weight: 600;">0.1% of pop.</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="tier-badge tier-elite">ELITE</span>
+                                <span style="color: #ccc; font-weight: 700;">3:00+ min</span>
+                            </div>
+                            <span style="color: #aaa; font-weight: 600;">1% of pop.</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="tier-badge tier-pro">PRO</span>
+                                <span style="color: #ccc; font-weight: 700;">2:00+ min</span>
+                            </div>
+                            <span style="color: #aaa; font-weight: 600;">5% of pop.</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="tier-badge tier-contender">CONTENDER</span>
+                                <span style="color: #ccc; font-weight: 700;">1:00+ min</span>
+                            </div>
+                            <span style="color: #aaa; font-weight: 600;">20% of pop.</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="tier-badge tier-challenger">CHALLENGER</span>
+                                <span style="color: #ccc; font-weight: 700;">< 1:00 min</span>
+                            </div>
+                            <span style="color: #aaa; font-weight: 600;">75% of pop.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Icon Legend Card -->
+                <div class="sidebar-card" style="margin-top: 20px; font-size: 1.0rem;">
+                    <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
+                        <h3 class="sidebar-title" style="color: var(--text-dim);">ICON LEGEND</h3>
+                    </div>
+                    <div style="padding: 0 20px 15px;">
+                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 12px;">
+                            <span style="font-size: 1.2rem; color: var(--gold); line-height: 1.2; width: 20px; text-align: center;">âœ”</span>
+                            <div>
+                                <div style="color: #ddd;">Pro-Level Verification</div>
+                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Independently reviewed and certified by WDHC. This record stands.</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 15px;">
+                            <span style="font-size: 1.2rem; color: var(--silver); line-height: 1.2; width: 20px; text-align: center;">âš¡</span>
+                            <div>
+                                <div style="color: #ddd;">Total Personal Records</div>
+                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Times athlete has set a new personal record.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+
+        <div class="cta-section">
+            <div class="cta-text">
+                <h3>Compete and find your limit</h3>
+                <p>Set up your camera, hang until you drop, and claim your official ranking on the world's first sanctioned dead hang leaderboard.</p>
+            </div>
+            <a href="submit.html" class="cta-btn">Submit Your Hang</a>
+        </div>
+
+    </div>
+
+    <footer>
+        <img src="media/new_wdhc_logo.jpg" alt="World Dead Hang Championship Footer Logo" class="footer-logo">
+        <div style="color: #444; font-family: 'Roboto Mono', monospace; font-size: 0.8rem;">Â© 2026 World Dead Hang Championship</div>
+    </footer>
+
+<script>
+    // Data
+    const athletes = [
+    {
+        "id": 8,
+        "history": [
+            {
+                "date": "2026-03-09 4:54:40",
+                "time": "6:02"
+            }
+        ],
+        "name": "Frank S",
+        "currentPR": "6:02",
+        "location": "detriot, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-09 4:54:40",
+        "video": "https://www.google.com/search?q=apple+tv+shows&sca_esv=04b991333a83f57d&biw=3440&bih=1317&sxsrf=ANbL-n6ZlOQC8LWXniSttjtOKwb90iyI-w%3A1773029359104&ei=70euabKKBsucptQP2OWzsQk&oq=apple&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWFwcGxlKgIIATIWEC4YgAQYsQMY0QMYQxiDARjHARiKBTIOEAAYgAQYkQIYsQMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyExAuGIAEGLEDGNEDGEMYxwEYigUyFBAuGIAEGLEDGNEDGIMBGMcBGIoFSLY8UKMPWNwVcAR4AJABAJgBlgGgAc4FqgEDMS41uAEDyAEA-AEBmAILoAK9RcICChAAGLADGNYEGEfCAgQQIxgnwgIKECMYgAQYJxiKBcICDRAjGIAEGCcYyQIYigXCAgsQLhiABBiRAhiKBcICERAuGIAEGLEDGNEDGIMBGMcBwgILEAAYgAQYsQMYgwHCAg4QLhiABBixAxjRAxjHAcICCxAAGIAEGJECGIoFwgIlEC4YgAQYsQMY0QMYQxiDARjHARiKBRiXBRjcBBjeBBjgBNgBAZgDAIgGAZAGCLoGBggBEAEYFJIHBzQuNS45LTKgB9ZPsgcDMC41uAeKBcIHBTAuNy40yAcigAgA&sclient=gws-wiz-serp",
+        "occupation": "Parent",
+        "category": "Open Men",
+        "prCount": 1
+    },
+    {
+        "id": 2,
+        "history": [
+            {
+                "date": "2026-03-07 6:16:38",
+                "time": "4:09"
+            },
+            {
+                "date": "2026-03-10 4:06:52",
+                "time": "4:01"
+            }
+        ],
+        "name": "Milo Birk",
+        "currentPR": "4:09",
+        "location": "Detroit, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-07 6:16:38",
+        "video": "https://www.reddit.com/r/Advice/comments/1huk5e3/what_sources_you_guys_watch_for_movies_can_u_guys/",
+        "occupation": "Athlete",
+        "category": "Open Women",
+        "prCount": 2
+    },
+    {
+        "id": 5,
+        "history": [
+            {
+                "date": "2026-03-08 3:07:47",
+                "time": "3:42"
+            }
+        ],
+        "name": "Random R",
+        "currentPR": "3:42",
+        "location": "Detroit, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-08 3:07:47",
+        "video": "https://aistudio.google.com/api-keys?project=gen-lang-client-0688610786",
+        "occupation": "Contractor",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 10,
+        "history": [
+            {
+                "date": "2026-03-11 3:53:28",
+                "time": "3:01"
+            }
+        ],
+        "name": "Bryant Garcia",
+        "currentPR": "3:01",
+        "location": "Unknown, USA",
+        "country": "ðŸ‡ºðŸ‡¸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-11 3:53:28",
+        "video": "https://tally.so/forms/RGzOe4/edit",
+        "occupation": "Athlete",
+        "category": "Open Men",
+        "prCount": 1
+    },
+    {
+        "id": 9,
+        "history": [
+            {
+                "date": "2026-03-09 5:40:29",
+                "time": "2:35"
+            }
+        ],
+        "name": "Testa longername",
+        "currentPR": "2:35",
+        "location": "Unknown, USA",
+        "country": "ðŸ‡ºðŸ‡¸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-09 5:40:29",
+        "video": "https://docs.google.com/spreadsheets/d/1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s/edit?gid=0#gid=0",
+        "occupation": "Tester",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 6,
+        "history": [
+            {
+                "date": "2026-03-08 6:31:02",
+                "time": "2:20"
+            }
+        ],
+        "name": "Testa Longername",
+        "currentPR": "2:20",
+        "location": "Detroit, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-08 6:31:02",
+        "video": "https://www.youtube.com/",
+        "occupation": "Test Proffessional",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 1,
+        "history": [
+            {
+                "date": "2026-03-07 4:46:31",
+                "time": "1:16"
+            }
+        ],
+        "name": "Markie Mullins",
+        "currentPR": "1:16",
+        "location": "Detroit, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-07 4:46:31",
+        "video": "https://webhook.site/#!/view/efa2a342-0c51-4b94-a9f1-e9ea586f996a/d44730c2-bf62-40b9-97a3-e9ff278f561e/1",
+        "occupation": "Athlete",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 4,
+        "history": [
+            {
+                "date": "2026-03-07 7:11:58",
+                "time": "1:08"
+            }
+        ],
+        "name": "Venus M",
+        "currentPR": "1:08",
+        "location": "Detroit, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-07 7:11:58",
+        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "occupation": "Astrologer",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 11,
+        "history": [
+            {
+                "date": "2026-03-12 1:58:59",
+                "time": "0:50"
+            }
+        ],
+        "name": "Joshua Taylor",
+        "currentPR": "0:50",
+        "location": "Unknown, USA",
+        "country": "ðŸ‡ºðŸ‡¸",
+        "isVerified": false,
+        "lastAttempt": "2026-03-12 1:58:59",
+        "video": "https://www.mulerouter.ai/app/api-keys",
+        "occupation": "Community Outreach",
+        "category": "Masters Female",
+        "prCount": 1
+    },
+    {
+        "id": 3,
+        "history": [
+            {
+                "date": "2026-03-07 6:29:51",
+                "time": "0:42"
+            }
+        ],
+        "name": "Otis B",
+        "currentPR": "0:42",
+        "location": "Detroit, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-07 6:29:51",
+        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "occupation": "Athlete",
+        "category": "Open Women",
+        "prCount": 1
+    },
+    {
+        "id": 7,
+        "history": [
+            {
+                "date": "2026-03-08 18:40:02",
+                "time": "0:30"
+            }
+        ],
+        "name": "Pepper Chonie",
+        "currentPR": "0:30",
+        "location": "detroit, MI, USA",
+        "country": "ðŸŒŽ",
+        "isVerified": false,
+        "lastAttempt": "2026-03-08 18:40:02",
+        "video": "https://www.youtube.com/",
+        "occupation": "Security",
+        "category": "Open Women",
+        "prCount": 1
+    }
+];
+
+    let currentCategory = 'All';
+    let currentSort = 'recent'; 
+
+    function getTierInfo(timeStr) {
+        const seconds = parseTime(timeStr);
+        if (seconds >= 360) return { label: 'Freak', class: 'tier-freak' }; // 6:00+
+        if (seconds >= 240) return { label: 'Legend', class: 'tier-legend' }; // 4:00+
+        if (seconds >= 180) return { label: 'Elite', class: 'tier-elite' }; // 3:00+
+        if (seconds >= 120) return { label: 'Pro', class: 'tier-pro' }; // 2:00+
+        if (seconds >= 60) return { label: 'Contender', class: 'tier-contender' }; // 1:00+
+        return { label: 'Challenger', class: 'tier-challenger' };
+    }
+
+    function renderLeaderboard() {
+        const list = document.getElementById('leaderboard-body');
+        list.innerHTML = '';
+
+        // Filter
+        let filteredData = (currentCategory === 'All') ? athletes : athletes.filter(a => a.category === currentCategory);
+
+        // Pre-calculate True Rank based on Longest Time (always)
+        filteredData.sort((a, b) => {
+            const timeA = parseTime(a.currentPR);
+            const timeB = parseTime(b.currentPR);
+            return timeB - timeA;
+        });
+        filteredData.forEach((a, index) => {
+            a.trueRank = index + 1;
+        });
+
+        // Now sort based on user selection
+        if (currentSort === 'time') {
+            // Already sorted by time above
+        } else {
+            // Sort by recent
+            filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        }
+
+        if (filteredData.length === 0) {
+            list.innerHTML = '<div style="padding:40px; text-align:center; color:#555;">No records in this division yet.</div>';
+            return;
+        }
+
+        filteredData.forEach((athlete) => {
+            const rank = athlete.trueRank;
+            const rankClass = rank === 1 ? 'rank-1' : '';
+            const tier = getTierInfo(athlete.currentPR);
+            const flag = getCountryFlag(athlete.location);
+            
+            // Build History Tooltip
+            let historyHtml = athlete.history.map(h => {
+                const displayDate = h.date.split(' ')[0];
+                return `<div class="history-item"><span>${displayDate}</span><span class="h-time">${h.time}</span></div>`
+            }).join('');
+
+            const row = document.createElement('div');
+            row.className = 'lb-row';
+            const displayDateMain = athlete.lastAttempt.split(' ')[0];
+            const displayLocation = athlete.location.split('/')[0].trim();
+            row.innerHTML = `
+                <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
+                <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
+                <div class="name-cell">
+                    <div class="name-wrapper">
+                        <div class="name">
+                            ${athlete.name}
+                            <div class="tooltip">
+                                <div style="color:#fff; margin-bottom:5px; border-bottom:1px solid #333; padding-bottom:5px; font-weight:700;">HISTORY</div>
+                                ${historyHtml}
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-left: 8px; transform: translateY(-2px); flex-shrink: 0;">
+                            ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">âœ”</span>` : ''}
+                            <div class="pr-badge">
+                                <span class="pr-val">âš¡ ${athlete.prCount}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
+                <div style="color: #bbb; font-size: 0.9rem; text-align: center;">${displayLocation} ${flag}</div>
+                <div style="text-align: center; color: #999; font-family: 'Roboto Mono', monospace; font-size: 0.85rem;">${displayDateMain}</div>
+                <div class="time" style-align: center;">${athlete.currentPR}</div>
+                <div style="text-align: right;"><a href="${athlete.video}" class="video-btn">Watch</a></div>
+            `;
+            list.appendChild(row);
+        });
+        
+        renderSidebar();
+    }
+    
+    function renderSidebar() {
+        const sidebar = document.getElementById('top-10-list');
+        sidebar.innerHTML = '';
+        
+        // Always show top 10 across ALL athletes (not filtered by category)
+        // This automatically updates as new times are added to the athletes array
+        let topData = [...athletes].sort((a, b) => {
+            const timeA = parseTime(a.currentPR);
+            const timeB = parseTime(b.currentPR);
+            return timeB - timeA;
+        }).slice(0, 10);
+        
+        if (topData.length === 0) {
+            sidebar.innerHTML = '<div style="padding: 20px; color:#555; font-size:0.8rem;">No records yet.</div>';
+            return;
+        }
+        
+        topData.forEach((athlete, index) => {
+            const rank = index + 1;
+            const rankClass = rank <= 3 ? 'top-3' : '';
+            
+            const row = document.createElement('div');
+            row.className = 'mini-row';
+            row.innerHTML = `
+                <div class="mini-rank ${rankClass}">${rank}</div>
+                <div class="mini-name">${athlete.name}</div>
+                <div class="mini-time">${athlete.currentPR}</div>
+            `;
+            sidebar.appendChild(row);
+        });
+    }
+
+    function parseTime(timeStr) {
+        const parts = String(timeStr).split(/[:.]/);
+        const minutes = parseInt(parts[0], 10) || 0;
+        const seconds = parseInt(parts[1], 10) || 0;
+        return minutes * 60 + seconds;
+    }
+    
+    function parseLocation(locationStr) {
+        // Expected format: "Detroit, MI / USA" or "City, State / Country"
+        const parts = locationStr.split('/');
+        const cityState = parts[0] ? parts[0].trim() : '';
+        const country = parts[1] ? parts[1].trim() : 'Unknown';
+        
+        const cityStateParts = cityState.split(',');
+        const city = cityStateParts[0] ? cityStateParts[0].trim() : 'Unknown';
+        const state = cityStateParts[1] ? cityStateParts[1].trim() : '';
+        
+        return { city, state, country };
+    }
+    
+    function getCountryFlag(countryStr) {
+        const upper = countryStr.toUpperCase();
+        if (upper.includes('USA') || upper.includes('US') || upper.includes('UNITED STATES')) return 'ðŸ‡ºðŸ‡¸';
+        if (upper.includes('UK') || upper.includes('UNITED KINGDOM')) return 'ðŸ‡¬ðŸ‡§';
+        if (upper.includes('CANADA') || upper.includes('CA')) return 'ðŸ‡¨ðŸ‡¦';
+        if (upper.includes('MEXICO') || upper.includes('MX')) return 'ðŸ‡²ðŸ‡½';
+        if (upper.includes('GERMANY') || upper.includes('DE')) return 'ðŸ‡©ðŸ‡ª';
+        if (upper.includes('FRANCE') || upper.includes('FR')) return 'ðŸ‡«ðŸ‡·';
+        if (upper.includes('AUSTRALIA') || upper.includes('AU')) return 'ðŸ‡¦ðŸ‡º';
+        if (upper.includes('JAPAN') || upper.includes('JP')) return 'ðŸ‡¯ðŸ‡µ';
+        return 'ðŸŒŽ';
+    }
+
+    function switchCategory(cat) {
+        const buttons = document.querySelectorAll('.division-tabs button');
+        buttons.forEach(btn => {
+            // Extract the category from the onclick attribute for a robust comparison
+            const onclickAttr = btn.getAttribute('onclick');
+            const btnCategoryMatch = onclickAttr ? onclickAttr.match(/switchCategory\('([^']+)'\)/) : null;
+            
+            if (btnCategoryMatch && btnCategoryMatch[1]) {
+                const btnCategory = btnCategoryMatch[1];
+                if (btnCategory === cat) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+        });
+        
+        currentCategory = cat;
+        document.getElementById('current-cat-display').innerText = cat.toUpperCase();
+        renderLeaderboard();
+    }
+    
+    function toggleSort(type) {
+        currentSort = type;
+        
+        document.getElementById('btn-sort-recent').classList.remove('active');
+        document.getElementById('btn-sort-time').classList.remove('active');
+        
+        if (type === 'recent') {
+            document.getElementById('btn-sort-recent').classList.add('active');
+        } else {
+            document.getElementById('btn-sort-time').classList.add('active');
+        }
+        
+        renderLeaderboard();
+    }
+
+    renderLeaderboard();
+</script>
+
+</body>
+</html>
+
+
