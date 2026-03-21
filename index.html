@@ -56,7 +56,7 @@
 
         .marquee-content {
             display: inline-block;
-            animation: marquee 40s linear infinite;
+            animation: marquee 50s linear infinite;
             font-family: 'Oswald', sans-serif;
             font-size: 1.1rem;
             text-transform: uppercase;
@@ -73,7 +73,7 @@
 
         @keyframes marquee {
             from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
+            to { transform: translateX(-50%); }
         }
 
         /* Navigation */
@@ -589,7 +589,7 @@
             
             /* Slow down marquee banner on mobile */
             .marquee-content {
-                animation-duration: 60s; /* Slower than desktop (40s) */
+                animation-duration: 75s; /* Slower than desktop (50s) */
             }
             
             /* Make marquee banner sticky below nav on mobile */
