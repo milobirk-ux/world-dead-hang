@@ -1,23 +1,29 @@
 # WDHC Email Automation - Version History
 
-## Current Version: v1.3 (Simple Email Format)
-**File:** `email-automation-v1.3.gs`
+## Current Version: v1.4 (Original HTML Format with Fixed Time Parsing)
+**File:** `email-automation-v1.4.gs`
 **Date:** March 20, 2026
 **Features:**
-- **Simple email format** (Milo's preferred plain text)
-- Looks for "yes" in Column AF (approval)
-- Sends on form submission
-- Tracks emailed status in Column AG
-- **Fixed time parsing** (4.26 = 4 minutes 26 seconds)
+- **Original HTML email format** (Milo's preferred HTML design)
+- **Fixed time parsing** (4.26 = 4 minutes 26 seconds ✅)
+- PR tracking with 🏆 badges
+- Grip age calculation with longevity insights
+- Tier system and motivational messaging
+- Sends on form submission (INSERT_ROW)
 
 ---
 
 ## Version History
 
-### v1.3 (Current) - SIMPLE FORMAT
+### v1.4 (Current) - ORIGINAL HTML WITH FIXED TIME
+- **File:** `email-automation-v1.4.gs`
+- **Date:** March 20, 2026
+- **Changes:** Original HTML email format with FIXED time parsing (4.26 = 4 minutes 26 seconds)
+
+### v1.3 - SIMPLE FORMAT
 - **File:** `email-automation-v1.3.gs`
 - **Date:** March 20, 2026
-- **Changes:** Simple plain text email format (Milo's preference), fixed time parsing
+- **Changes:** Simple plain text email format, fixed time parsing
 
 ### v1.2 
 - **File:** `email-automation-v1.2.gs`
@@ -77,17 +83,16 @@ These were created during debugging and can be deleted:
 
 ---
 
-## How to Use Current Version (v1.3)
+## How to Use Current Version (v1.4)
 
 1. **Open Google Sheets**
 2. **Extensions → Apps Script**
-3. **Paste** `email-automation-v1.3.gs` content
+3. **Paste** `email-automation-v1.4.gs` content
 4. **Save** and **authorize**
 5. **Run** `setupEmailColumns()` to add required columns
 6. **Run** `testTimeParsing()` to verify time parsing (4.26 = 266 seconds ✅)
 7. **Run** `testEmailToMilo()` (update with your email first)
-8. **Run** `testEmailFormat()` to see sample email
-9. **Set triggers:** On form submit + On change (Column AF)
+8. **Set trigger:** On form submit (INSERT_ROW)
 
 ---
 
