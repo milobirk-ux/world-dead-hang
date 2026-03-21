@@ -1,5 +1,5 @@
-// WDHC Email Automation with PR Tracking - CLEAN FIXED VERSION
-// This script sends personalized emails and tracks Personal Records (PRs)
+// WDHC Email Automation - FINAL VERSION with Milo's Personal Touch
+// This script sends personalized emails from Milo with accurate time parsing
 // Add to Google Sheets: Extensions > Apps Script
 
 function sendWelcomeEmailOnNewRow(e) {
@@ -11,9 +11,9 @@ function sendWelcomeEmailOnNewRow(e) {
   
   // Column indices (0-based)
   const emailColIndex = 10; // Column K (Email Address)
-  const nameColIndex = 3;   // Column D (Athlete Name)
-  const timeColIndex = 12;  // Column M (Official Time)
-  const dobColIndex = 7;    // Column H (Date of Birth)
+  const nameColIndex = 3; // Column D (Athlete Name)
+  const timeColIndex = 12; // Column M (Official Time)
+  const dobColIndex = 7; // Column H (Date of Birth)
   const genderColIndex = 8; // Column I (Gender)
   const weightColIndex = 9; // Column J (Bodyweight lbs)
   const approvedColIndex = headers.findIndex(h => h === 'Approved');
@@ -38,8 +38,8 @@ function sendWelcomeEmailOnNewRow(e) {
   }
   if (prBadgeColIndex === -1) {
     const newPrBadgeCol = headers.length + (emailedCol === headers.length ? 0 : 1) + 
-                         (prCol === headers.length + 1 ? 0 : 1) + 
-                         (previousBestCol === headers.length + 2 ? 0 : 1);
+      (prCol === headers.length + 1 ? 0 : 1) + 
+      (previousBestCol === headers.length + 2 ? 0 : 1);
     activeSheet.getRange(1, newPrBadgeCol + 1).setValue('PR Badge');
   }
 
@@ -47,52 +47,50 @@ function sendWelcomeEmailOnNewRow(e) {
   function parseTimeToSeconds(timeStr) {
     let s = String(timeStr || '0').trim();
     
-    // Handle colon format (e.g., "4:10" = 4 minutes, 10 seconds)
+    // Handle empty or invalid
+    if (!s || s === '0' || s === '') return 0;
+    
+    // Format 1: "MM:SS" (4:26 = 4 minutes 26 seconds)
     if (s.includes(':')) {
       let p = s.split(':');
-      return (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0);
+      if (p.length === 2) {
+        return (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0);
+      }
     }
     
-    // Handle decimal format - FIXED FOR "4.10" = 4 minutes 10 seconds
-    // When users type "4.10" in Google Sheets, they mean 4 minutes and 10 seconds
-    // NOT 4 minutes and 0.10 minutes (which would be 6 seconds)
+    // Format 2: Decimal minutes "M.SS" (4.26 = 4 minutes 26 seconds)
+    // This is the FIX: 4.26 should be 4 minutes 26 seconds, NOT 4 minutes 15.6 seconds
     if (s.includes('.')) {
       let parts = s.split('.');
-      let minutes = parseInt(parts[0]) || 0;
-      let decimalPart = parts[1] || '';
-      
-      // If decimal part is 1-2 digits, treat it as SECONDS
-      // "4.10" = 4 minutes and 10 seconds
-      // "4.1" = 4 minutes and 10 seconds (assume they meant 4:10)
-      // "4.25" = 4 minutes and 25 seconds
-      if (decimalPart.length <= 2) {
-        let seconds = parseInt(decimalPart) || 0;
-        // Handle single digit: "4.1" = 4:10, "4.2" = 4:20, etc.
-        if (decimalPart.length === 1) {
-          seconds = seconds * 10;
+      if (parts.length === 2) {
+        let minutes = parseInt(parts[0]) || 0;
+        let secondsStr = parts[1];
+        
+        // Handle cases like "4.26" where 26 is seconds
+        // Also handle "4.5" where .5 means 30 seconds
+        if (secondsStr.length === 1) {
+          // Single digit after decimal: "4.5" = 4 minutes 30 seconds
+          let seconds = parseInt(secondsStr) * 6; // .5 = 30 seconds
+          return minutes * 60 + seconds;
+        } else if (secondsStr.length === 2) {
+          // Two digits after decimal: "4.26" = 4 minutes 26 seconds
+          let seconds = parseInt(secondsStr);
+          return minutes * 60 + seconds;
         }
-        return minutes * 60 + seconds;
-      }
-      
-      // For longer decimal parts (e.g., "4.123"), treat as decimal minutes
-      // This is rare but handles cases like "4.5" meaning 4.5 minutes = 4:30
-      let num = parseFloat(s);
-      if (!isNaN(num)) {
-        return Math.round(num * 60);
       }
     }
     
-    // Handle plain numbers
+    // Format 3: Just a number (assume seconds if < 120, minutes if >= 120)
     let num = parseFloat(s);
     if (isNaN(num)) return 0;
     
-    // If number is small (<20), assume it's minutes
-    if (num < 20) {
-      return Math.round(num * 60);
+    if (num < 120) {
+      // Likely seconds (e.g., "85" = 85 seconds)
+      return Math.round(num);
+    } else {
+      // Likely minutes (e.g., "240" = 4 minutes)
+      return Math.round(num) * 60;
     }
-    
-    // Otherwise, assume it's already in seconds
-    return Math.round(num);
   }
 
   function formatSecondsToMinutes(sec) {
@@ -117,6 +115,7 @@ function sendWelcomeEmailOnNewRow(e) {
     return age;
   }
 
+  // ADVANCED GRIP AGE CALCULATION
   function calculateWDHCGripAge(timeSeconds, age, weightLbs, gender) {
     const isMale = gender.toString().toLowerCase() === 'male';
     const refWeight = isMale ? 175 : 135;
@@ -217,6 +216,9 @@ function sendWelcomeEmailOnNewRow(e) {
     const weight = row[weightColIndex];
     const isApproved = approvedColIndex !== -1 ? row[approvedColIndex] === 'Yes' : false;
 
+    // Skip if not approved
+    if (!isApproved) continue;
+
     const firstName = name.split(' ')[0];
     const totalSeconds = parseTimeToSeconds(time);
     const formattedTime = formatSecondsToMinutes(totalSeconds);
@@ -234,30 +236,48 @@ function sendWelcomeEmailOnNewRow(e) {
     
     // Tier calculation
     let currentTier = "", nextTier = "", gap = 0;
-    if (totalSeconds >= 360) { currentTier = "Freak"; gap = -1; } 
-    else if (totalSeconds >= 240) { currentTier = "Legend"; nextTier = "Freak"; gap = 360 - totalSeconds; } 
-    else if (totalSeconds >= 180) { currentTier = "Elite"; nextTier = "Legend"; gap = 240 - totalSeconds; } 
-    else if (totalSeconds >= 120) { currentTier = "Pro"; nextTier = "Elite"; gap = 180 - totalSeconds; } 
-    else if (totalSeconds >= 60) { currentTier = "Contender"; nextTier = "Pro"; gap = 120 - totalSeconds; } 
-    else { currentTier = "Challenger"; nextTier = "Contender"; gap = 60 - totalSeconds; }
+    if (totalSeconds >= 360) { 
+      currentTier = "Freak"; 
+      gap = -1; 
+    } else if (totalSeconds >= 240) { 
+      currentTier = "Legend"; 
+      nextTier = "Freak"; 
+      gap = 360 - totalSeconds; 
+    } else if (totalSeconds >= 180) { 
+      currentTier = "Elite"; 
+      nextTier = "Legend"; 
+      gap = 240 - totalSeconds; 
+    } else if (totalSeconds >= 120) { 
+      currentTier = "Pro"; 
+      nextTier = "Elite"; 
+      gap = 180 - totalSeconds; 
+    } else if (totalSeconds >= 60) { 
+      currentTier = "Contender"; 
+      nextTier = "Pro"; 
+      gap = 120 - totalSeconds; 
+    } else { 
+      currentTier = "Challenger"; 
+      nextTier = "Contender"; 
+      gap = 60 - totalSeconds; 
+    }
 
     // PR-specific messaging
     let prMessage = '';
     if (isPR) {
       if (prInfo.bestTime > 0) {
-        prMessage = `<div style="background: linear-gradient(135deg, #D4AF37, #FFD700); color: white; padding: 12px; border-radius: 8px; margin: 15px 0; text-align: center;">
+        prMessage = `<div style="background: linear-gradient(135deg, #D4AF37, #FFD700); color: white; padding: 12px; border-radius: 8px; margin: 20px 0; text-align: center;">
           <h3 style="margin: 0; color: white;">🎉 NEW PERSONAL RECORD! 🎉</h3>
           <p style="margin: 8px 0 0 0; font-size: 1.1em;">You beat your previous best of <strong>${prInfo.bestTimeFormatted}</strong> by <strong>${improvementFormatted}</strong>!</p>
           <p style="margin: 4px 0 0 0; font-size: 0.9em;">🏆 This submission will get the PR badge on the leaderboard.</p>
         </div>`;
       } else {
-        prMessage = `<div style="background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 12px; border-radius: 8px; margin: 15px 0; text-align: center;">
+        prMessage = `<div style="background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 12px; border-radius: 8px; margin: 20px 0; text-align: center;">
           <h3 style="margin: 0; color: white;">🏁 FIRST SUBMISSION! 🏁</h3>
           <p style="margin: 8px 0 0 0; font-size: 1.1em;">Welcome to the WDHC! <strong>${formattedTime}</strong> is your starting point.</p>
         </div>`;
       }
     } else if (prInfo.bestTime > 0) {
-      prMessage = `<div style="background: #f0f0f0; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #666;">
+      prMessage = `<div style="background: #f0f0f0; padding: 12px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #666;">
         <p style="margin: 0; color: #666;">This time of <strong>${formattedTime}</strong> didn't beat your PR of <strong>${prInfo.bestTimeFormatted}</strong>.</p>
         <p style="margin: 8px 0 0 0; font-size: 0.9em;">Keep training! You're <strong>${formatSecondsToMinutes(prInfo.bestTime - totalSeconds)}</strong> away from your best.</p>
       </div>`;
@@ -267,15 +287,15 @@ function sendWelcomeEmailOnNewRow(e) {
       ? `You're in the <strong>FREAK</strong> tier! You have officially transcended human limits.`
       : `Congrats on hitting <strong>${formattedTime}</strong>! You're in the <strong>${currentTier}</strong> tier, and you're only <strong>${formatSecondsToMinutes(gap)}</strong> away from leveling up to the <strong>${nextTier}</strong> tier. Keep going!`;
 
-    // Grip Age HTML - SIMPLIFIED AND FIXED
+    // Grip Age HTML
     let gripAgeHtml = '';
     let gripAgeMessage = '';
     let longevityFact = '';
     
     const hasGripAgeData = dob && dob instanceof Date && 
-                          gender !== undefined && gender !== null && gender !== '' &&
-                          weight !== undefined && weight !== null && weight !== '' &&
-                          age !== undefined && age !== null;
+      gender !== undefined && gender !== null && gender !== '' &&
+      weight !== undefined && weight !== null && weight !== '' &&
+      age !== undefined && age !== null;
 
     if (hasGripAgeData) {
       try {
@@ -312,14 +332,12 @@ function sendWelcomeEmailOnNewRow(e) {
           '</div>';
       } catch (err) {
         console.error("Error calculating Grip Age: " + err);
-        // FIXED LINE 279 - No line break in string
-        gripAgeHtml = '<div style="margin-top: 20px; padding: 15px; border-top: 1px solid #ddd;">' +
-          '<h3 style="color: #000; margin-top: 0;">Your WDHC Grip Age™</h3>' +
-          '<p>We couldn\'t calculate your grip age due to invalid data. Please make sure your Date of Birth, Gender, and Bodyweight are valid!</p>' +
+        gripAgeHtml = '<div style="margin-top: 20px;">' + 
+          '<h3 style="color: #000; margin-top: 0;">Your WDHC Grip Age™</h3>' + 
+          '<p>We couldn\'t calculate your grip age due to data issues. Please check your Date of Birth, Gender, and Bodyweight values.</p>' + 
           '</div>';
       }
     } else {
-      // FIXED LINE 285 - No line break in string
       gripAgeHtml = '<div style="margin-top: 20px; padding: 15px; border-top: 1px solid #ddd;">' +
         '<h3 style="color: #000; margin-top: 0;">Your WDHC Grip Age™</h3>' +
         '<p>To see your personalized grip age and longevity insights, make sure to include your Date of Birth, Gender, and Bodyweight in future submissions!</p>' +
@@ -359,10 +377,10 @@ function sendWelcomeEmailOnNewRow(e) {
       // Mark as emailed
       activeSheet.getRange(i + 1, emailedCol + 1).setValue('Yes');
       
-      Logger.log(`✅ Email sent to ${name} (${email}) - ${isPR ? 'PR!' : 'Not PR'}`);
+      console.log(`✅ Email sent to ${name} (${email}) - ${isPR ? 'PR!' : 'Not PR'}`);
       
     } catch (err) {
-      Logger.log(`❌ Failed to send email to ${email}: ${err.toString()}`);
+      console.log(`❌ Failed to send email to ${email}: ${err.toString()}`);
     }
   }
 }
@@ -377,4 +395,163 @@ function testEmailAutomation() {
   console.log("Testing email automation...");
   sendWelcomeEmailOnNewRow(mockEvent);
   console.log("Test complete!");
+}
+
+// Manual trigger function for testing
+function manualSendAllPendingEmails() {
+  const activeSheet = SpreadsheetApp.getActiveSheet();
+  const data = activeSheet.getDataRange().getValues();
+  const headers = data[0];
+  
+  const emailColIndex = 10; // Column K
+  const nameColIndex = 3; // Column D
+  const timeColIndex = 12; // Column M
+  const approvedColIndex = headers.findIndex(h => h === 'Approved');
+  const emailedCol = headers.findIndex(h => h === 'Emailed');
+  
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    const email = row[emailColIndex];
+    const name = row[nameColIndex] || 'Athlete';
+    const timeStr = row[timeColIndex] || '';
+    const approved = approvedColIndex >= 0 ? row[approvedColIndex] === 'Yes' : false;
+    const alreadyEmailed = emailedCol >= 0 ? row[emailedCol] : false;
+    
+    if (email && approved && !alreadyEmailed) {
+      const firstName = name.split(' ')[0];
+      
+      // Parse time using fixed function
+      function parseTimeToSeconds(timeStr) {
+        let s = String(timeStr || '0').trim();
+        
+        if (!s || s === '0' || s === '') return 0;
+        
+        if (s.includes(':')) {
+          let p = s.split(':');
+          if (p.length === 2) {
+            return (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0);
+          }
+        }
+        
+        if (s.includes('.')) {
+          let parts = s.split('.');
+          if (parts.length === 2) {
+            let minutes = parseInt(parts[0]) || 0;
+            let secondsStr = parts[1];
+            
+            if (secondsStr.length === 1) {
+              let seconds = parseInt(secondsStr) * 6;
+              return minutes * 60 + seconds;
+            } else if (secondsStr.length === 2) {
+              let seconds = parseInt(secondsStr);
+              return minutes * 60 + seconds;
+            }
+          }
+        }
+        
+        let num = parseFloat(s);
+        if (isNaN(num)) return 0;
+        
+        if (num < 120) {
+          return Math.round(num);
+        } else {
+          return Math.round(num) * 60;
+        }
+      }
+      
+      const seconds = parseTimeToSeconds(timeStr);
+      
+      function formatSecondsToMinutes(sec) {
+        if (isNaN(sec) || sec <= 0) return "0 seconds";
+        const minutes = Math.floor(sec / 60);
+        const seconds = sec % 60;
+        const minText = minutes + (minutes === 1 ? " minute" : " minutes");
+        const secText = seconds + (seconds === 1 ? " second" : " seconds");
+        if (minutes > 0 && seconds > 0) return `${minText} and ${secText}`;
+        if (minutes > 0) return minText;
+        return secText;
+      }
+      
+      const formattedTime = formatSecondsToMinutes(seconds);
+      
+      const subject = "Hang Tight! We're reviewing your WDHC submission ⏱️";
+      const body = `Hey ${firstName},\n\nThis is Milo from the World Dead Hang Championship.\n\nI just wanted to personally let you know that we received your submission of ${formattedTime} (${timeStr}) and our team is reviewing your video proof now.\n\nWe review every single hang manually to protect the integrity of the leaderboard. You can expect to see your official ranking go live on worlddeadhang.com within 24-48 hours if everything looks good.\n\nStay strong,\nMilo\nWorld Dead Hang Championship`;
+      
+      try {
+        MailApp.sendEmail(email, subject, body);
+        console.log(`Manual email sent to ${name} (${email})`);
+        
+        if (emailedCol >= 0) {
+          activeSheet.getRange(i + 1, emailedCol + 1).setValue('Yes');
+        }
+        
+        // Add delay to avoid rate limits
+        Utilities.sleep(1000);
+      } catch (error) {
+        console.error(`Failed to send manual email to ${email}: ${error}`);
+      }
+    }
+  }
+}
+
+// Test time parsing function
+function testTimeParsing() {
+  const testCases = [
+    ['4:26', 266],      // 4 minutes 26 seconds
+    ['4.26', 266],      // 4 minutes 26 seconds (FIXED!)
+    ['4.5', 270],       // 4 minutes 30 seconds
+    ['1:30', 90],       // 1 minute 30 seconds
+    ['2.15', 135],      // 2 minutes 15 seconds
+    ['85', 85],         // 85 seconds
+    ['240', 14400],     // 240 minutes (4 hours) - edge case
+    ['0', 0],           // Zero
+    ['', 0],            // Empty
+    ['invalid', 0],     // Invalid
+  ];
+  
+  console.log('Testing time parsing:');
+  for (const [input, expected] of testCases) {
+    const result = parseTimeToSeconds(input);
+    const status = result === expected ? '✅' : '❌';
+    console.log(`${status} "${input}" -> ${result} seconds (expected: ${expected})`);
+  }
+}
+
+// Helper function for test
+function parseTimeToSeconds(timeStr) {
+  let s = String(timeStr || '0').trim();
+  
+  if (!s || s === '0' || s === '') return 0;
+  
+  if (s.includes(':')) {
+    let p = s.split(':');
+    if (p.length === 2) {
+      return (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0);
+    }
+  }
+  
+  if (s.includes('.')) {
+    let parts = s.split('.');
+    if (parts.length === 2) {
+      let minutes = parseInt(parts[0]) || 0;
+      let secondsStr = parts[1];
+      
+      if (secondsStr.length === 1) {
+        let seconds = parseInt(secondsStr) * 6;
+        return minutes * 60 + seconds;
+      } else if (secondsStr.length === 2) {
+        let seconds = parseInt(secondsStr);
+        return minutes * 60 + seconds;
+      }
+    }
+  }
+  
+  let num = parseFloat(s);
+  if (isNaN(num)) return 0;
+  
+  if (num < 120) {
+    return Math.round(num);
+  } else {
+    return Math.round(num) * 60;
+  }
 }

@@ -1,0 +1,322 @@
+{
+  "name": "WDHC Automation Workflow",
+  "nodes": [
+    {
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "position": [250, 300],
+      "parameters": {}
+    },
+    {
+      "name": "Google Sheets Trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "position": [450, 300],
+      "parameters": {
+        "operation": "trigger",
+        "sheetId": "1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s",
+        "sheetName": "WDHC Database",
+        "triggerOn": "rowAddedOrUpdated",
+        "columns": "A:O",
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "googleSheets",
+          "name": "Google Sheets OAuth2"
+        }
+      }
+    },
+    {
+      "name": "Filter: New Submission",
+      "type": "n8n-nodes-base.if",
+      "position": [650, 300],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"N\"]}}",
+              "operation": "equals",
+              "value2": "Pending"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [850, 250],
+      "parameters": {
+        "fromEmail": "noreply@worlddeadhang.com",
+        "toEmail": "={{$json[\"E\"]}}",
+        "subject": "Welcome to the World Dead Hang Championship!",
+        "text": "Hi {{$json[\"D\"]}},\n\nThank you for submitting your dead hang time of {{$json[\"J\"]}} in the {{$json[\"I\"]}} category!\n\nYour grip age is: {{$node[\"Calculate Grip Age\"].$json[\"gripAge\"]}}\n\nYour submission is now under review. Once approved, you'll appear on the official leaderboard.\n\nLeaderboard: https://worlddeadhang.com\n\nStay strong!\nThe WDHC Team",
+        "options": {}
+      },
+      "credentials": {
+        "smtp": {
+          "id": "smtp",
+          "name": "WDHC SMTP"
+        }
+      }
+    },
+    {
+      "name": "Calculate Grip Age",
+      "type": "n8n-nodes-base.code",
+      "position": [850, 350],
+      "parameters": {
+        "jsCode": "const time = items[0].json.J;\nlet seconds = 0;\n\nif (time && time.includes(':')) {\n  const parts = time.split(':');\n  seconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);\n}\n\nlet gripAge = '90s';\nif (seconds >= 240) gripAge = '20s';\nelse if (seconds >= 180) gripAge = '30s';\nelse if (seconds >= 120) gripAge = '40s';\nelse if (seconds >= 90) gripAge = '50s';\nelse if (seconds >= 60) gripAge = '60s';\nelse if (seconds >= 45) gripAge = '70s';\nelse if (seconds >= 30) gripAge = '80s';\n\nreturn [{\n  json: {\n    gripAge,\n    ...items[0].json\n  }\n}];"
+      }
+    },
+    {
+      "name": "Filter: Approved/Verified",
+      "type": "n8n-nodes-base.if",
+      "position": [650, 400],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"N\"]}}",
+              "operation": "equals",
+              "value2": "Approved"
+            },
+            {
+              "value1": "={{$json[\"N\"]}}",
+              "operation": "equals",
+              "value2": "Verified"
+            }
+          ],
+          "options": {
+            "check": "any"
+          }
+        },
+        "options": {}
+      }
+    },
+    {
+      "name": "Execute Sync Script",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [850, 400],
+      "parameters": {
+        "command": "node {{$json[\"WORKSPACE_PATH\"]}}/direct_leaderboard_sync.py approve \"{{$json[\"D\"]}}\"",
+        "options": {}
+      }
+    },
+    {
+      "name": "Deploy to Cloudflare",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [1050, 400],
+      "parameters": {
+        "command": "cd {{$json[\"WORKSPACE_PATH\"]}}/WDHC && npx wrangler pages deploy WDHC",
+        "options": {}
+      }
+    },
+    {
+      "name": "Post to Twitter",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [1050, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/twitter",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": {
+            "action": "new-athlete",
+            "data": {
+              "name": "={{$json[\"D\"]}}",
+              "time": "={{$json[\"J\"]}}",
+              "category": "={{$json[\"I\"]}}",
+              "gripAge": "={{$node[\"Calculate Grip Age\"].$json[\"gripAge\"]}}"
+            }
+          }
+        },
+        "options": {}
+      }
+    },
+    {
+      "name": "Log to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [1250, 300],
+      "parameters": {
+        "operation": "append",
+        "sheetId": "1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s",
+        "sheetName": "Automation Log",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": [
+            {
+              "column": "Timestamp",
+              "mappingValue": "={{new Date().toISOString()}}"
+            },
+            {
+              "column": "Action",
+              "mappingValue": "={{$node[\"Filter: New Submission\"].$json[\"conditionMet\"] ? 'Email Sent' : 'Website Updated'}}"
+            },
+            {
+              "column": "Athlete",
+              "mappingValue": "={{$json[\"D\"]}}"
+            },
+            {
+              "column": "Details",
+              "mappingValue": "={{$json[\"J\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "googleSheets",
+          "name": "Google Sheets OAuth2"
+        }
+      }
+    },
+    {
+      "name": "Set Workspace Path",
+      "type": "n8n-nodes-base.set",
+      "position": [250, 400],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "WORKSPACE_PATH",
+              "name": "WORKSPACE_PATH",
+              "value": "C:/Users/milob/.openclaw/workspace",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Set Workspace Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Workspace Path": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter: New Submission",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter: Approved/Verified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter: New Submission": {
+      "main": [
+        [
+          {
+            "node": "Calculate Grip Age",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Grip Age": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to Twitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter: Approved/Verified": {
+      "main": [
+        [
+          {
+            "node": "Execute Sync Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Sync Script": {
+      "main": [
+        [
+          {
+            "node": "Deploy to Cloudflare",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy to Cloudflare": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to Twitter": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "pinData": {}
+}
