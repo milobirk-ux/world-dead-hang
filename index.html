@@ -109,6 +109,7 @@
         /* Hero Section */
         header { padding: 60px 20px 40px;
             position: relative;
+            text-align: center;
         }
 
         .status-pill {
@@ -1068,6 +1069,16 @@
         @media (max-width: 900px) {
             .content-grid { grid-template-columns: 1fr; }
             .sidebar-card { position: static; margin-top: 40px; }
+            
+            /* Center the status pill on mobile */
+            .status-pill {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                width: fit-content;
+            }
+            
             h1 {
                 font-size: 3.5rem;
                 text-align: center;
