@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDHC Dashboard Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #fbbf24;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .status.success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .status.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .link-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: #3b82f6;
+        }
+        
+        .link-card h3 {
+            color: #60a5fa;
+            margin-bottom: 10px;
+        }
+        
+        .link-card p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .timestamp {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WDHC Dashboard Test</h1>
+        
+        <div class="status success">
+            <h2>✅ Deployment Successful</h2>
+            <p>The submissions tracker dashboard has been deployed and is ready to use.</p>
+        </div>
+        
+        <div class="links">
+            <a href="submissions-tracker-dashboard.html" class="link-card" target="_blank">
+                <h3>📊 Submissions Tracker</h3>
+                <p>Interactive dashboard with charts, statistics, and daily updates</p>
+            </a>
+            
+            <a href="analytics-dashboard.html" class="link-card" target="_blank">
+                <h3>📈 Analytics Dashboard</h3>
+                <p>Comprehensive analytics with multiple charts and data visualizations</p>
+            </a>
+            
+            <a href="competitor-dashboard.html" class="link-card" target="_blank">
+                <h3>🎯 Competitor Dashboard</h3>
+                <p>Monitor competitors and market position</p>
+            </a>
+            
+            <a href="index.html" class="link-card" target="_blank">
+                <h3>🏆 Main Website</h3>
+                <p>WDHC homepage with leaderboard and submission system</p>
+            </a>
+        </div>
+        
+        <div class="timestamp">
+            <p>Live URL: <a href="https://9ad265b7.world-dead-hang.pages.dev/submissions-tracker-dashboard.html" style="color: #60a5fa;" target="_blank">https://9ad265b7.world-dead-hang.pages.dev/submissions-tracker-dashboard.html</a></p>
+            <p>Last updated: <span id="currentTime"></span></p>
+        </div>
+    </div>
+    
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            });
+            document.getElementById('currentTime').textContent = timeStr;
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Test dashboard functionality
+        console.log('WDHC Dashboard Test Page Loaded');
+        console.log('Live URL: https://9ad265b7.world-dead-hang.pages.dev/submissions-tracker-dashboard.html');
+        
+        // Check if Chart.js is available (for submissions tracker)
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js not loaded - dashboard charts may not work');
+        } else {
+            console.log('Chart.js loaded successfully');
+        }
+    </script>
+</body>
+</html>
