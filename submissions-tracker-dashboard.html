@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDHC Submissions Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="submissions-tracker.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .positive {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+
+        .negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h2 {
+            font-size: 1.5rem;
+            color: #f8fafc;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .timeframe-btn {
+            padding: 6px 12px;
+            background: #334155;
+            border: none;
+            border-radius: 6px;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .timeframe-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .timeframe-btn:hover:not(.active) {
+            background: #475569;
+        }
+
+        .refresh-btn {
+            padding: 6px 12px;
+            background: #10b981;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #059669;
+        }
+
+        .refresh-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+
+        .refresh-btn::after {
+            content: '↻';
+            margin-left: 5px;
+        }
+
+        .data-table {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+            overflow-x: auto;
+        }
+
+        .data-table h2 {
+            font-size: 1.5rem;
+            color: #f8fafc;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            background: rgba(51, 65, 85, 0.5);
+            color: #cbd5e1;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #334155;
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(51, 65, 85, 0.3);
+        }
+
+        .tier-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tier-freak { background: linear-gradient(90deg, #8b5cf6, #7c3aed); color: white; }
+        .tier-legend { background: linear-gradient(90deg, #f59e0b, #d97706); color: white; }
+        .tier-elite { background: linear-gradient(90deg, #10b981, #059669); color: white; }
+        .tier-challenger { background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; }
+        .tier-novice { background: linear-gradient(90deg, #94a3b8, #64748b); color: white; }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            border-top: 1px solid #334155;
+            margin-top: 40px;
+        }
+
+        .last-updated {
+            background: rgba(51, 65, 85, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #334155;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .auto-refresh input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .auto-refresh-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>WDHC Submissions Tracker</h1>
+            <p>Daily tracking of athlete submissions with interactive graphs</p>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalSubmissions">--</div>
+                <div class="stat-label">Total Submissions</div>
+                <div class="stat-change positive" id="submissionsChange">+0 today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="verifiedSubmissions">--</div>
+                <div class="stat-label">Verified Submissions</div>
+                <div class="stat-change positive" id="verifiedChange">+0 today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgTime">--</div>
+                <div class="stat-label">Average Time</div>
+                <div class="stat-change positive" id="timeChange">+0s today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="countries">--</div>
+                <div class="stat-label">Countries</div>
+                <div class="stat-change positive" id="countryChange">+0 today</div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Submissions Over Time</h2>
+                    <div class="chart-controls">
+                        <button class="timeframe-btn active" data-timeframe="week">Week</button>
+                        <button class="timeframe-btn" data-timeframe="month">Month</button>
+                        <button class="timeframe-btn" data-timeframe="all">All Time</button>
+                        <button class="refresh-btn" id="refreshBtn">Refresh</button>
+                    </div>
+                </div>
+                <canvas id="submissionsChart"></canvas>
+                <div class="auto-refresh">
+                    <label class="auto-refresh-label">
+                        <input type="checkbox" id="autoRefresh" checked>
+                        Auto-refresh every 5 minutes
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-table">
+            <h2>Recent Submissions</h2>
+            <div class="loading" id="tableLoading">Loading recent submissions...</div>
+            <table id="recentSubmissionsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Athlete</th>
+                        <th>Time</th>
+                        <th>Tier</th>
+                        <th>Country</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentSubmissionsBody">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>WDHC Submissions Tracker • Updates Daily</p>
+            <div class="last-updated">
+                Last updated: <span id="lastUpdated">Loading...</span>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                Data refreshes automatically. Historical data preserved for trend analysis.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            WDHCTracker.init();
+        });
+    </script>
+</body>
+</html>
