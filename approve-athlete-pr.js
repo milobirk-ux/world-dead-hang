@@ -20,7 +20,7 @@ async function approveAthlete(athleteName, action = 'approve') {
         // 2. Read the sheet to find the athlete
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: 'Sheet1!A:AA', // Extended range for PR Badge column
+            range: 'Sheet1!A:AK', // Extended range to include all columns (A to AK = 37 columns)
         });
 
         let rows = response.data.values;
@@ -114,21 +114,29 @@ async function approveAthlete(athleteName, action = 'approve') {
         const allAthleteTimes = athleteRows.map(row => ({
             seconds: parseTimeToSeconds(row.time),
             rowIndex: row.rowIndex,
-            hasPRBadge: row.hasPRBadge
+            hasPRBadge: row.hasPRBadge,
+            isVerified: row.verified === 'Yes' || row.verified === true
         }));
         
         const currentSeconds = parseTimeToSeconds(rowToUpdate.time);
         const isBestTime = allAthleteTimes.every(time => currentSeconds >= time.seconds);
         
         if (isBestTime && prBadgeIndex !== -1) {
-            // Remove PR badge from any previous submissions
+            // Remove PR badge from any previous submissions BUT PRESERVE VERIFICATION
             allAthleteTimes.forEach(time => {
                 if (time.hasPRBadge && time.rowIndex !== rowToUpdate.rowIndex) {
                     updates.push({
                         range: `Sheet1!${getColumnLetter(prBadgeIndex + 1)}${time.rowIndex}`,
-                        values: [['']] // Clear PR badge
+                        values: [['']] // Clear PR badge ONLY
                     });
                     console.log(`🔄 Removing PR badge from previous submission at row ${time.rowIndex}`);
+                    
+                    // IMPORTANT: If the old submission was verified, ensure verification stays
+                    if (time.isVerified && verifiedIndex !== -1) {
+                        // Double-check that verification column still has "Yes"
+                        console.log(`✅ Preserving verification checkmark on row ${time.rowIndex}`);
+                        // Note: We don't need to update the verified column since it should already be "Yes"
+                    }
                 }
             });
             

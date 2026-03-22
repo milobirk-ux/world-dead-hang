@@ -1,0 +1,17 @@
+{
+  "botToken": "",
+  "chatId": "",
+  "enabled": false,
+  "alertOnNewCompetitor": true,
+  "alertOnThreatChange": true,
+  "dailySummary": true,
+  "alertSchedule": {
+    "newCompetitor": "immediate",
+    "dailySummary": "09:00",
+    "weeklyReport": "Monday 09:00"
+  },
+  "messageTemplates": {
+    "newCompetitor": "🚨 <b>NEW COMPETITOR DETECTED!</b>\n\n🏆 <b>{name}</b>\n🔗 {url}\n📝 {description}\n🔍 Found via: {searchTerm}\n⚠️ Threat Level: {threatLevel}\n⏰ First seen: {firstSeen}\n\n<i>View dashboard for details:</i>\nfile://C:/Users/milob/.openclaw/workspace/WDHC/competitor-dashboard.html",
+    "dailySummary": "📊 <b>WDHC Competitor Daily Summary</b>\n\n📅 {date}\n👥 Total competitors tracked: {total}\n🆕 New today: {newToday}\n🔍 Last check: {lastCheck}\n\n{newCompetitorsList}\n\n<i>View full dashboard:</i>\nfile://C:/Users/milob/.openclaw/workspace/WDHC/competitor-dashboard.html"
+  }
+}

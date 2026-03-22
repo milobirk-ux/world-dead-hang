@@ -1,0 +1,102 @@
+{
+  "competitors": [
+    {
+      "id": "comp_rogue_cliffhanger",
+      "name": "Rogue Fitness Cliffhanger Challenge",
+      "url": "https://www.roguefitness.com/challenges/cliffhanger-challenge",
+      "description": "Annual dead hang competition with cash prizes ($2,500 for winners). Last held March 18-21, 2022. Not currently active but could return.",
+      "firstDetected": "2026-03-21T22:00:51.332Z",
+      "searchTerm": "dead hang competition",
+      "threatLevel": "medium",
+      "lastSeen": "2026-03-21T22:00:51.332Z",
+      "status": "inactive",
+      "prizes": "$2,500 cash + equipment",
+      "frequency": "annual",
+      "notes": "Last held 2022, may return. Professional organization with significant prize money."
+    },
+    {
+      "id": "comp_hang2win",
+      "name": "Hang2Win",
+      "url": "https://hang2win.com",
+      "description": "Dead hang challenge platform with leaderboard and community features. Focuses on personal improvement rather than competition.",
+      "firstDetected": "2026-03-21T21:59:26.000Z",
+      "searchTerm": "dead hang leaderboard",
+      "threatLevel": "low",
+      "lastSeen": "2026-03-21T21:59:26.000Z",
+      "status": "active",
+      "prizes": "none",
+      "frequency": "ongoing",
+      "notes": "Personal challenge platform, not direct competition. Community-focused."
+    },
+    {
+      "id": "comp_deadhangs",
+      "name": "DeadHangs.com",
+      "url": "https://deadhangs.com",
+      "description": "Educational website about dead hangs with training guides and benefits. No competition element.",
+      "firstDetected": "2026-03-21T21:58:52.000Z",
+      "searchTerm": "dead hang",
+      "threatLevel": "none",
+      "lastSeen": "2026-03-21T21:58:52.000Z",
+      "status": "active",
+      "prizes": "none",
+      "frequency": "n/a",
+      "notes": "Educational resource only, no competition features."
+    },
+    {
+      "id": "comp_guinness",
+      "name": "Guinness World Records - Dead Hang",
+      "url": "https://www.guinnessworldrecords.com/world-records/118967-longest-duration-in-the-dead-hang-position",
+      "description": "Official world record for longest dead hang (2 minutes 2 seconds by 81-year-old woman). Individual record attempts, not organized competition.",
+      "firstDetected": "2026-03-21T21:59:52.000Z",
+      "searchTerm": "world record dead hang",
+      "threatLevel": "low",
+      "lastSeen": "2026-03-21T21:59:52.000Z",
+      "status": "active",
+      "prizes": "world record title",
+      "frequency": "individual attempts",
+      "notes": "Individual record attempts, not organized competition. Different market segment."
+    }
+  ],
+  "lastCheck": "2026-03-21T23:33:41.124Z",
+  "searchHistory": {
+    "\"dead hang championship\"": [
+      {
+        "timestamp": "2026-03-21T22:01:00.000Z",
+        "resultsCount": 0
+      }
+    ],
+    "\"dead hang competition\"": [
+      {
+        "timestamp": "2026-03-21T22:01:00.000Z",
+        "resultsCount": 1
+      }
+    ],
+    "\"dead hang leaderboard\"": [
+      {
+        "timestamp": "2026-03-21T22:01:00.000Z",
+        "resultsCount": 1
+      }
+    ],
+    "\"dead hang world record\"": [
+      {
+        "timestamp": "2026-03-21T22:01:00.000Z",
+        "resultsCount": 1
+      }
+    ],
+    "\"dead hang federation\"": [
+      {
+        "timestamp": "2026-03-21T22:01:00.000Z",
+        "resultsCount": 0
+      }
+    ]
+  },
+  "alertsSent": [],
+  "summary": {
+    "totalCompetitors": 4,
+    "activeCompetitors": 3,
+    "directCompetitors": 1,
+    "indirectCompetitors": 2,
+    "educationalOnly": 1,
+    "lastUpdated": "2026-03-21T22:01:00.000Z"
+  }
+}

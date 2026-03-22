@@ -19,7 +19,7 @@ async function syncLeaderboard() {
 
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: 'Sheet1!A:AA', // Extended to include PR Badge column
+            range: 'Sheet1!A:AK', // Extended to include all columns (A to AK = 37 columns)
         });
 
         let rows = response.data.values;
@@ -33,12 +33,12 @@ async function syncLeaderboard() {
         const athletesData = {};
         
         const nameIndex = headers.indexOf('Athlete Name');
-        const timeIndex = headers.indexOf('Total Dead Hang Time');
-        const videoIndex = headers.indexOf('Video Proof URL (Paste Unlisted YT, Instagram Or TIkTok)');
+        const timeIndex = headers.indexOf('Official Time');
+        const videoIndex = headers.indexOf('Video Link (Copy &amp; Paste Unlisted YouTube, Instagram / TIkTok, Google Drive Link)');
         const categoryIndex = headers.indexOf('Division');
         const locationIndex = headers.indexOf('City, State / Country');
         const dateIndex = headers.indexOf('Submitted at');
-        const backgroundIndex = headers.findIndex(h => h.toString().toLowerCase().includes('background'));
+        const backgroundIndex = headers.indexOf('Occupation / Background');
         const verifiedIndex = headers.indexOf('Verified');
         const prBadgeIndex = headers.indexOf('PR Badge'); // New: PR Badge column
         const approvedIndex = headers.indexOf('Approved');
@@ -47,18 +47,38 @@ async function syncLeaderboard() {
         function parseTimeToSeconds(timeStr) {
             if (!timeStr) return 0;
             const str = String(timeStr).trim();
+            
+            // Handle MM:SS format (e.g., "4:09")
             if (str.includes(':')) {
                 const parts = str.split(':');
                 const minutes = parseInt(parts[0]) || 0;
                 const seconds = parseInt(parts[1]) || 0;
                 return minutes * 60 + seconds;
             }
-            const num = parseFloat(str);
-            if (isNaN(num)) return 0;
-            if (str.includes('.') && num < 20) {
-                return Math.round(num * 60);
+            
+            // Handle decimal format (e.g., "4.26" = 4 minutes 26 seconds, "4.5" = 4 minutes 30 seconds)
+            if (str.includes('.')) {
+                const parts = str.split('.');
+                const minutes = parseInt(parts[0]) || 0;
+                const decimalPart = parts[1];
+                
+                // If decimal part has 2 digits, treat as seconds (e.g., "4.26" = 4 min 26 sec)
+                if (decimalPart.length === 2) {
+                    const seconds = parseInt(decimalPart) || 0;
+                    return minutes * 60 + seconds;
+                }
+                // If decimal part has 1 digit, treat as fraction of minute (e.g., "4.5" = 4.5 min = 4 min 30 sec)
+                else if (decimalPart.length === 1) {
+                    const fraction = parseInt(decimalPart) / 10;
+                    return Math.round((minutes + fraction) * 60);
+                }
+                // Default: treat as float
+                return Math.round(parseFloat(str) * 60);
             }
-            return Math.round(num);
+            
+            // Handle plain number (assume seconds)
+            const num = parseFloat(str);
+            return isNaN(num) ? 0 : Math.round(num);
         }
 
         // First pass: Find each athlete's best time and PR status
@@ -67,6 +87,7 @@ async function syncLeaderboard() {
             const name = row[nameIndex];
             const time = row[timeIndex];
             const approved = approvedIndex !== -1 ? row[approvedIndex] === 'Yes' : false;
+            const verified = verifiedIndex !== -1 ? row[verifiedIndex] === 'Yes' : false;
             
             if (!name || !time || !approved) return;
             
@@ -77,7 +98,8 @@ async function syncLeaderboard() {
                 athleteBestTimes[name] = {
                     seconds: seconds,
                     rowIndex: i,
-                    hasPRBadge: prBadgeIndex !== -1 ? row[prBadgeIndex] === '🏆 PR' : false
+                    hasPRBadge: prBadgeIndex !== -1 ? row[prBadgeIndex] === '🏆 PR' : false,
+                    isVerified: verified
                 };
             }
         });
@@ -106,6 +128,10 @@ async function syncLeaderboard() {
             // Only include best times in leaderboard
             if (!isBestTime) return;
             
+            // Get verification status from best time record (preserves verification even if PR badge changes)
+            const bestTimeRecord = athleteBestTimes[name];
+            const preservedVerified = bestTimeRecord ? bestTimeRecord.isVerified : verified;
+            
             // Format time for display
             let displayTime;
             if (seconds >= 60) {
@@ -126,7 +152,7 @@ async function syncLeaderboard() {
                 location: location || '',
                 date: date ? new Date(date).toISOString().split('T')[0] : '',
                 background: background || '',
-                verified: verified,
+                verified: preservedVerified, // Use preserved verification status
                 prBadge: hasPRBadge, // Include PR badge status
                 isPR: hasPRBadge // Alias for compatibility
             };
