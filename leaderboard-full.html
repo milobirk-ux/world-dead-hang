@@ -869,6 +869,18 @@
             .country-col, .date-col { display: none; }
             .cta-section { flex-direction: column; text-align: center; gap: 30px; }
             .cta-section::before { width: 100%; height: 4px; bottom: auto; }
+            
+            /* Slightly faster marquee banner on mobile */
+            .marquee-content {
+                animation-duration: 60s; /* Slightly faster than 75s, but not as fast as desktop (50s) */
+            }
+            
+            /* Make marquee banner sticky below nav on mobile */
+            .marquee-container {
+                position: sticky;
+                top: 60px; /* Height of nav (40px logo + 10px top + 10px bottom padding) */
+                z-index: 90; /* Below nav's z-index: 100 */
+            }
         }
             
             /* Fix for mobile name cutoff */
