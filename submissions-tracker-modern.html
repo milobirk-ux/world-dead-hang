@@ -1,0 +1,555 @@
+                </div>
+            </div>
+
+            <!-- Tier Distribution -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Tier Distribution</div>
+                    <div class="chart-controls">
+                        <button class="control-btn active" data-chart="pie">Pie</button>
+                        <button class="control-btn" data-chart="bar">Bar</button>
+                        <button class="control-btn" data-chart="doughnut">Doughnut</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="tierChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Geographic Distribution -->
+            <div class="chart-card full-width">
+                <div class="chart-header">
+                    <div class="chart-title">Geographic Distribution</div>
+                    <div class="chart-controls">
+                        <button class="control-btn active" data-map="countries">Countries</button>
+                        <button class="control-btn" data-map="regions">Regions</button>
+                        <button class="control-btn" data-map="heatmap">Heat Map</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="geoChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Performance Trends -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Performance Trends</div>
+                    <div class="chart-controls">
+                        <button class="control-btn active" data-metric="time">Time</button>
+                        <button class="control-btn" data-metric="grip">Grip Age</button>
+                        <button class="control-btn" data-metric="ratio">Ratio</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Growth Metrics -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Growth Metrics</div>
+                    <div class="chart-controls">
+                        <button class="control-btn active" data-growth="daily">Daily</button>
+                        <button class="control-btn" data-growth="weekly">Weekly</button>
+                        <button class="control-btn" data-growth="monthly">Monthly</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Submissions Table -->
+        <div class="data-section">
+            <div class="section-header">
+                <div class="section-title">Recent Submissions</div>
+                <div class="table-controls">
+                    <input type="text" class="search-box" placeholder="Search athletes..." id="searchInput">
+                    <select class="control-btn" id="filterTier">
+                        <option value="all">All Tiers</option>
+                        <option value="freak">Freak</option>
+                        <option value="legend">Legend</option>
+                        <option value="elite">Elite</option>
+                        <option value="challenger">Challenger</option>
+                    </select>
+                    <select class="control-btn" id="filterStatus">
+                        <option value="all">All Status</option>
+                        <option value="verified">Verified Only</option>
+                        <option value="pending">Pending Only</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="submissionsTable">
+                    <thead>
+                        <tr>
+                            <th>Athlete</th>
+                            <th>Time</th>
+                            <th>Tier</th>
+                            <th>Grip Age</th>
+                            <th>Country</th>
+                            <th>Status</th>
+                            <th>Submitted</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>WDHC Analytics Dashboard • Last updated: <span id="lastUpdated">Loading...</span></p>
+            <p>Data refreshes automatically every 5 minutes • <a href="https://worlddeadhang.com" target="_blank">Visit WDHC Website</a></p>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            autoRefresh: true,
+            refreshInterval: 300000, // 5 minutes
+            cacheDuration: 1800000, // 30 minutes
+            apiEndpoint: null, // Set to actual API endpoint when available
+            mockData: true
+        };
+
+        // State
+        let state = {
+            currentTimeframe: 'week',
+            charts: {},
+            data: null,
+            lastUpdate: null,
+            isRefreshing: false
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            await loadData();
+            initializeCharts();
+            setupEventListeners();
+            
+            if (CONFIG.autoRefresh) {
+                setInterval(refreshData, CONFIG.refreshInterval);
+            }
+        });
+
+        // Time functions
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            });
+            document.getElementById('currentTime').textContent = timeStr;
+            
+            if (state.lastUpdate) {
+                const lastUpdateStr = state.lastUpdate.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById('lastUpdated').textContent = lastUpdateStr;
+            }
+        }
+
+        // Data loading
+        async function loadData() {
+            try {
+                state.isRefreshing = true;
+                document.getElementById('statusBadge').textContent = 'Loading...';
+                
+                if (CONFIG.mockData) {
+                    state.data = generateMockData();
+                } else {
+                    // TODO: Implement actual API call
+                    state.data = await fetchDataFromAPI();
+                }
+                
+                state.lastUpdate = new Date();
+                updateStats();
+                updateTable();
+                updateCharts();
+                
+                document.getElementById('statusBadge').textContent = 'Live Data';
+                state.isRefreshing = false;
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('statusBadge').textContent = 'Error';
+                state.isRefreshing = false;
+            }
+        }
+
+        async function refreshData() {
+            if (state.isRefreshing) return;
+            await loadData();
+        }
+
+        // Mock data generation
+        function generateMockData() {
+            const countries = ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'JP', 'BR', 'IN', 'RU', 'CN', 'MX', 'IT', 'ES', 'KR'];
+            const tiers = ['freak', 'legend', 'elite', 'challenger'];
+            const tierNames = {
+                'freak': 'Freak',
+                'legend': 'Legend', 
+                'elite': 'Elite',
+                'challenger': 'Challenger'
+            };
+            
+            const submissions = [];
+            const now = new Date();
+            
+            // Generate 50 submissions over the last 90 days
+            for (let i = 0; i < 50; i++) {
+                const daysAgo = Math.floor(Math.random() * 90);
+                const date = new Date(now);
+                date.setDate(date.getDate() - daysAgo);
+                
+                const timeMinutes = Math.floor(Math.random() * 3);
+                const timeSeconds = Math.floor(Math.random() * 60);
+                const time = `${timeMinutes}:${timeSeconds.toString().padStart(2, '0')}`;
+                
+                const tier = tiers[Math.floor(Math.random() * tiers.length)];
+                const gripAge = (Math.random() * 10 + 20).toFixed(1);
+                const country = countries[Math.floor(Math.random() * countries.length)];
+                const verified = Math.random() > 0.3;
+                
+                submissions.push({
+                    id: i + 1,
+                    name: `Athlete ${i + 1}`,
+                    time: time,
+                    tier: tier,
+                    tierName: tierNames[tier],
+                    gripAge: gripAge,
+                    country: country,
+                    verified: verified,
+                    date: date,
+                    timestamp: date.getTime()
+                });
+            }
+            
+            // Sort by date (newest first)
+            submissions.sort((a, b) => b.timestamp - a.timestamp);
+            
+            return {
+                submissions: submissions,
+                stats: {
+                    total: submissions.length,
+                    verified: submissions.filter(s => s.verified).length,
+                    avgTime: '1:45',
+                    countries: new Set(submissions.map(s => s.country)).size,
+                    tierDistribution: {
+                        freak: submissions.filter(s => s.tier === 'freak').length,
+                        legend: submissions.filter(s => s.tier === 'legend').length,
+                        elite: submissions.filter(s => s.tier === 'elite').length,
+                        challenger: submissions.filter(s => s.tier === 'challenger').length
+                    }
+                }
+            };
+        }
+
+        // Update stats display
+        function updateStats() {
+            if (!state.data) return;
+            
+            const stats = state.data.stats;
+            
+            document.getElementById('totalSubmissions').textContent = stats.total;
+            document.getElementById('verifiedSubmissions').textContent = stats.verified;
+            document.getElementById('avgTime').textContent = stats.avgTime;
+            document.getElementById('countries').textContent = stats.countries;
+        }
+
+        // Update table
+        function updateTable() {
+            if (!state.data) return;
+            
+            const tableBody = document.getElementById('tableBody');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filterTier = document.getElementById('filterTier').value;
+            const filterStatus = document.getElementById('filterStatus').value;
+            
+            let filtered = state.data.submissions;
+            
+            // Apply filters
+            if (searchTerm) {
+                filtered = filtered.filter(s => 
+                    s.name.toLowerCase().includes(searchTerm) ||
+                    s.country.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filterTier !== 'all') {
+                filtered = filtered.filter(s => s.tier === filterTier);
+            }
+            
+            if (filterStatus === 'verified') {
+                filtered = filtered.filter(s => s.verified);
+            } else if (filterStatus === 'pending') {
+                filtered = filtered.filter(s => !s.verified);
+            }
+            
+            // Render table rows
+            tableBody.innerHTML = '';
+            filtered.slice(0, 20).forEach(submission => {
+                const row = document.createElement('tr');
+                
+                const dateStr = submission.date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                
+                row.innerHTML = `
+                    <td>${submission.name}</td>
+                    <td><strong>${submission.time}</strong></td>
+                    <td><span class="tier-badge tier-${submission.tier}">${submission.tierName}</span></td>
+                    <td>${submission.gripAge}</td>
+                    <td>${submission.country}</td>
+                    <td class="${submission.verified ? 'verified-badge' : ''}">
+                        ${submission.verified ? '✅ Verified' : '⏳ Pending'}
+                    </td>
+                    <td>${dateStr}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Submissions Chart
+            const submissionsCtx = document.getElementById('submissionsChart').getContext('2d');
+            state.charts.submissions = new Chart(submissionsCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Total Submissions',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Verified Submissions',
+                        data: [],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#f8fafc',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Tier Chart
+            const tierCtx = document.getElementById('tierChart').getContext('2d');
+            state.charts.tier = new Chart(tierCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Freak', 'Legend', 'Elite', 'Challenger'],
+                    datasets: [{
+                        data: [0, 0, 0, 0],
+                        backgroundColor: [
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)'
+                        ],
+                        borderColor: [
+                            '#8b5cf6',
+                            '#f59e0b',
+                            '#3b82f6',
+                            '#10b981'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#f8fafc',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#cbd5e1'
+                        }
+                    }
+                }
+            });
+
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            state.charts.performance = new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Average Time',
+                        data: [],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#f8fafc'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Growth Chart
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            state.charts.growth = new Chart(growthCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'New Submissions',
+                        data: [],
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#f8fafc'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update charts with data
+        function updateCharts() {
+            if (!state.data) return;
+            
+            const stats = state.data.stats;
+            
+            // Update tier chart
+            state.charts.t
