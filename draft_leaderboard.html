@@ -1097,6 +1097,56 @@
             color: var(--text-dim);
             font-size: 0.9rem;
             font-style: italic;
+
+        /* Video placeholder for Google Drive links */
+        .video-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border-color: var(--accent-red);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .video-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .video-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .video-size {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
         }
 
         @media (max-width: 900px) {
@@ -1813,20 +1863,26 @@
 
                 </div>
                 
-                <!-- Video Submission 2: Athlete 1 -->
+                <!-- Video Submission 2: Athlete 1 - Markie -->
                 <div class="video-submission-item vertical-video">
-                    <video controls playsinline>
-                        <source src="media/athlete1_video.mp4" type="video/mp4">
-                        Your browser does not support HTML5 video.
-                    </video>
+                    <a href="https://drive.google.com/file/d/1o2pnIgG_QWw75PN-EpoPHhyA-QC6LiCx/view" target="_blank" class="video-link">
+                        <div class="video-placeholder">
+                            <div class="video-icon">▶️</div>
+                            <div class="video-label">Markie's Submission</div>
+                            <div class="video-size">(146 MB - Click to view on Google Drive)</div>
+                        </div>
+                    </a>
                 </div>
                 
-                <!-- Video Submission 3: Athlete 2 -->
+                <!-- Video Submission 3: Athlete 2 - Meg -->
                 <div class="video-submission-item vertical-video">
-                    <video controls playsinline>
-                        <source src="media/athlete2_video.mp4" type="video/mp4">
-                        Your browser does not support HTML5 video.
-                    </video>
+                    <a href="https://drive.google.com/file/d/1PFSBVsigB87jP05tl7a0kMsO9uUS_IO_/view" target="_blank" class="video-link">
+                        <div class="video-placeholder">
+                            <div class="video-icon">▶️</div>
+                            <div class="video-label">Meg's Submission</div>
+                            <div class="video-size">(594 MB - Click to view on Google Drive)</div>
+                        </div>
+                    </a>
                 </div>
                 
                 <script>
