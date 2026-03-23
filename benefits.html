@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Leaderboard | World Dead Hang Championship</title>
+    <title>Benefits | World Dead Hang Championship</title>
     <link rel="icon" type="image/jpeg" href="media/new_wdhc_logo.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
@@ -1124,7 +1124,7 @@
 
         /* Content Tabs */
         .content-tabs {
-            display: none; /* Hidden by default */
+            display: block; /* Always visible for standalone pages */
             margin-top: 40px;
             padding: 40px;
             background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
@@ -1532,7 +1532,7 @@
             <a href="index.html">Leaderboard</a>
             <a href="rules.html">Rulebook</a>
             <a href="submit.html">Submit</a>
-            <a href="benefits.html">Benefits</a>
+            <a href="benefits.html" class="active">Benefits</a>
             <a href="about.html">About</a>
         </div>
     </nav>
@@ -1560,154 +1560,49 @@
 
 
     <div class="container">
-        
-        <div class="content-grid">
+        <!-- Benefits Tab Content -->
+        <div id="benefits-tab" class="content-tabs">
+            <h2>Benefits of Dead Hang Training</h2>
             
-            <!-- Main Content -->
-            <div class="main-column">
-                <div class="controls">
-                    <div class="controls-header">
-                        <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 21, 2026, 1:10 AM EST</div>
-                    </div>
-                    <div class="division-tabs">
-                        <button class="active" onclick="switchCategory('All')">All</button>
-                        <button onclick="switchCategory('Open Men')">Open Men</button>
-                        <button onclick="switchCategory('Open Women')">Open Women</button>
-                        <button onclick="switchCategory('Masters Male')">Masters Male (40+)</button>
-                        <button onclick="switchCategory('Masters Female')">Masters Female (40+)</button>
-                    </div>
-                    <div class="sort-row">
-                        <div id="current-cat-display" style="font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: #fff; letter-spacing: 1px; text-transform: uppercase;">ALL</div>
-                        <div class="division-tabs" style="transform: scale(0.85); transform-origin: right center;">
-                            <button class="sort-btn active" onclick="toggleSort('recent')" id="btn-sort-recent">Most Recent</button>
-                            <button class="sort-btn" onclick="toggleSort('time')" id="btn-sort-time">Longest Time</button>
-                            <button class="sort-btn" onclick="toggleSort('age')" id="btn-sort-age">By Age</button>
-                            <button class="sort-btn" onclick="toggleSort('prs')" id="btn-sort-prs">PR's</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Search Bar -->
-                    <div class="search-row">
-                        <div class="search-container">
-                            <input type="text" id="athlete-search" placeholder="Search athlete name..." class="search-input" aria-label="Search athlete names">
-                            <div class="search-icon">🔍</div>
-                            <button id="clear-search" class="clear-search-btn" style="display: none;" aria-label="Clear search">✕</button>
-                        </div>
-                        <div id="search-count" class="search-count" style="display: none;"></div>
-                    </div>
-                </div>
-
-                <div class="leaderboard">
-
-                    <div id="leaderboard-body">
-                        <!-- JS Populated -->
-                    </div>
-                    <!-- No pagination controls on full leaderboard page -->
-                    <div style="text-align: center; padding: 20px; border-top: 1px solid var(--border);">
-                        <a href="index.html" style="color: var(--gold); text-decoration: none; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">? Back to Top 10 Leaderboard</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sidebar -->
-            <aside class="sidebar-column">
-                <!-- Top 10 Card -->
-                <div class="sidebar-card">
-                    <div class="sidebar-header">
-                        <h3 class="sidebar-title">🏆 World Leaders</h3>
-                        <div class="sidebar-subtitle">Global Top 10 • All Time</div>
-                    </div>
-                    <div id="top-10-list" class="mini-list">
-                        <!-- JS Populated -->
-                    </div>
-                </div>
-
-                <!-- Tier Legend Card -->
-                <div class="sidebar-card" style="padding-bottom: 10px;">
-                    <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
-                        <h3 class="sidebar-title" style="color: var(--text-dim);">TIER CLASSIFICATIONS</h3>
-                    </div>
-                    <div style="padding: 0 20px 15px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-freak">FREAK</span>
-                                <span style="color: #ccc; font-weight: 700;">6:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">.001% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-legend">LEGEND</span>
-                                <span style="color: #ccc; font-weight: 700;">4:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">0.01% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-elite">ELITE</span>
-                                <span style="color: #ccc; font-weight: 700;">3:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">1% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-pro">PRO</span>
-                                <span style="color: #ccc; font-weight: 700;">2:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">5% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-contender">CONTENDER</span>
-                                <span style="color: #ccc; font-weight: 700;">1:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">20% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-challenger">CHALLENGER</span>
-                                <span style="color: #ccc; font-weight: 700;">< 1:00 min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">75% of pop.</span>
-                        </div>
-                    </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h4>Shoulder Health & Mobility</h4>
+                    <p>Dead hangs naturally decompress the spine and shoulder joints, relieving pressure and improving range of motion. Regular hanging can help prevent and alleviate shoulder impingement, rotator cuff issues, and general stiffness.</p>
                 </div>
                 
-                <!-- Icon Legend Card -->
-                <div class="sidebar-card" style="font-size: 1.0rem;">
-                    <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
-                        <h3 class="sidebar-title" style="color: var(--text-dim);">ICON LEGEND</h3>
-                    </div>
-                    <div style="padding: 0 20px 15px;">
-                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 12px;">
-                            <span style="font-size: 1.2rem; color: var(--gold); line-height: 1.2; width: 20px; text-align: center;">✔</span>
-                            <div>
-                                <div style="color: #ddd;">Pro-Level Verification</div>
-                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Independently reviewed and certified by WDHC. This record stands.</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: flex-start; gap: 15px;">
-                            <span style="font-size: 1.2rem; color: var(--silver); line-height: 1.2; width: 20px; text-align: center;">⚡</span>
-                            <div>
-                                <div style="color: #ddd;">Total Personal Records</div>
-                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Times athlete has set a new personal record.</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-top: 12px;">
-                            <span style="font-size: 1.2rem; color: #888; line-height: 1.2; width: 20px; text-align: center;">📊</span>
-                            <div>
-                                <div style="color: #ddd;">WDHC Grip Age™</div>
-                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">A fitness index comparing your dead hang to population norms for age, sex, and bodyweight.</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="benefit-card">
+                    <h4>Grip Strength Development</h4>
+                    <p>Your grip is the foundation of all upper body strength. Dead hangs build crushing grip, supporting strength, and endurance - essential for pull-ups, climbing, and everyday activities.</p>
                 </div>
-            </aside>
-
+                
+                <div class="benefit-card">
+                    <h4>Spinal Decompression</h4>
+                    <p>Gravity compresses your spine daily. Hanging counteracts this by creating space between vertebrae, reducing back pain, improving posture, and increasing height temporarily.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Mental Fortitude</h4>
+                    <p>Hanging until failure teaches mental resilience. The struggle against gravity builds focus, determination, and the ability to push through discomfort - skills that translate to all areas of life.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Forearm & Arm Development</h4>
+                    <p>Dead hangs work the entire arm chain: forearms, biceps, triceps, and shoulders. This functional strength supports better performance in sports, lifting, and daily tasks.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Community & Competition</h4>
+                    <p>The WDHC community provides motivation, accountability, and friendly competition. Seeing others push their limits inspires you to reach new personal bests.</p>
+                </div>
+            </div>
+            
+            <h3>Getting Started</h3>
+            <p>Begin with <strong>10-30 second hangs</strong> and gradually increase time as your grip strengthens. Focus on proper form: relaxed shoulders, engaged core, and full extension. Consistency matters more than duration - regular short hangs yield better results than occasional long sessions.</p>
+            
+            <div class="about-highlight">
+                <p><strong>Pro Tip:</strong> Incorporate dead hangs into your warm-up routine to activate shoulder stabilizers and improve overhead mobility before workouts.</p>
+            </div>
         </div>
-
-        <!-- Benefits Tab Content -->
         <div id="benefits-tab" class="content-tabs">
             <h2>Benefits of Dead Hang Training</h2>
             
@@ -3137,50 +3032,7 @@
     });
 </script>
 
-<script>
-    // Tab Switching Functionality
-    function showTab(tabName) {
-        // Hide all content tabs
-        document.querySelectorAll('.content-tabs').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        
-        // Show selected tab
-        const selectedTab = document.getElementById(tabName + '-tab');
-        if (selectedTab) {
-            selectedTab.classList.add('active');
-            
-            // Scroll to tab smoothly
-            selectedTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Update URL hash without scrolling (we already scrolled)
-            history.pushState(null, null, '#' + tabName);
-        }
-        
-        return false; // Prevent default anchor behavior
-    }
-    
-    // Check URL hash on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        const hash = window.location.hash.substring(1);
-        if (hash === 'benefits' || hash === 'about') {
-            showTab(hash);
-        }
-    });
-    
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', function() {
-        const hash = window.location.hash.substring(1);
-        if (hash === 'benefits' || hash === 'about') {
-            showTab(hash);
-        } else {
-            // Hide all tabs if no hash or different hash
-            document.querySelectorAll('.content-tabs').forEach(tab => {
-                tab.classList.remove('active');
-            });
-        }
-    });
-</script>
+
 
       
 </body>
