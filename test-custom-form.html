@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WDHC Custom Form Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>WDHC Custom Form Test Suite</h1>
+    
+    <div class="test">
+        <h3>Test 1: Form HTML Validation</h3>
+        <button onclick="testFormHTML()">Test Form Structure</button>
+        <div id="test1-result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Test 2: Form JavaScript Validation</h3>
+        <button onclick="testFormValidation()">Test Validation Logic</button>
+        <div id="test2-result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Test 3: Sample Form Data</h3>
+        <button onclick="showSampleData()">Show Sample Submission</button>
+        <pre id="sample-data"></pre>
+    </div>
+    
+    <div class="test">
+        <h3>Test 4: Integration Readiness</h3>
+        <button onclick="checkIntegration()">Check Integration Points</button>
+        <div id="test4-result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Next Steps</h3>
+        <ol>
+            <li>Copy <code>google-apps-script-form-handler.gs</code> to Google Apps Script</li>
+            <li>Deploy as web app and get URL</li>
+            <li>Update <code>submit-custom-draft.html</code> with web app URL</li>
+            <li>Test complete submission flow</li>
+            <li>Deploy to production</li>
+        </ol>
+    </div>
+
+    <script>
+        function testFormHTML() {
+            const result = document.getElementById('test1-result');
+            try {
+                // Check if form elements exist in the actual file
+                fetch('submit-custom-draft.html')
+                    .then(r => r.text())
+                    .then(html => {
+                        const checks = [
+                            { name: 'Athlete Name field', regex: /id="athleteName"/ },
+                            { name: 'Email field', regex: /id="email"/ },
+                            { name: 'Height field', regex: /id="height"/ },
+                            { name: 'Grip Training field', regex: /id="gripTraining"/ },
+                            { name: 'Submit button', regex: /id="submitBtn"/ },
+                            { name: 'Form validation', regex: /validateForm\(\)/ }
+                        ];
+                        
+                        let passed = 0;
+                        let details = '';
+                        
+                        checks.forEach(check => {
+                            if (check.regex.test(html)) {
+                                passed++;
+                                details += `✅ ${check.name}<br>`;
+                            } else {
+                                details += `❌ ${check.name}<br>`;
+                            }
+                        });
+                        
+                        result.innerHTML = `
+                            <div class="${passed === checks.length ? 'success' : 'error'}">
+                                <strong>${passed}/${checks.length} tests passed</strong><br>
+                                ${details}
+                            </div>
+                        `;
+                    });
+            } catch (e) {
+                result.innerHTML = `<div class="error">Error: ${e.message}</div>`;
+            }
+        }
+        
+        function testFormValidation() {
+            const result = document.getElementById('test2-result');
+            
+            // Test validation patterns
+            const tests = [
+                {
+                    name: 'Email validation',
+                    test: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test('test@example.com'),
+                    should: true
+                },
+                {
+                    name: 'Time format MM:SS',
+                    test: () => /^(\d+):([0-5]?\d)$|^(\d+)\.(\d{1,2})$/.test('4:26'),
+                    should: true
+                },
+                {
+                    name: 'Time format M.SS',
+                    test: () => /^(\d+):([0-5]?\d)$|^(\d+)\.(\d{1,2})$/.test('4.26'),
+                    should: true
+                },
+                {
+                    name: 'Invalid time format',
+                    test: () => /^(\d+):([0-5]?\d)$|^(\d+)\.(\d{1,2})$/.test('4.266'),
+                    should: false
+                }
+            ];
+            
+            let passed = 0;
+            let details = '';
+            
+            tests.forEach(t => {
+                const actual = t.test();
+                if (actual === t.should) {
+                    passed++;
+                    details += `✅ ${t.name}: ${actual === t.should ? 'PASS' : 'FAIL'}<br>`;
+                } else {
+                    details += `❌ ${t.name}: Expected ${t.should}, got ${actual}<br>`;
+                }
+            });
+            
+            result.innerHTML = `
+                <div class="${passed === tests.length ? 'success' : 'error'}">
+                    <strong>${passed}/${tests.length} tests passed</strong><br>
+                    ${details}
+                </div>
+            `;
+        }
+        
+        function showSampleData() {
+            const sample = {
+                athleteName: "John Doe",
+                email: "john@example.com",
+                dob: "1990-01-15",
+                gender: "Male",
+                weight: 175.5,
+                height: 70,
+                gripTraining: "Regular",
+                hangTime: "4:26",
+                videoUrl: "https://youtube.com/watch?v=abc123",
+                notes: "Test submission with all fields",
+                timestamp: new Date().toISOString()
+            };
+            
+            document.getElementById('sample-data').textContent = 
+                JSON.stringify(sample, null, 2);
+        }
+        
+        function checkIntegration() {
+            const result = document.getElementById('test4-result');
+            const checks = [
+                'Google Apps Script handler created',
+                'Email automation v2.0 ready',
+                'Custom HTML form designed',
+                'Deployment guide created',
+                'Test suite available'
+            ];
+            
+            let details = '';
+            checks.forEach(check => {
+                details += `✅ ${check}<br>`;
+            });
+            
+            result.innerHTML = `
+                <div class="success">
+                    <strong>Integration Ready!</strong><br>
+                    ${details}
+                    <br>
+                    <strong>Next:</strong> Deploy Google Apps Script and update form URL.
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

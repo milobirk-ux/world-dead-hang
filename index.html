@@ -542,7 +542,7 @@
 
         .time { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 2rem; 
+            font-size: 2rem !important; 
             color: var(--gold); 
             font-weight: 700; 
             letter-spacing: 0.3px; 
@@ -2579,7 +2579,7 @@
                     </div>
                     <div style="text-align: center;">
                         <div class="desktop-time">${athlete.currentPR}</div>
-                        ${athlete.prBadge ? `<div class="pr-badge"><span class="pr-val">${athlete.prBadge}</span></div>` : ''}
+                        ${athlete.prCount ? `<div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>` : ''}
                     </div>
                     <div style="text-align: center;">${videoPreview}</div>
                 `;

@@ -1,0 +1,92 @@
+:', error);
+                searchCount.textContent = 'Error loading leaderboard';
+            }
+        }
+        
+        function renderLeaderboard(data) {
+            leaderboardBody.innerHTML = '';
+            
+            data.forEach(athlete => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                
+                row.innerHTML = `
+                    <div class="rank rank-${athlete.rank}">${athlete.rank}</div>
+                    <div class="athlete">
+                        <img src="${athlete.avatar}" alt="${athlete.name}" class="athlete-avatar">
+                        <div class="athlete-info">
+                            <div class="athlete-name">
+                                ${athlete.name}
+                                ${athlete.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
+                                <span class="tier-badge tier-${athlete.tier}">${athlete.tier.toUpperCase()}</span>
+                            </div>
+                            <div class="athlete-location">${athlete.location}</div>
+                        </div>
+                    </div>
+                    <div class="time">${athlete.time}</div>
+                    <div class="grip-age">${athlete.gripAge}</div>
+                    <div class="date">${athlete.date}</div>
+                    <div class="video">
+                        <a href="${athlete.video}" class="video-link" target="_blank">📹 View</a>
+                    </div>
+                `;
+                
+                leaderboardBody.appendChild(row);
+            });
+        }
+        
+        // Search functionality
+        searchBox.addEventListener('input', () => {
+            const searchTerm = searchBox.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                renderLeaderboard(athletes);
+                searchCount.textContent = `${athletes.length} athletes found`;
+                return;
+            }
+            
+            const filtered = athletes.filter(athlete => 
+                athlete.name.toLowerCase().includes(searchTerm) ||
+                athlete.location.toLowerCase().includes(searchTerm)
+            );
+            
+            renderLeaderboard(filtered);
+            searchCount.textContent = `${filtered.length} athletes found`;
+        });
+        
+        // Featured video controls
+        const featuredVideo = document.getElementById('featuredVideo');
+        const videoOverlay = document.querySelector('.video-overlay');
+        
+        if (featuredVideo) {
+            featuredVideo.addEventListener('play', () => {
+                videoOverlay.style.opacity = '0';
+            });
+            
+            featuredVideo.addEventListener('pause', () => {
+                videoOverlay.style.opacity = '1';
+            });
+        }
+        
+        // Load leaderboard on page load
+        document.addEventListener('DOMContentLoaded', loadLeaderboard);
+        
+        // Update featured video source when Google Drive link is available
+        function updateVideoSource(fileId) {
+            if (fileId && featuredVideo) {
+                const source = featuredVideo.querySelector('source');
+                source.src = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                featuredVideo.load();
+                
+                // Update all links
+                document.querySelectorAll('[href*="YOUR_GOOGLE_DRIVE_FILE_ID"]').forEach(link => {
+                    link.href = link.href.replace('YOUR_GOOGLE_DRIVE_FILE_ID', fileId);
+                });
+            }
+        }
+        
+        // Replace with your actual Google Drive file ID after upload
+        // updateVideoSource('YOUR_ACTUAL_FILE_ID_HERE');
+    </script>
+</body>
+</html>

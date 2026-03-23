@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WDHC Custom Form Preview</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .preview-container { display: flex; gap: 30px; margin-top: 20px; }
+        .form-preview { flex: 1; border: 3px solid #333; border-radius: 10px; overflow: hidden; }
+        .details { flex: 1; }
+        iframe { width: 100%; height: 800px; border: none; }
+        h2 { color: #D4AF37; margin-top: 0; }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { margin: 10px 0; padding-left: 25px; position: relative; }
+        .feature-list li:before { content: "✓"; color: #28a745; font-weight: bold; position: absolute; left: 0; }
+        .status { padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .ready { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .pending { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .section { margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>WDHC Custom Form Preview</h1>
+    <p>This is what your custom submission form looks like (actual rendering):</p>
+    
+    <div class="preview-container">
+        <div class="form-preview">
+            <iframe src="submit-custom-draft.html"></iframe>
+        </div>
+        
+        <div class="details">
+            <div class="section">
+                <h2>✅ Form Status: COMPLETE</h2>
+                <div class="status ready">
+                    <strong>All 11 fields implemented:</strong>
+                    <ul class="feature-list">
+                        <li>Athlete Name (required)</li>
+                        <li>Email Address (required)</li>
+                        <li>Date of Birth (required)</li>
+                        <li>Gender (required)</li>
+                        <li>Bodyweight lbs (required)</li>
+                        <li>Height inches (optional - NEW)</li>
+                        <li>Grip Training Experience (optional - NEW)</li>
+                        <li>Official Hang Time (required)</li>
+                        <li>Video Proof URL (required)</li>
+                        <li>Additional Notes (optional)</li>
+                        <li>Submit Button with validation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🎨 Design Features</h2>
+                <ul class="feature-list">
+                    <li>Matches WDHC black/gold branding</li>
+                    <li>Mobile-responsive design</li>
+                    <li>Professional typography (Oswald/Rajdhani fonts)</li>
+                    <li>Gold accents and gradients</li>
+                    <li>Clean, modern interface</li>
+                    <li>Real-time validation feedback</li>
+                    <li>Loading spinner during submission</li>
+                    <li>Success/error messages</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>⚙️ Technical Features</h2>
+                <ul class="feature-list">
+                    <li>Client-side validation (email format, time format)</li>
+                    <li>Age calculation from DOB</li>
+                    <li>Form data sanitization</li>
+                    <li>AJAX submission (no page reload)</li>
+                    <li>Error handling with user feedback</li>
+                    <li>Ready for Google Apps Script integration</li>
+                    <li>reCAPTCHA placeholder included</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>🚀 Next Steps</h2>
+                <div class="status pending">
+                    <ol>
+                        <li><strong>Deploy Google Apps Script</strong> (copy handler.gs to your WDHC Google Sheet)</li>
+                        <li><strong>Get web app URL</strong> after deployment</li>
+                        <li><strong>Update form URL</strong> in submit-custom-draft.html line 372</li>
+                        <li><strong>Test submission flow</strong> with real data</li>
+                        <li><strong>Deploy to production</strong> (replace Tally iframe)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>📊 Comparison: Custom vs Tally</h2>
+                <table style="width:100%; border-collapse: collapse;">
+                    <tr style="background:#f2f2f2;">
+                        <th style="padding:10px; text-align:left;">Feature</th>
+                        <th style="padding:10px; text-align:left;">Custom Form</th>
+                        <th style="padding:10px; text-align:left;">Tally</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Cost</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>Free forever</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">$29/month</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Submission Limits</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>Unlimited</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">100/month (free)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Design</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>Perfect WDHC match</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Generic</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Performance</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>Fast, no iframe</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Slow iframe</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top:30px; padding:20px; background:#e9ecef; border-radius:8px;">
+        <h3>📁 Files Created:</h3>
+        <ul>
+            <li><code>submit-custom-draft.html</code> - The actual custom form (18KB)</li>
+            <li><code>google-apps-script-form-handler.gs</code> - Backend handler (8KB)</li>
+            <li><code>CUSTOM_FORM_DEPLOYMENT_GUIDE.md</code> - Step-by-step guide</li>
+            <li><code>test-custom-form.html</code> - Testing utility</li>
+            <li><code>form-preview.html</code> - This preview page</li>
+        </ul>
+        
+        <p><strong>Note:</strong> The form is <em>visually complete</em> but needs the Google Apps Script backend URL to be fully functional.</p>
+    </div>
+    
+    <script>
+        // Auto-refresh iframe every 30 seconds to show latest changes
+        setInterval(() => {
+            document.querySelector('iframe').src = document.querySelector('iframe').src;
+        }, 30000);
+    </script>
+</body>
+</html>

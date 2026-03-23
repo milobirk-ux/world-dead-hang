@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Leaderboard | World Dead Hang Championship</title>
+    <title>About | World Dead Hang Championship</title>
     <link rel="icon" type="image/jpeg" href="media/new_wdhc_logo.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
@@ -376,27 +376,6 @@
             letter-spacing: 1px;
             font-family: 'Roboto Mono', monospace;
         }
-        
-        /* Center the Tier, Background, Location, Time, and Watch headers and data cells */
-        .lb-header > *:nth-child(2), /* Tier column header */
-        .lb-header > *:nth-child(4), /* Background column header */
-        .lb-header > *:nth-child(5), /* Location column header */
-        .lb-header > *:nth-child(6), /* Time column header */
-        .lb-header > *:nth-child(7), /* Watch column header */
-        .lb-row > *:nth-child(2), /* Tier column data */
-        .lb-row > *:nth-child(4), /* Background column data */
-        .lb-row > *:nth-child(5), /* Location column data */
-        .lb-row > *:nth-child(6), /* Time column data */
-        .lb-row > *:nth-child(7) { /* Watch column data */
-            text-align: center !important;
-        }
-        
-        /* Ensure Background header is centered (additional specificity) */
-        .lb-header > *:nth-child(4) {
-            text-align: center !important;
-        }
-        
-
 
         .lb-row {
             display: grid;
@@ -563,7 +542,7 @@
 
         .time { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 2rem !important; 
+            font-size: 2rem; 
             color: var(--gold); 
             font-weight: 700; 
             letter-spacing: 0.3px; 
@@ -896,8 +875,19 @@
 
         /* Sidebar - Top 10 Card */
         .sidebar-column {
-            /* Removed sticky positioning and independent scrolling */
-            /* Sidebar now scrolls naturally with main content */
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+        .sidebar-column::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-column::-webkit-scrollbar-thumb {
+            background-color: var(--border);
+            border-radius: 4px;
         }
 
         .sidebar-card {
@@ -1168,18 +1158,10 @@
                 gap: 20px;
             }
             
-            /* Make video submission items larger on mobile */
-            .video-submission-item {
-                flex: 0 1 100%; /* Take full width on mobile */
-                min-width: 100%; /* Full width */
-                max-width: 400px; /* Larger max width for mobile */
-                margin: 0 auto; /* Center the items */
-            }
-            
             .video-submission-item.vertical-video {
                 width: 100%;
-                max-width: 350px; /* Larger for mobile */
-                height: 500px; /* Taller for mobile for better visibility */
+                max-width: 300px; /* Same as desktop */
+                height: 400px; /* Tall enough for vertical videos */
             }
             
             .video-submission-item.vertical-video video {
@@ -1192,7 +1174,7 @@
 
         /* Content Tabs */
         .content-tabs {
-            display: none; /* Hidden by default */
+            display: block; /* Always visible for standalone pages */
             margin-top: 40px;
             padding: 40px;
             background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
@@ -1601,7 +1583,7 @@
             <a href="rules.html">Rulebook</a>
             <a href="submit.html">Submit</a>
             <a href="benefits.html">Benefits</a>
-            <a href="about.html">About</a>
+            <a href="about.html" class="active">About</a>
         </div>
     </nav>
 
@@ -1628,197 +1610,6 @@
 
 
     <div class="container">
-        
-        <div class="content-grid">
-            
-            <!-- Main Content -->
-            <div class="main-column">
-                <div class="controls">
-                    <div class="controls-header">
-                        <h2>Global Standings</h2>
-                        <div id="last-updated" style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; color: #555; text-align: right;">Last Updated: Mar 21, 2026, 1:10 AM EST</div>
-                    </div>
-                    <div class="division-tabs">
-                        <button class="active" onclick="switchCategory('All')">All</button>
-                        <button onclick="switchCategory('Open Men')">Open Men</button>
-                        <button onclick="switchCategory('Open Women')">Open Women</button>
-                        <button onclick="switchCategory('Masters Male')">Masters Male (40+)</button>
-                        <button onclick="switchCategory('Masters Female')">Masters Female (40+)</button>
-                    </div>
-                    <div class="sort-row">
-                        <div id="current-cat-display" style="font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: #fff; letter-spacing: 1px; text-transform: uppercase;">ALL</div>
-                        <div class="division-tabs" style="transform: scale(0.85); transform-origin: right center;">
-                            <button class="sort-btn active" onclick="toggleSort('recent')" id="btn-sort-recent">Most Recent</button>
-                            <button class="sort-btn" onclick="toggleSort('time')" id="btn-sort-time">Longest Time</button>
-                            <button class="sort-btn" onclick="toggleSort('age')" id="btn-sort-age">By Age</button>
-                            <button class="sort-btn" onclick="toggleSort('prs')" id="btn-sort-prs">PR's</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Search Bar -->
-                    <div class="search-row">
-                        <div class="search-container">
-                            <input type="text" id="athlete-search" placeholder="Search athlete name..." class="search-input" aria-label="Search athlete names">
-                            <div class="search-icon">🔍</div>
-                            <button id="clear-search" class="clear-search-btn" style="display: none;" aria-label="Clear search">✕</button>
-                        </div>
-                        <div id="search-count" class="search-count" style="display: none;"></div>
-                    </div>
-                </div>
-
-                <div class="leaderboard">
-
-                    <div id="leaderboard-body">
-                        <!-- JS Populated -->
-                    </div>
-                    <!-- No pagination controls on full leaderboard page -->
-                    <div style="text-align: center; padding: 20px; border-top: 1px solid var(--border);">
-                        <a href="index.html" style="color: var(--gold); text-decoration: none; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">? Back to Top 10 Leaderboard</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sidebar -->
-            <aside class="sidebar-column">
-                <!-- Top 10 Card -->
-                <div class="sidebar-card">
-                    <div class="sidebar-header">
-                        <h3 class="sidebar-title">🏆 World Leaders</h3>
-                        <div class="sidebar-subtitle">Global Top 10 • All Time</div>
-                    </div>
-                    <div id="top-10-list" class="mini-list">
-                        <!-- JS Populated -->
-                    </div>
-                </div>
-
-                <!-- Tier Legend Card -->
-                <div class="sidebar-card" style="padding-bottom: 10px;">
-                    <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
-                        <h3 class="sidebar-title" style="color: var(--text-dim);">TIER CLASSIFICATIONS</h3>
-                    </div>
-                    <div style="padding: 0 20px 15px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-freak">FREAK</span>
-                                <span style="color: #ccc; font-weight: 700;">6:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">.001% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-legend">LEGEND</span>
-                                <span style="color: #ccc; font-weight: 700;">4:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">0.01% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-elite">ELITE</span>
-                                <span style="color: #ccc; font-weight: 700;">3:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">1% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-pro">PRO</span>
-                                <span style="color: #ccc; font-weight: 700;">2:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">5% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-contender">CONTENDER</span>
-                                <span style="color: #ccc; font-weight: 700;">1:00+ min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">20% of pop.</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; font-family: 'Rajdhani', sans-serif; font-size: 1.0rem;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="tier-badge tier-challenger">CHALLENGER</span>
-                                <span style="color: #ccc; font-weight: 700;">< 1:00 min</span>
-                            </div>
-                            <span style="color: #aaa; font-weight: 600;">75% of pop.</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Icon Legend Card -->
-                <div class="sidebar-card" style="font-size: 1.0rem;">
-                    <div class="sidebar-header" style="background: transparent; border-bottom: none; padding-bottom: 5px;">
-                        <h3 class="sidebar-title" style="color: var(--text-dim);">ICON LEGEND</h3>
-                    </div>
-                    <div style="padding: 0 20px 15px;">
-                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 12px;">
-                            <span style="font-size: 1.2rem; color: var(--gold); line-height: 1.2; width: 20px; text-align: center;">✔</span>
-                            <div>
-                                <div style="color: #ddd;">Pro-Level Verification</div>
-                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Independently reviewed and certified by WDHC. This record stands.</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: flex-start; gap: 15px;">
-                            <span style="font-size: 1.2rem; color: var(--silver); line-height: 1.2; width: 20px; text-align: center;">⚡</span>
-                            <div>
-                                <div style="color: #ddd;">Total Personal Records</div>
-                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Times athlete has set a new personal record.</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-top: 12px;">
-                            <span style="font-size: 1.2rem; color: #888; line-height: 1.2; width: 20px; text-align: center;">📊</span>
-                            <div>
-                                <div style="color: #ddd;">WDHC Grip Age™</div>
-                                <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">A fitness index comparing your dead hang to population norms for age, sex, and bodyweight.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
-        </div>
-
-        <!-- Benefits Tab Content -->
-        <div id="benefits-tab" class="content-tabs">
-            <h2>Benefits of Dead Hang Training</h2>
-            
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <h4>Shoulder Health & Mobility</h4>
-                    <p>Dead hangs naturally decompress the spine and shoulder joints, relieving pressure and improving range of motion. Regular hanging can help prevent and alleviate shoulder impingement, rotator cuff issues, and general stiffness.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <h4>Grip Strength Development</h4>
-                    <p>Your grip is the foundation of all upper body strength. Dead hangs build crushing grip, supporting strength, and endurance - essential for pull-ups, climbing, and everyday activities.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <h4>Spinal Decompression</h4>
-                    <p>Gravity compresses your spine daily. Hanging counteracts this by creating space between vertebrae, reducing back pain, improving posture, and increasing height temporarily.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <h4>Mental Fortitude</h4>
-                    <p>Hanging until failure teaches mental resilience. The struggle against gravity builds focus, determination, and the ability to push through discomfort - skills that translate to all areas of life.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <h4>Forearm & Arm Development</h4>
-                    <p>Dead hangs work the entire arm chain: forearms, biceps, triceps, and shoulders. This functional strength supports better performance in sports, lifting, and daily tasks.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <h4>Community & Competition</h4>
-                    <p>The WDHC community provides motivation, accountability, and friendly competition. Seeing others push their limits inspires you to reach new personal bests.</p>
-                </div>
-            </div>
-            
-            <h3>Getting Started</h3>
-            <p>Begin with <strong>10-30 second hangs</strong> and gradually increase time as your grip strengthens. Focus on proper form: relaxed shoulders, engaged core, and full extension. Consistency matters more than duration - regular short hangs yield better results than occasional long sessions.</p>
-            
-            <div class="about-highlight">
-                <p><strong>Pro Tip:</strong> Incorporate dead hangs into your warm-up routine to activate shoulder stabilizers and improve overhead mobility before workouts.</p>
-            </div>
-        </div>
-
         <!-- About Us Tab Content -->
         <div id="about-tab" class="content-tabs">
             <h2>About World Dead Hang Championship</h2>
@@ -2548,10 +2339,6 @@
         } else if (currentSort === 'prs') {
             // Sort by most PRs
             filteredData.sort((a, b) => b.prCount - a.prCount);
-            // Update trueRank based on PR count for PR tab
-            filteredData.forEach((a, index) => {
-                a.trueRank = index + 1;
-            });
         }
 
         // Create header dynamically
@@ -2618,7 +2405,7 @@
                                 <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
                             </div>
                         </div>
-                        <div class="gender-label">${isFemale ? 'Female' : 'Male'} • ${athlete.category}</div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
                         <div style="font-size: 0.6rem; color: #666; margin-top: 2px; display: flex; align-items: center; gap: 4px;">
                             <span>${displayLocation}</span>
                             <span class="flag">${flag}</span>
@@ -2634,10 +2421,13 @@
                     <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
                     <div class="name-cell">
                         <div class="name-wrapper">
-                            <div class="name">${athlete.name}</div>
-                            ${athlete.isVerified ? '<span class="verified-badge">✓</span>' : ''}
+                            <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 4px;">
+                                ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✓</span>` : ''}
+                                <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                            </div>
                         </div>
-                        <div class="gender-label">${isFemale ? 'Female' : 'Male'} • ${athlete.category}</div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
                     </div>
                     <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
                     <div style="color: #bbb; font-size: 0.9rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;">
@@ -3073,12 +2863,11 @@
             const detailsPanel = document.createElement('div');
             detailsPanel.className = 'details-panel';
             
-            // Parse display location (just city/state, not full location)
-            const displayLocation = athlete.location ? athlete.location.split('/')[0].trim() : '';
-            const isFemale = athlete.category && (athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female'));
-            
             // Mobile layout
             if (window.innerWidth <= 900) {
+                // Parse display location (just city/state, not full location)
+                const displayLocation = athlete.location ? athlete.location.split('/')[0].trim() : '';
+                const isFemale = athlete.category && (athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female'));
                 
                 row.innerHTML = `
                     <div class="rank">${athlete.trueRank < 10 ? '0' + athlete.trueRank : athlete.trueRank}</div>
@@ -3087,10 +2876,10 @@
                             <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
                             <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 4px;">
                                 ${athlete.isVerified ? '<span class="verified-badge" title="Pro-Level Verification">✓</span>' : ''}
-                                <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                                ${athlete.prCount ? `<div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>` : ''}
                             </div>
                         </div>
-                        <div class="gender-label">${isFemale ? 'Female' : 'Male'} • ${athlete.category}</div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
                         <div style="font-size: 0.6rem; color: #666; margin-top: 2px; display: flex; align-items: center; gap: 4px;">
                             <span>${displayLocation}</span>
                             <span class="flag">${countryFlag}</span>
@@ -3145,12 +2934,6 @@
                 
                 // Make row clickable on mobile to toggle details
                 row.addEventListener('click', function(e) {
-                    // Check if we're on mobile
-                    const isMobile = window.innerWidth <= 900;
-                    if (!isMobile) {
-                        return; // Only handle on mobile
-                    }
-                    
                     // Don't trigger if clicking on a video button
                     if (e.target.closest('.video-btn') || e.target.closest('.video-preview')) {
                         return;
@@ -3179,9 +2962,10 @@
                         <div class="name-wrapper">
                             <div class="name">${athlete.name}</div>
                             ${athlete.isVerified ? '<span class="verified-badge">✓</span>' : ''}
-                            <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
                         </div>
-                        <div class="gender-label">${isFemale ? 'Female' : 'Male'} • ${athlete.category}</div>
+                        <div class="location" style="font-size: 0.9rem; color: #888; font-weight: 500; text-transform: none;">
+                            ${location.city}, ${location.state} ${countryFlag}
+                        </div>
                     </div>
                     <div>
                         <div style="font-size: 0.9rem; color: #ccc;">${athlete.occupation || 'Athlete'}</div>
@@ -3189,19 +2973,32 @@
                     </div>
                     <div style="text-align: center;">
                         <div style="font-size: 0.9rem; color: #ccc;">${location.city}, ${location.state}</div>
-                        <div style="font-size: 0.8rem; color: #666;">${location.country} ${countryFlag}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${location.country}</div>
                     </div>
                     <div style="text-align: center;">
                         <div class="desktop-time">${athlete.currentPR}</div>
+                        ${athlete.prCount ? `<div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>` : ''}
                     </div>
                     <div style="text-align: center;">${videoPreview}</div>
                 `;
                 
+                // Details button for desktop
+                const detailsBtn = document.createElement('button');
+                detailsBtn.className = 'details-btn';
+                detailsBtn.innerHTML = 'Details';
+                detailsBtn.onclick = function(e) {
+                    toggleDetails(this);
+                    e.stopPropagation();
+                };
+                
+                row.appendChild(detailsBtn);
             }
             
             // Append row and details to the wrapper, then wrapper to the list
             wrapper.appendChild(row);
-            wrapper.appendChild(detailsPanel);
+            if (window.innerWidth <= 900) {
+                wrapper.appendChild(detailsPanel);
+            }
             list.appendChild(wrapper);
         });
         
@@ -3223,50 +3020,7 @@
     });
 </script>
 
-<script>
-    // Tab Switching Functionality
-    function showTab(tabName) {
-        // Hide all content tabs
-        document.querySelectorAll('.content-tabs').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        
-        // Show selected tab
-        const selectedTab = document.getElementById(tabName + '-tab');
-        if (selectedTab) {
-            selectedTab.classList.add('active');
-            
-            // Scroll to tab smoothly
-            selectedTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Update URL hash without scrolling (we already scrolled)
-            history.pushState(null, null, '#' + tabName);
-        }
-        
-        return false; // Prevent default anchor behavior
-    }
-    
-    // Check URL hash on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        const hash = window.location.hash.substring(1);
-        if (hash === 'benefits' || hash === 'about') {
-            showTab(hash);
-        }
-    });
-    
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', function() {
-        const hash = window.location.hash.substring(1);
-        if (hash === 'benefits' || hash === 'about') {
-            showTab(hash);
-        } else {
-            // Hide all tabs if no hash or different hash
-            document.querySelectorAll('.content-tabs').forEach(tab => {
-                tab.classList.remove('active');
-            });
-        }
-    });
-</script>
+
 
       
 </body>

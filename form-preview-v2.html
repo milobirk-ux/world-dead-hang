@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WDHC Custom Form - UPDATED PREVIEW</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .preview-container { display: flex; gap: 30px; margin-top: 20px; }
+        .form-preview { flex: 1; border: 3px solid #333; border-radius: 10px; overflow: hidden; }
+        .details { flex: 1; }
+        iframe { width: 100%; height: 900px; border: none; }
+        h2 { color: #D4AF37; margin-top: 0; }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { margin: 10px 0; padding-left: 25px; position: relative; }
+        .feature-list li:before { content: "✓"; color: #28a745; font-weight: bold; position: absolute; left: 0; }
+        .status { padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .ready { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .pending { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .section { margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+        .improvements { background: #e7f3ff; border-left: 4px solid #007bff; padding: 15px; margin: 15px 0; }
+        .improvement-item { display: flex; align-items: center; margin: 8px 0; }
+        .improvement-item:before { content: "🔄"; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <h1>WDHC Custom Form - UPDATED WITH YOUR FEEDBACK</h1>
+    <p><strong>✅ All your requested improvements implemented:</strong></p>
+    
+    <div class="improvements">
+        <div class="improvement-item"><strong>Verified Checkmark Rules Section</strong> - Added with all 6 criteria</div>
+        <div class="improvement-item"><strong>Improved Date Input</strong> - HTML5 date picker with age limits (16+)</div>
+        <div class="improvement-item"><strong>Better Gender Dropdown</strong> - Clean select with "Prefer not to say"</div>
+        <div class="improvement-item"><strong>Enhanced Bodyweight Field</strong> - With "lbs" unit label</div>
+        <div class="improvement-item"><strong>Enhanced Height Field</strong> - With "in" unit label</div>
+        <div class="improvement-item"><strong>Professional Time Input</strong> - Separate minutes:seconds with validation</div>
+        <div class="improvement-item"><strong>Grip Training Dropdown</strong> - Your exact Tally options</div>
+    </div>
+    
+    <div class="preview-container">
+        <div class="form-preview">
+            <iframe src="submit-custom-draft.html"></iframe>
+        </div>
+        
+        <div class="details">
+            <div class="section">
+                <h2>✅ VERIFIED CHECKMARK RULES ADDED</h2>
+                <div class="status ready">
+                    <strong>All 6 verification criteria now displayed:</strong>
+                    <ul class="feature-list">
+                        <li>Video must show full body and clear timer</li>
+                        <li>Timer must be visible throughout entire hang</li>
+                        <li>No editing/cuts in the video</li>
+                        <li>Feet must be off the ground for entire duration</li>
+                        <li>Hands must maintain full grip on bar</li>
+                        <li>Time stops when any hand releases or feet touch</li>
+                    </ul>
+                    <p style="margin-top: 10px;"><em>Submissions meeting all criteria receive the gold verified checkmark ✓</em></p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🎯 IMPROVED FORM FIELD FORMATTING</h2>
+                <ul class="feature-list">
+                    <li><strong>Date of Birth:</strong> HTML5 date picker (no manual typing errors)</li>
+                    <li><strong>Gender:</strong> Clean dropdown with "Prefer not to say" option</li>
+                    <li><strong>Bodyweight:</strong> Number input with "lbs" unit label</li>
+                    <li><strong>Height:</strong> Number input with "in" unit label</li>
+                    <li><strong>Official Time:</strong> Separate minutes:seconds inputs (prevents format errors)</li>
+                    <li><strong>Grip Training:</strong> Your exact Tally dropdown options</li>
+                    <li><strong>Video URL:</strong> URL validation</li>
+                    <li><strong>All fields:</strong> Real-time validation with visual feedback</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>⚙️ TECHNICAL IMPROVEMENTS</h2>
+                <ul class="feature-list">
+                    <li><strong>Time Validation:</strong> Seconds automatically limited to 0-59</li>
+                    <li><strong>Age Validation:</strong> Date limits prevent under-16 submissions</li>
+                    <li><strong>Unit Labels:</strong> Clear "lbs" and "in" labels for weight/height</li>
+                    <li><strong>Better UX:</strong> Separate time inputs prevent MM:SS vs M.SS confusion</li>
+                    <li><strong>Mobile Optimized:</strong> All new inputs work perfectly on mobile</li>
+                    <li><strong>Accessibility:</strong> Proper labels and ARIA attributes</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>🚀 DEPLOYMENT READY</h2>
+                <div class="status ready">
+                    <p><strong>The form is now complete with all your requested improvements!</strong></p>
+                    <p>Next steps (30 minutes):</p>
+                    <ol>
+                        <li>Copy Google Apps Script to your WDHC Google Sheet</li>
+                        <li>Deploy as web app and get URL</li>
+                        <li>Update form with web app URL (line 372)</li>
+                        <li>Test complete submission flow</li>
+                        <li>Deploy to production (replace Tally iframe)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>📊 COMPARISON: Custom Form vs Tally</h2>
+                <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
+                    <tr style="background:#f2f2f2;">
+                        <th style="padding:10px; text-align:left; width:40%;">Feature</th>
+                        <th style="padding:10px; text-align:left; width:30%;">Custom Form</th>
+                        <th style="padding:10px; text-align:left; width:30%;">Tally</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Verified Rules Display</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>✅ Included</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">❌ Separate page</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Time Input Format</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>✅ Separate M:S</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Text field (errors common)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Date Input</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>✅ Date picker</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Text field</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Cost</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>✅ Free forever</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">$29/month</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">Submission Limits</td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd; color:#28a745;"><strong>✅ Unlimited</strong></td>
+                        <td style="padding:10px; border-bottom:1px solid #ddd;">100/month (free)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top:30px; padding:20px; background:#e9ecef; border-radius:8px;">
+        <h3>📁 Updated Files:</h3>
+        <ul>
+            <li><code>submit-custom-draft.html</code> - <strong>UPDATED</strong> with all improvements (18KB)</li>
+            <li><code>google-apps-script-form-handler.gs</code> - Backend handler (8KB)</li>
+            <li><code>CUSTOM_FORM_DEPLOYMENT_GUIDE.md</code> - Step-by-step guide</li>
+            <li><code>form-preview-v2.html</code> - This updated preview</li>
+        </ul>
+        
+        <p><strong>✅ The form now has:</strong></p>
+        <ol>
+            <li>Verified checkmark rules section</li>
+            <li>Professional dropdowns for gender/grip training</li>
+            <li>Separate minutes:seconds time input</li>
+            <li>HTML5 date picker with age limits</li>
+            <li>Unit labels (lbs, in) for weight/height</li>
+            <li>All your exact Tally questions + 2 new fields</li>
+        </ol>
+    </div>
+    
+    <script>
+        // Auto-refresh iframe every 30 seconds
+        setInterval(() => {
+            document.querySelector('iframe').src = document.querySelector('iframe').src;
+        }, 30000);
+    </script>
+</body>
+</html>

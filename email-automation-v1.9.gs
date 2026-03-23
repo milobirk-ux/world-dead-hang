@@ -1,4 +1,4 @@
-// WDHC Email Automation with PR Tracking - v1.4 (HTML Format with Fixed Time Parsing)
+// WDHC Email Automation with PR Tracking - v1.9 (Fixed Subject Line Logic)
 // Milo's original HTML email format with FIXED time calculation
 // 4.26 = 4 minutes 26 seconds (not 4 minutes 16 seconds)
 // Add to Google Sheets: Extensions > Apps Script
@@ -17,6 +17,8 @@ function sendWelcomeEmailOnNewRow(e) {
  const dobColIndex = 7; // Column H (Date of Birth)
  const genderColIndex = 8; // Column I (Gender)
  const weightColIndex = 9; // Column J (Bodyweight lbs)
+ const heightColIndex = headers.findIndex(h => h === 'Height (inches)');
+ const gripTrainingColIndex = headers.findIndex(h => h === 'Grip Training Experience');
  const approvedColIndex = headers.findIndex(h => h === 'Approved');
  const prBadgeColIndex = headers.findIndex(h => h === 'PR Badge');
  
@@ -42,6 +44,28 @@ function sendWelcomeEmailOnNewRow(e) {
      (prCol === headers.length + 1 ? 0 : 1) + 
      (previousBestCol === headers.length + 2 ? 0 : 1);
    activeSheet.getRange(1, newPrBadgeCol + 1).setValue('PR Badge');
+ }
+ 
+ // Add height and grip training columns if they don't exist (for enhanced grip age calculation)
+ if (heightColIndex === -1) {
+   const newHeightCol = headers.length + (emailedCol === headers.length ? 0 : 1) + 
+     (prCol === headers.length + 1 ? 0 : 1) + 
+     (previousBestCol === headers.length + 2 ? 0 : 1) +
+     (prBadgeColIndex === -1 ? 1 : 0);
+   heightColIndex = newHeightCol;
+   activeSheet.getRange(1, heightColIndex + 1).setValue('Height (inches)');
+ }
+ 
+ if (gripTrainingColIndex === -1) {
+   const newGripTrainingCol = headers.length + (emailedCol === headers.length ? 0 : 1) + 
+     (prCol === headers.length + 1 ? 0 : 1) + 
+     (previousBestCol === headers.length + 2 ? 0 : 1) +
+     (prBadgeColIndex === -1 ? 1 : 0) +
+     (heightColIndex >= headers.length ? 1 : 0);
+   gripTrainingColIndex = newGripTrainingCol;
+   activeSheet.getRange(1, gripTrainingColIndex + 1).setValue('Grip Training Experience');
+   // Add sample data validation or instructions
+   activeSheet.getRange(2, gripTrainingColIndex + 1).setValue('Options: Never, Occasional, Regular, Advanced');
  }
 
  // ========== FIXED TIME PARSING ==========
@@ -109,11 +133,12 @@ function sendWelcomeEmailOnNewRow(e) {
    return age;
  }
 
- function calculateWDHCGripAge(timeSeconds, age, weightLbs, gender) {
+ function calculateWDHCGripAge(timeSeconds, age, weightLbs, gender, heightInches = null, gripTraining = null) {
    const isMale = gender.toString().toLowerCase() === 'male';
    const refWeight = isMale ? 175 : 135;
    let baseExpected = 0;
    
+   // Base expected times by age and gender (in seconds)
    if (isMale) {
      if (age < 30) baseExpected = 150;
      else if (age < 40) baseExpected = 120;
@@ -130,17 +155,63 @@ function sendWelcomeEmailOnNewRow(e) {
      else baseExpected = 20;
    }
    
-   const adjustedExpectedTime = (baseExpected * (refWeight / weightLbs) * 0.7) + (baseExpected * 0.3);
+   // Adjust for weight (heavier people have to support more weight)
+   const weightAdjustment = (refWeight / weightLbs) * 0.7;
+   
+   // Adjust for height (taller people have different leverage)
+   let heightAdjustment = 1.0;
+   if (heightInches) {
+     const refHeight = isMale ? 70 : 65; // Reference heights in inches
+     // Taller people have slightly harder time due to longer lever arms
+     // Shorter people have advantage in dead hangs
+     const heightDiff = heightInches - refHeight;
+     heightAdjustment = 1.0 - (heightDiff * 0.02); // 2% per inch difference
+     heightAdjustment = Math.max(0.8, Math.min(1.2, heightAdjustment)); // Cap adjustments
+   }
+   
+   // Adjust for grip training experience - ONLY 4 LEVELS: None, Beginner, Intermediate, Advanced
+   let trainingAdjustment = 1.0;
+   if (gripTraining) {
+     const training = gripTraining.toString().toLowerCase().trim();
+     if (training.includes('none')) {
+       trainingAdjustment = 0.9; // None: 10% lower expected (untrained)
+     } else if (training.includes('beginner')) {
+       trainingAdjustment = 1.0; // Beginner: Average (0-6 months)
+     } else if (training.includes('intermediate')) {
+       trainingAdjustment = 1.15; // Intermediate: 15% higher expected (6 months - 2 years)
+     } else if (training.includes('advanced')) {
+       trainingAdjustment = 1.3; // Advanced: 30% higher expected (2+ years)
+     }
+   }
+   
+   // Calculate adjusted expected time
+   const adjustedExpectedTime = (baseExpected * weightAdjustment * heightAdjustment * trainingAdjustment * 0.7) + 
+                                (baseExpected * 0.3);
+   
    const performanceRatio = timeSeconds / adjustedExpectedTime;
-   let gripAge = age - ((performanceRatio - 1.0) * 50);
-   gripAge = Math.max(age - 25, Math.min(age + 25, gripAge));
-   gripAge = Math.max(16, Math.min(85, gripAge));
+   
+   // Calculate grip age with more realistic ranges
+   // Performance ratio of 1.0 = grip age equals chronological age
+   // Each 0.1 above 1.0 = 4 years younger grip age (less dramatic than before)
+   // Each 0.1 below 1.0 = 4 years older grip age
+   let gripAge = age - ((performanceRatio - 1.0) * 40);
+   
+   // More realistic age bounds
+   const minGripAge = Math.max(18, age - 20); // Minimum 18, maximum 20 years younger
+   const maxGripAge = Math.min(85, age + 20); // Maximum 85, maximum 20 years older
+   
+   gripAge = Math.max(minGripAge, Math.min(maxGripAge, gripAge));
    const yearsSaved = age - Math.round(gripAge);
    
    return {
      gripAge: Math.round(gripAge),
      yearsSaved: yearsSaved,
-     performanceRatio: performanceRatio.toFixed(2)
+     performanceRatio: performanceRatio.toFixed(2),
+     adjustments: {
+       weight: weightAdjustment.toFixed(2),
+       height: heightAdjustment.toFixed(2),
+       training: trainingAdjustment.toFixed(2)
+     }
    };
  }
 
@@ -248,13 +319,8 @@ function sendWelcomeEmailOnNewRow(e) {
   </p>
 </div>`;
      } else {
-       prMessage = `
-<div style="margin: 20px 0; padding: 15px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 6px;">
-  <p style="margin: 0 0 8px 0; font-size: 1em; font-weight: 600;">First Submission</p>
-  <p style="margin: 0; font-size: 0.95em; color: #555;">
-    Welcome to the WDHC. ${formattedTime} is your starting point.
-  </p>
-</div>`;
+       // First submission is now celebrated in the greeting message, no separate PR message needed
+       prMessage = '';
      }
    } else if (prInfo.bestTime > 0) {
      prMessage = `
@@ -289,7 +355,11 @@ function sendWelcomeEmailOnNewRow(e) {
          throw new Error("Invalid weight value");
        }
 
-       const gripAgeResult = calculateWDHCGripAge(totalSeconds, age, weightNum, genderStr);
+       // Get height and grip training data for enhanced grip age calculation
+       const height = heightColIndex !== -1 ? data[i][heightColIndex] : null;
+       const gripTraining = gripTrainingColIndex !== -1 ? data[i][gripTrainingColIndex] : null;
+       
+       const gripAgeResult = calculateWDHCGripAge(totalSeconds, age, weightNum, genderStr, height, gripTraining);
        const yearsSavedText = gripAgeResult.yearsSaved > 0 ? 
          gripAgeResult.yearsSaved + ' years younger' : 
          Math.abs(gripAgeResult.yearsSaved) + ' years older';
@@ -307,13 +377,28 @@ function sendWelcomeEmailOnNewRow(e) {
        }
 
        gripAgeHtml = `
-<div style="margin: 20px 0;">
-  <h3 style="margin: 0 0 10px 0; font-size: 1.1em; color: #333; font-weight: 600;">Grip Age Analysis</h3>
-  <p style="margin: 0 0 8px 0; font-size: 1em; line-height: 1.5; color: #333;">
-    Based on your ${formattedTime} hang at ${weight}lbs, your biological grip age is <strong>${gripAgeResult.gripAge}</strong> (chronological age: ${age}).
+<div style="margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #e6f7ff, #f0f9ff); border-radius: 8px; border-left: 4px solid #007bff;">
+  <h3 style="margin: 0 0 12px 0; font-size: 1.2em; color: #0056b3; font-weight: 700;">Enhanced Grip Age Analysis</h3>
+  <p style="margin: 0 0 10px 0; font-size: 1.05em; line-height: 1.5; color: #333;">
+    Your biological grip age is <strong style="color: #0056b3;">${gripAgeResult.gripAge}</strong> (chronological age: ${age}).
   </p>
-  <p style="margin: 0; font-size: 0.95em; line-height: 1.5; color: #666;">
-    ${gripAgeMessage}
+  <div style="background: rgba(0, 123, 255, 0.1); padding: 12px; border-radius: 6px; margin: 15px 0;">
+    <p style="margin: 0; font-size: 0.95em; line-height: 1.5; color: #495057; font-style: italic;">
+      ${gripAgeMessage}
+    </p>
+  </div>
+  ${height || gripTraining ? `
+  <div style="margin: 15px 0; padding: 10px; background: rgba(0, 123, 255, 0.05); border-radius: 6px; border: 1px dashed #007bff;">
+    <p style="margin: 0 0 8px 0; font-size: 0.85em; color: #666; font-weight: 600;">Calculation Factors:</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.8em;">
+      ${height ? `<span style="background: rgba(0, 123, 255, 0.1); padding: 4px 8px; border-radius: 4px; color: #0056b3;">Height: ${height}"</span>` : ''}
+      ${gripTraining ? `<span style="background: rgba(40, 167, 69, 0.1); padding: 4px 8px; border-radius: 4px; color: #28a745;">Training: ${gripTraining}</span>` : ''}
+      <span style="background: rgba(255, 193, 7, 0.1); padding: 4px 8px; border-radius: 4px; color: #ffc107;">Weight: ${weight}lbs</span>
+    </div>
+  </div>
+  ` : ''}
+  <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #666;">
+    <strong>Longevity Insight:</strong> ${longevityFact}
   </p>
 </div>`;
      } catch (err) {
@@ -328,28 +413,26 @@ function sendWelcomeEmailOnNewRow(e) {
      }
    } else {
      gripAgeHtml = `
-<div style="background: linear-gradient(135deg, #343a40, #495057); color: white; padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 5px solid #C5A065;">
-  <div style="display: flex; align-items: center; margin-bottom: 15px;">
-    <div style="background: #C5A065; color: black; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px;">
-      🔍
-    </div>
-    <h3 style="margin: 0; color: #C5A065; font-size: 1.3em;">Discover Your Grip Age</h3>
-  </div>
-  <p style="margin: 0 0 15px 0; font-size: 1.1em; line-height: 1.5;">
-    To see your personalized grip age and longevity insights, make sure to include your <strong>Date of Birth</strong>, <strong>Gender</strong>, and <strong>Bodyweight</strong> in future submissions!
+<div style="margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px; border-left: 4px solid #6c757d;">
+  <h3 style="margin: 0 0 12px 0; font-size: 1.2em; color: #495057; font-weight: 700;">Enhanced Grip Age Analysis</h3>
+  <p style="margin: 0 0 10px 0; font-size: 1.05em; line-height: 1.5; color: #333;">
+    Complete your profile for enhanced insights
   </p>
-  <div style="background: rgba(197, 160, 101, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #C5A065;">
-    <p style="margin: 0; font-size: 0.95em; color: #e0e0e0; font-style: italic;">
-      "Grip strength is a powerful predictor of longevity—tracking it could help you live longer."
+  <div style="background: rgba(108, 117, 125, 0.1); padding: 12px; border-radius: 6px; margin: 15px 0;">
+    <p style="margin: 0; font-size: 0.95em; line-height: 1.5; color: #495057;">
+      Add your date of birth, gender, bodyweight, height, and grip training experience for a more accurate biological grip age calculation with personalized training recommendations.
     </p>
   </div>
+  <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #666;">
+    <strong>Why it matters:</strong> Grip strength is the #1 predictor of longevity - stronger than blood pressure or cholesterol.
+  </p>
 </div>`;
    }
    
    // Dynamic message based on submission count
    let personalMessage = '';
    if (prInfo.submissionCount === 1) {
-     personalMessage = 'Welcome to the WDHC! We\'ve received your first submission and our team is reviewing your video proof now.';
+     personalMessage = `Welcome to the WDHC! Your first hang of <strong>${formattedTime}</strong> is officially submitted—that's an awesome start! 🎉 Our team is reviewing your video proof now.`;
    } else if (prInfo.submissionCount === 2) {
      personalMessage = 'Second submission received—great consistency! Our team is reviewing your video proof now.';
    } else if (prInfo.submissionCount === 3) {
@@ -358,55 +441,150 @@ function sendWelcomeEmailOnNewRow(e) {
      personalMessage = `Submission #${prInfo.submissionCount} received—you're becoming a WDHC regular! Our team is reviewing your video proof now.`;
    }
 
-   // Clean tier section
+   // Tier badge helper function with correct colors from website
+   function getTierColor(tierName) {
+     const tier = tierName.toUpperCase();
+     if (tier === 'FREAK') return { bg: '#9900ff', text: '#fff', border: '#9900ff' };
+     if (tier === 'LEGEND') return { bg: '#D4AF37', text: '#000', border: '#D4AF37' };
+     if (tier === 'ELITE') return { bg: '#E0E0E0', text: '#000', border: '#E0E0E0' };
+     if (tier === 'PRO') return { bg: '#cc0000', text: '#fff', border: '#cc0000' };
+     if (tier === 'CONTENDER') return { bg: 'transparent', text: '#ccc', border: '#666' };
+     if (tier === 'CHALLENGER') return { bg: 'transparent', text: '#1E8449', border: '#1E8449' };
+     return { bg: '#666', text: '#fff', border: '#666' };
+   }
+
+   // Training hint function based on current tier and gap
+   function getTrainingHint(currentTier, gapSeconds) {
+     const tier = currentTier.toUpperCase();
+     const gapMinutes = Math.floor(gapSeconds / 60);
+     
+     if (tier === 'CHALLENGER') {
+       if (gapSeconds < 30) return "Try 3 sets of 30-second hangs with 2 minutes rest between sets, 3x per week.";
+       if (gapSeconds < 60) return "Focus on grip endurance: hang for 45 seconds, rest 90 seconds, repeat 4 times.";
+       return "Build a foundation: start with 20-second hangs, 5 sets, resting 60 seconds between.";
+     }
+     
+     if (tier === 'CONTENDER') {
+       if (gapSeconds < 30) return "Add towel hangs once a week to build crushing grip strength.";
+       if (gapSeconds < 60) return "Try 'grease the groove': do 5-10 short hangs throughout the day.";
+       return "Work on finger strength: dead hangs with 2-3 fingers for shorter durations.";
+     }
+     
+     if (tier === 'PRO') {
+       if (gapSeconds < 30) return "Incorporate weighted hangs: add 5-10lbs for 15-20 second holds.";
+       if (gapSeconds < 60) return "Try interval training: 45s hang, 30s rest, repeat 6-8 times.";
+       return "Focus on mental endurance: practice breathing control during longer hangs.";
+     }
+     
+     if (tier === 'ELITE') {
+       if (gapSeconds < 30) return "Experiment with different grip widths to find your strongest position.";
+       if (gapSeconds < 60) return "Add eccentric training: jump up, lower as slowly as possible.";
+       return "Consider grip-specific accessories like fat grips or climbing putty.";
+     }
+     
+     if (tier === 'LEGEND') {
+       if (gapSeconds < 30) return "Perfect your technique: ensure shoulders are packed, core engaged.";
+       if (gapSeconds < 60) return "Try 'density training': accumulate 5+ minutes of hang time in one session.";
+       return "Focus on recovery: ensure 48+ hours between intense grip sessions.";
+     }
+     
+     // Default for FREAK or any other tier
+     return "Maintain consistency: 2-3 sessions per week with varied intensity.";
+   }
+
+   // Enhanced tier section with correct colors and better design
    let tierBadgeHtml = '';
+   const currentTierColor = getTierColor(currentTier);
+   const nextTierColor = getTierColor(nextTier);
+   
    if (gap === -1) {
      tierBadgeHtml = `
-<div style="margin: 20px 0;">
-  <div style="display: inline-block; background: #9900ff; color: #fff; padding: 6px 12px; border-radius: 4px; font-family: 'Roboto Mono', monospace; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-    ${currentTier} TIER
+<div style="margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid ${currentTierColor.border};">
+  <div style="display: flex; align-items: center; margin-bottom: 12px;">
+    <div style="background: ${currentTierColor.bg}; color: ${currentTierColor.text}; border: 1px solid ${currentTierColor.border}; padding: 8px 16px; border-radius: 6px; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      ${currentTier} TIER
+    </div>
   </div>
-  <p style="margin: 10px 0; font-size: 1em; line-height: 1.5; color: #333;">
-    Your ${formattedTime} hang places you in the ${currentTier} tier. This is the maximum level.
+  <p style="margin: 0; font-size: 1em; line-height: 1.5; color: #333;">
+    You've reached the pinnacle! Your ${formattedTime} hang places you in the <strong>${currentTier}</strong> tier - the maximum level of achievement.
   </p>
+  <div style="margin-top: 12px; padding: 10px; background: rgba(197, 160, 101, 0.1); border-radius: 6px; border-left: 3px solid #C5A065;">
+    <p style="margin: 0; font-size: 0.9em; color: #666; font-style: italic;">
+      <strong>Maintenance tip:</strong> ${getTrainingHint(currentTier, 0)}
+    </p>
+  </div>
 </div>`;
    } else {
      tierBadgeHtml = `
-<div style="margin: 20px 0;">
-  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-    <div style="background: #9900ff; color: #fff; padding: 6px 12px; border-radius: 4px; font-family: 'Roboto Mono', monospace; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+<div style="margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid ${currentTierColor.border};">
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+    <div style="background: ${currentTierColor.bg}; color: ${currentTierColor.text}; border: 1px solid ${currentTierColor.border}; padding: 8px 16px; border-radius: 6px; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
       ${currentTier}
     </div>
-    <span style="color: #666;">→</span>
-    <div style="border: 1px solid #ddd; color: #666; padding: 6px 12px; border-radius: 4px; font-family: 'Roboto Mono', monospace; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+    <span style="color: #666; font-weight: 600;">→</span>
+    <div style="background: ${nextTierColor.bg}; color: ${nextTierColor.text}; border: 1px solid ${nextTierColor.border}; padding: 8px 16px; border-radius: 6px; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">
       ${nextTier}
     </div>
   </div>
   
   <p style="margin: 0; font-size: 1em; line-height: 1.5; color: #333;">
-    Your ${formattedTime} hang is ${formatSecondsToMinutes(gap)} from the ${nextTier} tier.
+    You're <strong>${formatSecondsToMinutes(gap)}</strong> away from the <strong>${nextTier}</strong> tier.
   </p>
+  <div style="margin-top: 12px; padding: 10px; background: rgba(197, 160, 101, 0.1); border-radius: 6px; border-left: 3px solid #C5A065;">
+    <p style="margin: 0; font-size: 0.9em; color: #666; font-style: italic;">
+      <strong>Quick tip:</strong> ${getTrainingHint(currentTier, gap)}
+    </p>
+  </div>
 </div>`;
    }
 
-   // Email composition
+   // Email composition with enhanced design
    const randomFact = benefits[Math.floor(Math.random() * benefits.length)];
-   const subject = isPR ? "NEW PR - WDHC Submission Review" : "WDHC Submission Received";
+   
+   // Fix subject line logic: first submissions aren't "NEW PR"
+   let subject;
+   if (prInfo.submissionCount === 1) {
+     subject = "WDHC Submission Received - Welcome!";
+   } else if (isPR) {
+     subject = "NEW PR - WDHC Submission Review";
+   } else {
+     subject = "WDHC Submission Received";
+   }
    const htmlBody = `
-<div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; line-height: 1.5;">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Inter', Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; line-height: 1.6; padding: 0;">
   
-  <!-- Header -->
-  <div style="background: #0a0a0a; color: white; padding: 20px; text-align: center; margin-bottom: 25px;">
-    <h1 style="color: #C5A065; margin: 0 0 8px 0; font-size: 1.5em;">WORLD DEAD HANG CHAMPIONSHIP</h1>
-    <p style="margin: 0; color: #aaa; font-size: 0.85em;">Submission Confirmation</p>
+  <!-- Header with WDHC Logo -->
+  <div style="background: #0a0a0a; color: white; padding: 25px 20px; text-align: center; margin-bottom: 30px; border-bottom: 2px solid #C5A065;">
+    <div style="margin-bottom: 15px;">
+      <img src="https://worlddeadhang.com/media/new_wdhc_logo.jpg" alt="WDHC Logo" style="max-width: 120px; height: auto; margin: 0 auto;">
+    </div>
+    <h1 style="margin: 0 0 5px 0; font-size: 1.4em; font-weight: 700; letter-spacing: 0.5px;">
+      <span style="color: #C5A065;">WORLD</span> 
+      <span style="color: white;">DEAD HANG</span> 
+      <span style="color: #C5A065;">CHAMPIONSHIP</span>
+    </h1>
+    <p style="margin: 0; color: #aaa; font-size: 1em; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Submission Confirmation</p>
   </div>
 
-  <!-- Greeting -->
-  <p style="margin: 0 0 15px 0; font-size: 1em;">
-    <strong>${firstName},</strong><br>
-    This is Milo from the World Dead Hang Championship.
-  </p>
-  <p style="margin: 0 0 20px 0; font-size: 1em;">${personalMessage}</p>
+  <!-- Greeting Card -->
+  <div style="margin: 0 0 25px 0; padding: 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px; border-left: 4px solid #C5A065;">
+    <p style="margin: 0 0 10px 0; font-size: 1.1em; color: #333; font-weight: 600;">
+      Hey ${firstName},
+    </p>
+    <p style="margin: 0 0 12px 0; font-size: 1em; color: #555;">
+      This is Milo from the World Dead Hang Championship.
+    </p>
+    <p style="margin: 0; font-size: 1em; color: #555;">
+      ${personalMessage}
+    </p>
+  </div>
 
   <!-- PR Message -->
   ${prMessage}
@@ -417,35 +595,58 @@ function sendWelcomeEmailOnNewRow(e) {
   <!-- Grip Age Section -->
   ${gripAgeHtml}
 
-  <!-- Health Insight -->
-  <div style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 6px;">
-    <p style="margin: 0 0 8px 0; font-size: 1em; font-weight: 600;">Health Insight</p>
-    <p style="margin: 0; font-size: 0.95em; color: #555;">
-      Grip strength is a strong predictor of longevity. ${randomFact}
+  <!-- Health Insight Card -->
+  <div style="margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #d4edda, #c3e6cb); border-radius: 8px; border-left: 4px solid #28a745;">
+    <h3 style="margin: 0 0 12px 0; font-size: 1.2em; color: #155724; font-weight: 700;">Health Insight</h3>
+    <p style="margin: 0 0 10px 0; font-size: 1.05em; line-height: 1.5; color: #155724;">
+      Grip strength is one of the strongest predictors of longevity.
     </p>
+    <div style="background: rgba(40, 167, 69, 0.1); padding: 12px; border-radius: 6px;">
+      <p style="margin: 0; font-size: 0.95em; line-height: 1.5; color: #155724; font-style: italic;">
+        ${randomFact}
+      </p>
+    </div>
   </div>
 
-  <!-- Review Process -->
-  <div style="margin: 20px 0; padding: 15px; border: 1px solid #e9ecef; border-radius: 6px;">
-    <p style="margin: 0 0 8px 0; font-size: 1em; font-weight: 600;">Review Process</p>
-    <p style="margin: 0; font-size: 0.95em; color: #555;">
-      We manually review every submission. Your ranking will appear on worlddeadhang.com within 24-48 hours.
+  <!-- Review Process Card -->
+  <div style="margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #fff3cd, #ffeaa7); border-radius: 8px; border-left: 4px solid #ffc107;">
+    <h3 style="margin: 0 0 12px 0; font-size: 1.2em; color: #856404; font-weight: 700;">Review Process</h3>
+    <p style="margin: 0 0 10px 0; font-size: 1.05em; line-height: 1.5; color: #856404;">
+      We maintain competitive integrity through manual verification.
     </p>
+    <div style="background: rgba(255, 193, 7, 0.1); padding: 12px; border-radius: 6px;">
+      <p style="margin: 0; font-size: 0.95em; line-height: 1.5; color: #856404;">
+        Your submission is in our review queue. Expect your official ranking to appear on <a href="https://worlddeadhang.com" style="color: #856404; font-weight: 600;">worlddeadhang.com</a> within <strong>24-48 hours</strong>.
+      </p>
+    </div>
   </div>
 
   <!-- Footer -->
-  <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
-    <p style="margin: 0 0 8px 0; font-size: 0.95em;">
-      <strong>Stay strong,</strong><br>
-      <span style="color: #C5A065;">Milo</span><br>
-      <span style="font-size: 0.85em; color: #666;">World Dead Hang Championship</span>
-    </p>
-    <p style="margin: 15px 0 0 0; font-size: 0.8em; color: #999;">
-      Automated message. Do not reply.<br>
-      Questions? Visit <a href="https://worlddeadhang.com" style="color: #C5A065;">worlddeadhang.com</a>
-    </p>
+  <div style="margin-top: 40px; padding-top: 25px; border-top: 2px solid #e9ecef; text-align: center;">
+    <div style="margin-bottom: 15px;">
+      <div style="margin-bottom: 10px;">
+        <img src="https://worlddeadhang.com/media/new_wdhc_logo.jpg" alt="WDHC Logo" style="max-width: 60px; height: auto; margin: 0 auto;">
+      </div>
+      <p style="margin: 0 0 8px 0; font-size: 1.1em; color: #333; font-weight: 700;">
+        Stay strong,
+      </p>
+      <p style="margin: 0 0 15px 0; font-size: 1em; color: #666;">
+        <span style="color: #C5A065; font-weight: 600;">Milo</span><br>
+        <span style="font-size: 0.9em;">Founder, World Dead Hang Championship</span>
+      </p>
+    </div>
+    
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-top: 20px;">
+      <p style="margin: 0; font-size: 0.8em; color: #999; line-height: 1.4;">
+        This is an automated confirmation message.<br>
+        Please do not reply directly to this email.<br>
+        Questions? Visit <a href="https://worlddeadhang.com" style="color: #C5A065; font-weight: 600;">worlddeadhang.com</a>
+      </p>
+    </div>
   </div>
-</div>`;
+</div>
+</body>
+</html>`;
 
    try {
      // Send email

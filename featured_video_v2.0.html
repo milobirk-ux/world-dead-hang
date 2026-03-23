@@ -1,0 +1,122 @@
+step-number">3</div>
+                    <div class="step-title">Last 10 Seconds</div>
+                    <div class="step-duration">2:16.50 - 2:26.50</div>
+                    <div class="step-description">
+                        Normal speed. Finish and celebration to show completion.
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: var(--text); font-size: 1.1rem; max-width: 800px; margin: 0 auto; line-height: 1.7;">
+                    <strong>Why this formula works:</strong> Viewers get to see the full attempt without sitting through 
+                    4+ minutes of static hanging. The speed change is clearly indicated and maintains the integrity 
+                    of the performance while respecting viewers' time.
+                </p>
+            </div>
+        </div>
+
+        <!-- Version History -->
+        <div class="version-history">
+            <h2>VERSION HISTORY</h2>
+            <div class="version-list">
+                <div class="version-item current">
+                    <div class="version-info">
+                        <div class="version-name">Milo Birk - Vertical Dead Hang - v2.0</div>
+                        <div class="version-desc">Normal→Fast→Normal formula applied (10s normal → 253s at 2x → 10s normal)</div>
+                    </div>
+                    <div class="version-date">March 21, 2026</div>
+                </div>
+                
+                <div class="version-item">
+                    <div class="version-info">
+                        <div class="version-name">Milo Birk - Vertical Dead Hang - v0.1</div>
+                        <div class="version-desc">Original unedited footage (4:33.00 duration)</div>
+                    </div>
+                    <div class="version-date">March 12, 2026</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: var(--text-dim); font-size: 0.9rem;">
+                    Future versions may include: Slow-motion analysis, multiple camera angles, 
+                    grip strength metrics overlay, and comparison with other athletes.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <a href="index.html">
+                    <img src="media/new_wdhc_logo.jpg" alt="WDHC Logo">
+                </a>
+            </div>
+            
+            <div class="footer-links">
+                <a href="index.html">Leaderboard</a>
+                <a href="submit.html">Submit</a>
+                <a href="rules.html">Rules</a>
+                <a href="test.html">Test Your Grip</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 World Dead Hang Championship. All rights reserved.</p>
+                <p>Featured Video: Milo Birk - Vertical Dead Hang - v2.0 • 1-Minute Maximum Formula</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Update video source with actual Google Drive file ID
+        function updateVideoSource(fileId) {
+            if (fileId) {
+                const video = document.getElementById('mainVideo');
+                const source = video.querySelector('source');
+                source.src = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                video.load();
+                
+                // Update download links
+                document.querySelectorAll('[href*="1xYlyMk_6_AtwPZrDnWZ8HjHAgyqcJIj7"]').forEach(link => {
+                    link.href = link.href.replace('1xYlyMk_6_AtwPZrDnWZ8HjHAgyqcJIj7', fileId);
+                });
+                
+                console.log('Video source updated with file ID:', fileId);
+            }
+        }
+        
+        // Replace with your actual Google Drive file ID after upload
+        // updateVideoSource('YOUR_ACTUAL_FILE_ID_HERE');
+        
+        // Video analytics
+        const video = document.getElementById('mainVideo');
+        if (video) {
+            video.addEventListener('play', () => {
+                console.log('Featured video v2.0 started playing');
+            });
+            
+            video.addEventListener('ended', () => {
+                console.log('Featured video v2.0 completed');
+            });
+        }
+        
+        // Mobile menu (if needed)
+        if (window.innerWidth <= 768) {
+            const nav = document.querySelector('nav');
+            const navLinks = document.querySelector('.nav-links');
+            const mobileBtn = document.createElement('button');
+            mobileBtn.className = 'mobile-menu-btn';
+            mobileBtn.innerHTML = '☰';
+            mobileBtn.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+            nav.appendChild(mobileBtn);
+        }
+    </script>
+</body>
+</html>
