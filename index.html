@@ -542,7 +542,7 @@
 
         .time { 
             font-family: 'Oswald', sans-serif; 
-            font-size: 2rem !important; 
+            font-size: 2rem; 
             color: var(--gold); 
             font-weight: 700; 
             letter-spacing: 0.3px; 
@@ -630,7 +630,7 @@
         .video-thumbnail {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
         
         .play-button {
@@ -857,37 +857,12 @@
             line-height: 1.5;
             max-width: 60ch;
         }
-        .details-btn {
-            background: transparent;
-            border: 1px solid #333;
-            color: #888;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .details-btn:hover {
-            background: var(--gold);
-            color: #000;
-            border-color: var(--gold);
-        }
+
 
         /* Sidebar - Top 10 Card */
         .sidebar-column {
-            position: sticky;
-            top: 100px;
-            max-height: calc(100vh - 120px);
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--border) transparent;
-        }
-        .sidebar-column::-webkit-scrollbar {
-            width: 4px;
-        }
-        .sidebar-column::-webkit-scrollbar-thumb {
-            background-color: var(--border);
-            border-radius: 4px;
+            /* Removed sticky positioning and independent scrolling */
+            /* Sidebar now scrolls naturally with main content */
         }
 
         .sidebar-card {
@@ -1024,6 +999,262 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 30px var(--gold-glow);
             filter: brightness(1.1);
+        }
+
+        /* Video Submissions Section */
+        .video-submissions-section {
+            margin-top: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .video-submissions-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .video-submissions-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-submission-item {
+            flex: 0 1 300px;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-submission-item video {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 4px;
+            object-fit: cover; /* Fill container while maintaining aspect ratio */
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Vertical video - optimized for portrait aspect ratio */
+        .video-submission-item.vertical-video {
+            width: 100%;
+            max-width: 300px;
+            height: 400px; /* Tall enough for vertical videos */
+            aspect-ratio: 9/16; /* Common vertical video aspect ratio */
+        }
+
+        .video-submission-item.vertical-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Fill the container while maintaining aspect ratio */
+            object-position: center top; /* Show more of the top area for hand struggle */
+        }
+
+        .video-submission-caption {
+            margin-top: 10px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-style: italic;
+
+        /* Video placeholder for Google Drive links */
+        .video-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border-color: var(--accent-red);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .video-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .video-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .video-size {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+        }
+
+        @media (max-width: 900px) {
+            .video-submissions-title {
+                font-size: 1.5rem;
+            }
+            
+            .video-submissions-grid {
+                gap: 20px;
+            }
+            
+            .video-submission-item.vertical-video {
+                width: 100%;
+                max-width: 300px; /* Same as desktop */
+                height: 400px; /* Maintain same height as desktop for consistency */
+            }
+            
+            .video-submission-item.vertical-video video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Fill the container while maintaining aspect ratio */
+                object-position: center top; /* Show more of the top area for hand struggle */
+            }
+        }
+
+        /* Content Tabs */
+        .content-tabs {
+            display: none; /* Hidden by default */
+            margin-top: 40px;
+            padding: 40px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .content-tabs::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+        }
+
+        .content-tabs.active {
+            display: block;
+        }
+
+        .content-tabs h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content-tabs h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 25px 0 15px;
+            text-transform: uppercase;
+        }
+
+        .content-tabs p {
+            color: #ccc;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .content-tabs ul {
+            color: #ccc;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .content-tabs li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .content-tabs strong {
+            color: #fff;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 25px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .benefit-card h4 {
+            color: var(--gold);
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .about-highlight {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        @media (max-width: 900px) {
+            .content-tabs {
+                padding: 30px 20px;
+            }
+            
+            .content-tabs h2 {
+                font-size: 2rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         footer {
@@ -1311,6 +1542,53 @@
         @media (max-width: 600px) {
             /* Remove conflicting mobile styles - use only the 900px media query */
         }
+
+        /* Section Animation Styles */
+        @keyframes subtlePulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(50, 150, 220, 0.2), 0 4px 15px rgba(50, 200, 255, 0.1); }
+            50% { box-shadow: 0 10px 35px rgba(50, 150, 220, 0.3), 0 4px 20px rgba(50, 200, 255, 0.15); }
+        }
+
+        @keyframes subtleShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: rgba(220, 50, 50, 0.4); border-left-color: rgba(220, 50, 50, 0.7); }
+            50% { border-color: rgba(255, 100, 100, 0.5); border-left-color: rgba(255, 100, 100, 0.8); }
+        }
+
+        @keyframes topBorderFlow {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Apply animations to sections */
+        .struggle-description {
+            animation: subtleShake 3s ease-in-out infinite, borderGlow 4s ease-in-out infinite;
+        }
+
+        .struggle-description > div:first-child {
+            animation: topBorderFlow 3s linear infinite;
+            background-size: 200% 100%;
+        }
+
+        .motivational-text {
+            animation: subtlePulse 4s ease-in-out infinite;
+        }
+
+        /* Hover effects for interactivity */
+        .struggle-description:hover {
+            transform: translateY(-2px);
+            transition: transform 0.3s ease;
+        }
+
+        .motivational-text:hover {
+            transform: translateY(-2px) scale(1.01);
+            transition: transform 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -1321,6 +1599,8 @@
             <a href="index.html">Leaderboard</a>
             <a href="rules.html">Rulebook</a>
             <a href="submit.html">Submit</a>
+            <a href="benefits.html">Benefits</a>
+            <a href="about.html">About</a>
         </div>
     </nav>
 
@@ -1341,6 +1621,10 @@
         </h1>
         <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
     </header>
+      
+      
+
+
 
     <div class="container">
         
@@ -1365,6 +1649,8 @@
                         <div class="division-tabs" style="transform: scale(0.85); transform-origin: right center;">
                             <button class="sort-btn active" onclick="toggleSort('recent')" id="btn-sort-recent">Most Recent</button>
                             <button class="sort-btn" onclick="toggleSort('time')" id="btn-sort-time">Longest Time</button>
+                            <button class="sort-btn" onclick="toggleSort('age')" id="btn-sort-age">By Age</button>
+                            <button class="sort-btn" onclick="toggleSort('prs')" id="btn-sort-prs">PR's</button>
                         </div>
                     </div>
                     
@@ -1488,6 +1774,91 @@
 
         </div>
 
+        <!-- Benefits Tab Content -->
+        <div id="benefits-tab" class="content-tabs">
+            <h2>Benefits of Dead Hang Training</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h4>Shoulder Health & Mobility</h4>
+                    <p>Dead hangs naturally decompress the spine and shoulder joints, relieving pressure and improving range of motion. Regular hanging can help prevent and alleviate shoulder impingement, rotator cuff issues, and general stiffness.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Grip Strength Development</h4>
+                    <p>Your grip is the foundation of all upper body strength. Dead hangs build crushing grip, supporting strength, and endurance - essential for pull-ups, climbing, and everyday activities.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Spinal Decompression</h4>
+                    <p>Gravity compresses your spine daily. Hanging counteracts this by creating space between vertebrae, reducing back pain, improving posture, and increasing height temporarily.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Mental Fortitude</h4>
+                    <p>Hanging until failure teaches mental resilience. The struggle against gravity builds focus, determination, and the ability to push through discomfort - skills that translate to all areas of life.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Forearm & Arm Development</h4>
+                    <p>Dead hangs work the entire arm chain: forearms, biceps, triceps, and shoulders. This functional strength supports better performance in sports, lifting, and daily tasks.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4>Community & Competition</h4>
+                    <p>The WDHC community provides motivation, accountability, and friendly competition. Seeing others push their limits inspires you to reach new personal bests.</p>
+                </div>
+            </div>
+            
+            <h3>Getting Started</h3>
+            <p>Begin with <strong>10-30 second hangs</strong> and gradually increase time as your grip strengthens. Focus on proper form: relaxed shoulders, engaged core, and full extension. Consistency matters more than duration - regular short hangs yield better results than occasional long sessions.</p>
+            
+            <div class="about-highlight">
+                <p><strong>Pro Tip:</strong> Incorporate dead hangs into your warm-up routine to activate shoulder stabilizers and improve overhead mobility before workouts.</p>
+            </div>
+        </div>
+
+        <!-- About Us Tab Content -->
+        <div id="about-tab" class="content-tabs">
+            <h2>About World Dead Hang Championship</h2>
+            
+            <p>The <strong>World Dead Hang Championship (WDHC)</strong> was founded on March 1st, 2026 with a simple mission: to create the world's first sanctioned platform for dead hang performance and competition.</p>
+            
+            <h3>Our Vision</h3>
+            <p>We believe that grip strength and hanging endurance are fundamental markers of physical capability and mental resilience. WDHC exists to:</p>
+            
+            <ul>
+                <li><strong>Standardize</strong> dead hang performance measurement worldwide</li>
+                <li><strong>Celebrate</strong> the simple yet profound challenge of hanging from a bar</li>
+                <li><strong>Build community</strong> around functional strength and mental fortitude</li>
+                <li><strong>Document</strong> human capability through verified performance data</li>
+                <li><strong>Inspire</strong> people to develop grip strength and shoulder health</li>
+            </ul>
+            
+            <h3>The Competition</h3>
+            <p>WDHC follows strict verification standards to ensure fair competition:</p>
+            
+            <ul>
+                <li><strong>Video verification</strong> required for all submissions</li>
+                <li><strong>Standardized timing</strong> from full hang to release</li>
+                <li><strong>Multiple divisions</strong> (Open Men, Open Women, Age Groups)</li>
+                <li><strong>Transparent ranking</strong> on our public leaderboard</li>
+                <li><strong>Gold verification</strong> for elite performers</li>
+            </ul>
+            
+            <h3>Why Dead Hangs?</h3>
+            <p>Dead hangs represent the purest test of grip endurance. Unlike weighted exercises that can be "cheated" with momentum or technique, a dead hang is binary: you're either hanging or you're not. This simplicity makes it the perfect equalizer and the ultimate test of raw, sustainable grip strength.</p>
+            
+            <div class="about-highlight">
+                <p><strong>Founder's Note:</strong> "The dead hang doesn't care about your gym membership, your equipment budget, or your genetics. It only asks one question: Can you hold on?"</p>
+            </div>
+            
+            <h3>Join the Movement</h3>
+            <p>Whether you're a seasoned athlete or a complete beginner, WDHC welcomes you. Record your hang, submit your video, and claim your spot on the global leaderboard. Your time becomes part of the documented history of human grip strength.</p>
+            
+            <p><strong>Ready to hang?</strong> <a href="submit.html" style="color: var(--gold); text-decoration: underline;">Submit your performance</a> and join athletes worldwide pushing the limits of human endurance.</p>
+        </div>
+
         <div class="cta-section">
             <div class="cta-text">
                 <h3>If your life was on the line, <br>Could you hang on?</h3>
@@ -1496,12 +1867,250 @@
             <a href="submit.html" class="cta-btn">Submit Your Hang</a>
         </div>
 
+        <!-- Video Submissions Section -->
+        <div class="video-submissions-section">
+            <h2 class="video-submissions-title">Video Submissions</h2>
+            <div class="video-submissions-grid">
+                <!-- Current Featured Video - Last 20 Seconds Loop -->
+                <div class="video-submission-item vertical-video">
+                    <video controls autoplay muted playsinline loop>
+                        <source src="media/milo_20s_struggle.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                    <div class="video-submission-caption">Milo - Final 20s</div>
+                </div>
+                
+                <!-- Video Submission 2: Athlete 1 - Markie -->
+                <div class="video-submission-item vertical-video">
+                    <video controls autoplay muted playsinline loop>
+                        <source src="media/markie_20s.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                    <div class="video-submission-caption">Markie - Final 20s</div>
+                </div>
+                
+                <!-- Video Submission 3: Athlete 2 - Meg -->
+                <div class="video-submission-item vertical-video">
+                    <video controls autoplay muted playsinline loop>
+                        <source src="media/meg_20s_small.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                    <div class="video-submission-caption">Meg - Final 20s</div>
+                </div>
+                
+                <script>
+                    // Ensure video starts at last 20 seconds and loops ONLY last 20 seconds
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const video = document.getElementById('featuredVideo');
+                        let startTime = 0;
+                        let endTime = 0;
+                        
+                        // Wait for video metadata to load so we know the duration
+                        video.addEventListener('loadedmetadata', function() {
+                            const totalDuration = video.duration;
+                            
+                            if (totalDuration > 20) {
+                                // Calculate start time for last 20 seconds
+                                startTime = totalDuration - 20;
+                                endTime = totalDuration;
+                                
+                                // Set video to start at last 20 seconds
+                                video.currentTime = startTime;
+                                
+                                console.log('Video configured: Looping last 20 seconds (', startTime.toFixed(1), '-', endTime.toFixed(1), ') of', totalDuration.toFixed(1), 'second video');
+                            } else {
+                                console.log('Video too short for 20-second loop');
+                            }
+                            
+                            // Ensure autoplay works
+                            video.play().catch(function(error) {
+                                console.log('Autoplay prevented:', error);
+                            });
+                        });
+                        
+                        // Custom loop for last 20 seconds only
+                        video.addEventListener('timeupdate', function() {
+                            if (startTime > 0 && endTime > 0) {
+                                // If video reaches the end OR goes beyond our 20-second window
+                                if (video.currentTime >= endTime || video.currentTime < startTime) {
+                                    video.currentTime = startTime; // Jump back to last 20 seconds
+                                }
+                            }
+                        });
+                        
+                        // If metadata already loaded (cached video)
+                        if (video.readyState >= 1) {
+                            video.dispatchEvent(new Event('loadedmetadata'));
+                        }
+                    });
+                </script>
+                
+                <!-- Placeholder for Future Videos -->
+                <!-- More videos will appear here as submissions come in -->
+            </div>
+        </div>
+
+        <!-- Clean Section: The Final 20 Seconds -->
+        <div style="
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: #0a0a0a;
+            border-radius: 4px;
+            border: 1px solid #222;
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            color: #fff;
+        ">
+            <h3 style="
+                font-size: 1.8rem;
+                font-weight: 600;
+                color: #fff;
+                margin: 0 0 20px 0;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            ">
+                The Final 20 Seconds
+            </h3>
+            
+            <p style="
+                font-size: 1.1rem;
+                line-height: 1.7;
+                margin-bottom: 0;
+                color: #ccc;
+                font-weight: 400;
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+            ">
+                The final 20 seconds separate contenders from champions. This is where mental fortitude overrides physical fatigue—where true endurance is proven. Elite athletes push through the burn when every muscle screams to let go. These moments define the competition.
+            </p>
+            
+            <div style="
+                margin-top: 25px;
+                padding-top: 20px;
+                border-top: 1px solid #333;
+                font-size: 0.9rem;
+                color: #888;
+                font-weight: 400;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            ">
+                The ultimate test of willpower
+            </div>
+        </div>
+
+        <div style="
+            margin-top: 40px;
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            color: #cc0000;
+            font-weight: 300;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        ">
+            — Your journey starts now —
+        </div>
     </div>
 
-    <footer>
-        <img src="media/new_wdhc_logo.jpg" alt="World Dead Hang Championship Footer Logo" class="footer-logo">
-        <div style="color: #444; font-family: 'Roboto Mono', monospace; font-size: 0.8rem;">© 2026 World Dead Hang Championship</div>
-    </footer>
+    </div>
+
+    
+      
+      <footer style="
+          padding: 40px 20px 60px;
+          text-align: center;
+          background: #0a0a0a;
+          border-top: 1px solid #222;
+          margin-top: 20px; /* Reduced from auto to bring it closer to CTA */
+      ">
+          <!-- Logo Only (Smaller) -->
+          <div style="
+              max-width: 1200px;
+              margin: 0 auto 40px;
+          ">
+              <img src="media/new_wdhc_logo.jpg" 
+                   alt="WDHC Logo" 
+                   style="
+                       width: 100%;
+                       max-width: 150px; /* Smaller footer logo */
+                       height: auto;
+                       object-fit: contain;
+                       display: block;
+                       margin: 0 auto;
+                       opacity: 0.6;
+                   ">
+          </div>
+          
+          <!-- Footer links and copyright -->
+          <div style="
+              color: #444; 
+              font-family: 'Roboto Mono', monospace; 
+              font-size: 0.8rem;
+              margin-top: 30px;
+              padding-top: 30px;
+              border-top: 1px solid #333;
+          ">
+              <div style="margin-bottom: 15px;">
+                  <a href="index.html" style="color: #888; text-decoration: none; margin: 0 15px;">Home</a>
+                  <a href="leaderboard-full.html" style="color: #888; text-decoration: none; margin: 0 15px;">Full Leaderboard</a>
+                  <a href="submit.html" style="color: #888; text-decoration: none; margin: 0 15px;">Submit</a>
+                  <a href="rules.html" style="color: #888; text-decoration: none; margin: 0 15px;">Rules</a>
+              </div>
+              
+              <!-- Second line: Instagram logo + Email -->
+              <div style="margin-bottom: 15px;">
+                  <a href="https://www.instagram.com/worlddeadhang?igsh=MXI0dHR3Y2R1dXAwNQ==" target="_blank" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0;">
+                      <!-- Instagram SVG Logo -->
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="#888"/>
+                      </svg>
+                  </a>
+                  <span style="color: #888; margin: 0 15px;">|</span>
+                  <a href="mailto:support@worlddeadhang.com" style="color: #888; text-decoration: none; margin: 0 15px;">
+                      support@worlddeadhang.com
+                  </a>
+              </div>
+              <div>© 2026 World Dead Hang Championship. All rights reserved.</div>
+          </div>
+      </footer>
+      
+      <script>
+      // Seek to last 21 seconds when video loads
+      document.addEventListener('DOMContentLoaded', function() {
+          var video = document.getElementById('fullVideo');
+          if (video) {
+              video.addEventListener('loadedmetadata', function() {
+                  // Get video duration and seek to last 21 seconds
+                  var duration = video.duration;
+                  if (duration > 21) {
+                      // Seek to 21 seconds before end to ensure we see the drop
+                      video.currentTime = duration - 21;
+                  }
+                  // Start playing from that point
+                  video.play().catch(function(e) {
+                      console.log('Autoplay failed:', e.message);
+                  });
+              });
+              
+              // Loop the last 21 seconds (to see the full drop)
+              video.addEventListener('timeupdate', function() {
+                  var duration = video.duration;
+                  if (duration > 21) {
+                      // When video reaches the actual end, go back to last 21 seconds
+                      if (video.currentTime >= duration - 0.1) {
+                          video.currentTime = duration - 21;
+                      }
+                  }
+              });
+          }
+      });
+      </script>
+
+
+
 
 <script>
     // Data
@@ -1971,8 +2580,14 @@
         // Now sort based on user selection
         if (currentSort === 'time') {
             // Already sorted by time above
-        } else {
-            // Sort by recent
+        } else if (currentSort === 'recent') {
+            // Sort by recent (newest first) - DEFAULT
+            filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        } else if (currentSort === 'age') {
+            // Sort by recent (newest first) - SAME AS DEFAULT
+            filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        } else if (currentSort === 'prs') {
+            // Sort by recent (newest first) - SAME AS DEFAULT
             filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
         }
 
@@ -1991,9 +2606,9 @@
         } else {
             header.innerHTML = `
                 <div>Rank</div>
-                <div>Tier</div>
+                <div style="text-align: left; padding-left: 10px;">Tier</div>
                 <div>Athlete</div>
-                <div>Background</div>
+                <div style="text-align: center;">Background</div>
                 <div style="text-align: center;">Location</div>
                 <div style="text-align: center;">Time</div>
                 <div style="text-align: center;">Watch</div>
@@ -2080,6 +2695,9 @@
             const labelStyle = 'font-size: 0.7rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;';
             const valStyle = 'font-size: 0.9rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
             
+            // Calculate age
+            const age = calculateAge(athlete.dob);
+            
             if (gripAge !== null) {
                 if (gripAge.isYounger) {
                     detailsPanel.innerHTML = `
@@ -2111,6 +2729,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div><span style="${labelStyle}">Age:</span> <span style="${valStyle}">${age} years</span></div>
                             <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
                                 <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
                             </div>
@@ -2142,10 +2761,7 @@
         return age;
     }
 
-    function toggleDetails(button) {
-        const wrapper = button.closest('.lb-row-wrapper');
-        wrapper.classList.toggle('details-visible');
-    }
+
     
     function renderSidebar() {
         const sidebar = document.getElementById('top-10-list');
@@ -2234,17 +2850,45 @@
         window.renderLeaderboard(); // Use the overridden version
     }
     
+    // Weight class calculation
+    function getWeightClass(weight, category) {
+        const isMale = category.includes('Men') || category.includes('Male');
+        const isFemale = category.includes('Women') || category.includes('Female');
+        
+        if (isMale) {
+            if (weight < 160) return 'Lightweight';
+            if (weight <= 224) return 'Middleweight';
+            return 'Heavyweight';
+        } else if (isFemale) {
+            if (weight < 130) return 'Lightweight';
+            if (weight <= 179) return 'Middleweight';
+            return 'Heavyweight';
+        }
+        return 'Open'; // Fallback
+    }
+    
+    // Age calculation
+    function calculateAge(dob) {
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+    
     function toggleSort(type) {
         currentSort = type;
         
-        document.getElementById('btn-sort-recent').classList.remove('active');
-        document.getElementById('btn-sort-time').classList.remove('active');
+        // Remove active from all sort buttons
+        document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
         
-        if (type === 'recent') {
-            document.getElementById('btn-sort-recent').classList.add('active');
-        } else {
-            document.getElementById('btn-sort-time').classList.add('active');
-        }
+        // Add active to clicked button
+        const btnId = `btn-sort-${type}`;
+        const btn = document.getElementById(btnId);
+        if (btn) btn.classList.add('active');
         
         window.renderLeaderboard(); // Use the overridden version
     }
@@ -2404,9 +3048,19 @@
         // Now sort based on user selection
         if (currentSort === 'time') {
             // Already sorted by time above
-        } else {
+        } else if (currentSort === 'recent') {
             // Sort by recent
             dataToRender.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        } else if (currentSort === 'age') {
+            // Sort by age (youngest first)
+            dataToRender.sort((a, b) => {
+                const ageA = calculateAge(a.dob);
+                const ageB = calculateAge(b.dob);
+                return ageA - ageB;
+            });
+        } else if (currentSort === 'prs') {
+            // Sort by PR count (highest first)
+            dataToRender.sort((a, b) => (b.prCount || 0) - (a.prCount || 0));
         }
         
         // Call the original rendering logic with our filtered data
@@ -2433,9 +3087,9 @@
         } else {
             header.innerHTML = `
                 <div>Rank</div>
-                <div>Tier</div>
+                <div style="text-align: left; padding-left: 10px;">Tier</div>
                 <div>Athlete</div>
-                <div>Background</div>
+                <div style="text-align: center;">Background</div>
                 <div style="text-align: center;">Location</div>
                 <div style="text-align: center;">Time</div>
                 <div style="text-align: center;">Watch</div>
@@ -2453,6 +3107,8 @@
             const countryFlag = getCountryFlag(athlete.location);
             const gripAge = calculateGripAge(athlete);
             const videoPreview = getVideoPreview(athlete.video);
+            const isFemale = athlete.category && (athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female'));
+            const displayLocation = athlete.location ? athlete.location.split('/')[0].trim() : '';
             
             // Create row wrapper
             const wrapper = document.createElement('div');
@@ -2468,9 +3124,7 @@
             
             // Mobile layout
             if (window.innerWidth <= 900) {
-                // Parse display location (just city/state, not full location)
-                const displayLocation = athlete.location ? athlete.location.split('/')[0].trim() : '';
-                const isFemale = athlete.category && (athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female'));
+
                 
                 row.innerHTML = `
                     <div class="rank">${athlete.trueRank < 10 ? '0' + athlete.trueRank : athlete.trueRank}</div>
@@ -2527,6 +3181,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
                             <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div><span style="${labelStyle}">Age:</span> <span style="${valStyle}">${age} years</span></div>
                             <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
                                 <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
                             </div>
@@ -2563,44 +3218,69 @@
                     <div class="name-cell">
                         <div class="name-wrapper">
                             <div class="name">${athlete.name}</div>
-                            ${athlete.isVerified ? '<span class="verified-badge">✓</span>' : ''}
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 4px;">
+                                ${athlete.isVerified ? '<span class="verified-badge" title="Pro-Level Verification">✓</span>' : ''}
+                                <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                            </div>
                         </div>
-                        <div class="location" style="font-size: 0.9rem; color: #888; font-weight: 500; text-transform: none;">
-                            ${location.city}, ${location.state} ${countryFlag}
-                        </div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
                     </div>
-                    <div>
-                        <div style="font-size: 0.9rem; color: #ccc;">${athlete.occupation || 'Athlete'}</div>
-                        <div style="font-size: 0.8rem; color: #666;">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : ''}</div>
+                    <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation || 'Athlete'}</div>
+                    <div style="color: #bbb; font-size: 0.9rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <span>${displayLocation}</span>
+                        <span class="flag">${countryFlag}</span>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 0.9rem; color: #ccc;">${location.city}, ${location.state}</div>
-                        <div style="font-size: 0.8rem; color: #666;">${location.country}</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="desktop-time">${athlete.currentPR}</div>
-                        ${athlete.prCount ? `<div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>` : ''}
-                    </div>
+                    <div class="time desktop-time" style="justify-self: center; padding-left: 8px;">${athlete.currentPR}</div>
                     <div style="text-align: center;">${videoPreview}</div>
                 `;
                 
-                // Details button for desktop
-                const detailsBtn = document.createElement('button');
-                detailsBtn.className = 'details-btn';
-                detailsBtn.innerHTML = 'Details';
-                detailsBtn.onclick = function(e) {
-                    toggleDetails(this);
-                    e.stopPropagation();
-                };
+                // Set details panel content for desktop (same as mobile but with different styling if needed)
+                const labelStyle = 'font-size: 0.7rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;';
+                const valStyle = 'font-size: 0.9rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
                 
-                row.appendChild(detailsBtn);
+                if (gripAge !== null) {
+                    if (gripAge.isYounger) {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}">${gripAge.age}</span></div>
+                                <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}; font-size: 0.9rem;">Baseline Established</span></div>
+                                <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    detailsPanel.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div><span style="${labelStyle}">Age:</span> <span style="${valStyle}">${age} years</span></div>
+                            <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                            </div>
+                        </div>
+                    `;
+                }
             }
             
             // Append row and details to the wrapper, then wrapper to the list
             wrapper.appendChild(row);
-            if (window.innerWidth <= 900) {
-                wrapper.appendChild(detailsPanel);
-            }
+            wrapper.appendChild(detailsPanel); // Always append details panel for hover functionality
             list.appendChild(wrapper);
         });
         
@@ -2622,6 +3302,52 @@
     });
 </script>
 
+<script>
+    // Tab Switching Functionality
+    function showTab(tabName) {
+        // Hide all content tabs
+        document.querySelectorAll('.content-tabs').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Show selected tab
+        const selectedTab = document.getElementById(tabName + '-tab');
+        if (selectedTab) {
+            selectedTab.classList.add('active');
+            
+            // Scroll to tab smoothly
+            selectedTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Update URL hash without scrolling (we already scrolled)
+            history.pushState(null, null, '#' + tabName);
+        }
+        
+        return false; // Prevent default anchor behavior
+    }
+    
+    // Check URL hash on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const hash = window.location.hash.substring(1);
+        if (hash === 'benefits' || hash === 'about') {
+            showTab(hash);
+        }
+    });
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function() {
+        const hash = window.location.hash.substring(1);
+        if (hash === 'benefits' || hash === 'about') {
+            showTab(hash);
+        } else {
+            // Hide all tabs if no hash or different hash
+            document.querySelectorAll('.content-tabs').forEach(tab => {
+                tab.classList.remove('active');
+            });
+        }
+    });
+</script>
+
+      
 </body>
 </html>
 
