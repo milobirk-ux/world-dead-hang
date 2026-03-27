@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Flyer Footer Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        iframe {
+            width: 100%;
+            height: 1000px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .instructions {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>WDHC Flyer Footer Fix Test</h1>
+        
+        <div class="instructions">
+            <h3>Testing Instructions:</h3>
+            <ol>
+                <li>Scroll to the bottom of the flyer below</li>
+                <li>Check if the entire footer is visible (CTA button, website, social links)</li>
+                <li>Check if QR codes are fully visible and not cut off</li>
+                <li>Resize your browser window to test mobile responsiveness</li>
+                <li>Use browser's Print Preview (Ctrl+P) to check print layout</li>
+            </ol>
+        </div>
+        
+        <div class="status success">
+            ✓ Fixed: Changed fixed height to min-height, removed overflow:hidden, moved QR codes to normal flow
+        </div>
+        
+        <iframe src="flyer_climbing_gym_optimized.html"></iframe>
+        
+        <div style="margin-top: 20px;">
+            <h3>Changes Made:</h3>
+            <ul>
+                <li><strong>.flyer container:</strong> Changed <code>height: 918px</code> to <code>min-height: 918px</code></li>
+                <li><strong>.flyer container:</strong> Removed <code>overflow: hidden</code></li>
+                <li><strong>.qr-container:</strong> Changed from absolute positioning to normal flow</li>
+                <li><strong>.qr-container:</strong> Changed <code>position: absolute; bottom: 36px; right: 36px;</code> to <code>margin-top: 30px; align-items: center;</code></li>
+                <li><strong>.content:</strong> Added <code>margin-bottom: 20px</code> for spacing</li>
+                <li><strong>.footer:</strong> Reduced <code>margin-top</code> from 35px to 20px</li>
+                <li><strong>Print styles:</strong> Updated <code>height</code> to <code>min-height</code></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

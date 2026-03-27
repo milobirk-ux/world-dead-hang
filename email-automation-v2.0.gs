@@ -17,8 +17,18 @@ function sendWelcomeEmailOnNewRow(e) {
  const dobColIndex = 7; // Column H (Date of Birth)
  const genderColIndex = 8; // Column I (Gender)
  const weightColIndex = 9; // Column J (Bodyweight lbs)
- const heightColIndex = headers.findIndex(h => h === 'Height (inches)');
- const gripTrainingColIndex = headers.findIndex(h => h === 'Grip Training Experience');
+ 
+ // Look for height column with multiple possible names (Tally might use different naming)
+ let heightColIndex = headers.findIndex(h => h === 'Height (inches)');
+ if (heightColIndex === -1) heightColIndex = headers.findIndex(h => h === 'Height');
+ if (heightColIndex === -1) heightColIndex = headers.findIndex(h => h.includes('Height'));
+ 
+ // Look for grip training column with multiple possible names
+ let gripTrainingColIndex = headers.findIndex(h => h === 'Grip Training Experience');
+ if (gripTrainingColIndex === -1) gripTrainingColIndex = headers.findIndex(h => h === 'Grip Training');
+ if (gripTrainingColIndex === -1) gripTrainingColIndex = headers.findIndex(h => h.includes('Grip') && h.includes('Training'));
+ if (gripTrainingColIndex === -1) gripTrainingColIndex = headers.findIndex(h => h.includes('Grip') && h.includes('Experience'));
+ 
  const approvedColIndex = headers.findIndex(h => h === 'Approved');
  const prBadgeColIndex = headers.findIndex(h => h === 'PR Badge');
  
@@ -64,8 +74,7 @@ function sendWelcomeEmailOnNewRow(e) {
      (heightColIndex >= headers.length ? 1 : 0);
    gripTrainingColIndex = newGripTrainingCol;
    activeSheet.getRange(1, gripTrainingColIndex + 1).setValue('Grip Training Experience');
-   // Add sample data validation or instructions
-   activeSheet.getRange(2, gripTrainingColIndex + 1).setValue('Options: None, Beginner, Intermediate, Advanced');
+   // Don't add sample data to row 2 - it might interfere with actual submissions
  }
 
  // ========== FIXED TIME PARSING ==========

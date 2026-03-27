@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDHC QR Codes</title>
+    <style>
+        /* ===== PRINT OPTIMIZATION ===== */
+        :root {
+            --gold: #D4AF37;
+            --dark-bg: #050505;
+            --text: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #000;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* ===== FLYER CONTAINER ===== */
+        /* 5.5" x 8.5" with bleed margins for professional printing */
+        .flyer {
+            width: 594px; /* 5.5" at 108 DPI (print standard) + 0.25" bleed */
+            min-height: 918px; /* 8.5" at 108 DPI + 0.25" bleed */
+            background: #000;
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 
+                        0 0 30px rgba(212, 175, 55, 0.25);
+            position: relative;
+            padding: 40px 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ===== QR CODES ===== */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+        }
+        
+        .qr-pair {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .qr-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 180px;
+        }
+        
+        .qr-code-wrapper {
+            width: 160px;
+            height: 160px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--gold);
+        }
+        
+        .qr-code-wrapper img {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+        }
+        
+        .qr-label {
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin-top: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .qr-instruction {
+            font-size: 1rem;
+            color: #888;
+            margin-top: 10px;
+            max-width: 160px;
+            line-height: 1.4;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* ===== MOBILE RESPONSIVENESS ===== */
+        @media screen and (max-width: 650px) {
+            body {
+                padding: 10px;
+                background: #000;
+            }
+            
+            .flyer {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+                padding: 30px 20px;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+            }
+            
+            .qr-pair {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .qr-code-wrapper {
+                width: 140px;
+                height: 140px;
+                padding: 12px;
+            }
+            
+            .qr-code-wrapper img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .qr-label {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            .qr-code-wrapper {
+                width: 120px;
+                height: 120px;
+                padding: 10px;
+            }
+            
+            .qr-code-wrapper img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .qr-label {
+                font-size: 1rem;
+            }
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            @page {
+                size: 5.5in 8.5in;
+                margin: 0.125in;
+            }
+            
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .flyer {
+                width: 5.5in !important;
+                min-height: 8.5in !important;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0.5in 0.375in !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            
+            /* Ensure colors print correctly */
+            .qr-code-wrapper {
+                background: white !important;
+                border: 3px solid #000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .qr-label {
+                color: #000 !important;
+                font-weight: 900 !important;
+            }
+            
+            /* Remove shadows for cleaner print */
+            .qr-container {
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+        }
+
+        /* Import fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap');
+    </style>
+</head>
+<body>
+    <div class="flyer">
+        <!-- QR Codes - Side by Side -->
+        <div class="qr-container">
+            <div class="qr-pair">
+                <div class="qr-item">
+                    <div class="qr-code-wrapper">
+                        <img src="media/qr_leaderboard_transparent.png" alt="Scan QR code to view the live leaderboard">
+                    </div>
+                    <div class="qr-label">LEADERBOARD</div>
+                    <div class="qr-instruction">Scan to view live rankings</div>
+                </div>
+                
+                <div class="qr-item">
+                    <div class="qr-code-wrapper">
+                        <img src="media/qr_submit_transparent.png" alt="Scan QR code to submit your hang attempt">
+                    </div>
+                    <div class="qr-label">SUBMIT YOUR HANG</div>
+                    <div class="qr-instruction">Scan to upload your video</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - WDHC Athlete Portal</title>
+    <link rel="icon" type="image/png" href="assets/logo_final_transparent.jpg" sizes="any">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body class="auth-page">
+    <!-- Navigation -->
+    <nav class="navbar auth-navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <img src="assets/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+                <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
+            </a>
+            
+            <a href="/" class="nav-link">Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Auth Container -->
+    <main class="auth-container">
+        <div class="auth-card">
+            <!-- Logo -->
+            <div class="auth-logo">
+                <img src="assets/logo_final_transparent.jpg" alt="WDHC Logo" class="auth-logo-img">
+                <h1 class="auth-logo-text">WDHC Athlete Portal</h1>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="auth-tabs" id="authTabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="auth-form active" id="loginForm">
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Enter your email to receive a magic link</p>
+                
+                <form id="loginFormElement" class="auth-form-element">
+                    <div class="form-group">
+                        <label for="loginEmail" class="form-label">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="loginEmail" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="athlete@example.com" 
+                            required
+                            autocomplete="email"
+                        >
+                        <div class="form-error" id="loginEmailError"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block" id="loginSubmit">
+                        <span class="btn-text">Send Magic Link</span>
+                        <span class="btn-spinner" style="display: none;">
+                            <span class="spinner"></span>
+                        </span>
+                    </button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                
+                <div class="auth-alt-options">
+                    <p class="auth-alt-text">
+                        New to WDHC? 
+                        <a href="#" class="auth-switch" data-switch-to="register">Create an account</a>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="auth-form" id="registerForm">
+                <h2 class="auth-title">Join WDHC</h2>
+                <p class="auth-subtitle">Create your athlete account in seconds</p>
+                
+                <form id="registerFormElement" class="auth-form-element">
+                    <div class="form-group">
+                        <label for="registerName" class="form-label">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="registerName" 
+                            name="name" 
+                            class="form-input" 
+                            placeholder="John Smith" 
+                            required
+                            autocomplete="name"
+                        >
+                        <div class="form-error" id="registerNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail" class="form-label">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="registerEmail" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="athlete@example.com" 
+                            required
+                            autocomplete="email"
+                        >
+                        <div class="form-error" id="registerEmailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Country</label>
+                        <select id="registerCountry" name="country" class="form-input" required>
+                            <option value="">Select your country</option>
+                            <option value="US">United States</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="CA">Canada</option>
+                            <option value="AU">Australia</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="JP">Japan</option>
+                            <option value="BR">Brazil</option>
+                            <option value="IN">India</option>
+                        </select>
+                        <div class="form-error" id="registerCountryError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input 
+                                type="checkbox" 
+                                id="registerTerms" 
+                                name="terms" 
+                                class="form-check-input" 
+                                required
+                            >
+                            <label for="registerTerms" class="form-check-label">
+                                I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> 
+                                and <a href="/privacy.html" target="_blank">Privacy Policy</a>
+                            </label>
+                        </div>
+                        <div class="form-error" id="registerTermsError"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block" id="registerSubmit">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-spinner" style="display: none;">
+                            <span class="spinner"></span>
+                        </span>
+                    </button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                
+                <div class="auth-alt-options">
+                    <p class="auth-alt-text">
+                        Already have an account? 
+                        <a href="#" class="auth-switch" data-switch-to="login">Sign in</a>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Magic Link Sent -->
+            <div class="auth-form" id="magicLinkSent">
+                <div class="auth-success">
+                    <div class="success-icon">✉️</div>
+                    <h2 class="auth-title">Check Your Email</h2>
+                    <p class="auth-subtitle" id="magicLinkEmail"></p>
+                    
+                    <div class="success-message">
+                        <p>We've sent a magic link to your email address. Click the link to access your dashboard.</p>
+                        
+                        <div class="success-tips">
+                            <div class="tip">
+                                <span class="tip-icon">⏰</span>
+                                <span class="tip-text">Link expires in 24 hours</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-icon">📧</span>
+                                <span class="tip-text">Check your spam folder</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-icon">🔄</span>
+                                <span class="tip-text">Can't find it? <a href="#" id="resendLink">Resend</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-secondary btn-block" id="backToLogin">
+                        Back to Login
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Auth Benefits -->
+        <div class="auth-benefits">
+            <h3 class="benefits-title">Why Join WDHC?</h3>
+            
+            <div class="benefits-list">
+                <div class="benefit">
+                    <span class="benefit-icon">📊</span>
+                    <div class="benefit-content">
+                        <h4 class="benefit-title">Track Your Progress</h4>
+                        <p class="benefit-description">
+                            Log PRs, monitor improvements, and visualize your grip strength journey.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="benefit">
+                    <span class="benefit-icon">🏆</span>
+                    <div class="benefit-content">
+                        <h4 class="benefit-title">Compete Globally</h4>
+                        <p class="benefit-description">
+                            See how you rank against athletes worldwide on our live leaderboards.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="benefit">
+                    <span class="benefit-icon">💪</span>
+                    <div class="benefit-content">
+                        <h4 class="benefit-title">Training Tools</h4>
+                        <p class="benefit-description">
+                            Log workouts, track volume, and get personalized training insights.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="benefit">
+                    <span class="benefit-icon">👥</span>
+                    <div class="benefit-content">
+                        <h4 class="benefit-title">Join the Community</h4>
+                        <p class="benefit-description">
+                            Connect with grip athletes, share tips, and stay motivated together.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "WDHC transformed how I track my grip training. The analytics helped me add 45 seconds to my max hang in 3 months!"
+                </p>
+                <div class="testimonial-author">
+                    <span class="author-name">Alex Chen</span>
+                    <span class="author-rank">#2 Global Rank</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="auth-footer">
+        <div class="container">
+            <p class="footer-copyright">
+                © 2024 World Dead Hang Championship. All rights reserved.
+            </p>
+            <div class="footer-links">
+                <a href="/privacy.html">Privacy</a>
+                <a href="/terms.html">Terms</a>
+                <a href="/contact.html">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/auth.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const registerParam = urlParams.get('register');
+            
+            if (registerParam === 'true') {
+                switchToRegister();
+            }
+            
+            // Check for session token (magic link verification)
+            const sessionToken = urlParams.get('session');
+            if (sessionToken) {
+                localStorage.setItem('wdhc_session', sessionToken);
+                window.location.href = '/dashboard.html';
+            }
+            
+            // Tab switching
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    forms.forEach(form => form.classList.remove('active'));
+                    document.getElementById(`${tabName}Form`).classList.add('active');
+                });
+            });
+            
+            // Form switching
+            const switchLinks = document.querySelectorAll('.auth-switch');
+            switchLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetTab = this.getAttribute('data-switch-to');
+                    
+                    if (targetTab === 'register') {
+                        switchToRegister();
+                    } else {
+                        switchToLogin();
+                    }
+                });
+            });
+            
+            // Back to login button
+            const backToLoginBtn = document.getElementById('backToLogin');
+            if (backToLoginBtn) {
+                backToLoginBtn.addEventListener('click', function() {
+                    document.getElementById('magicLinkSent').classList.remove('active');
+                    document.getElementById('loginForm').classList.add('active');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    document.querySelector('[data-tab="login"]').classList.add('active');
+                });
+            }
+            
+            // Resend magic link
+            const resendLink = document.getElementById('resendLink');
+            if (resendLink) {
+                resendLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const email = this.getAttribute('data-email');
+                    if (email) {
+                        console.log('Resending magic link to:', email);
+                    }
+                });
+            }
+            
+            // Form submissions
+            const loginForm = document.getElementById('loginFormElement');
+            const registerForm = document.getElementById('registerFormElement');
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLoginSubmit);
+            }
+            
+            if (registerForm) {
+                registerForm.addEventListener('submit', handleRegisterSubmit);
+            }
+        });
+        
+        function switchToRegister() {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-tab="register"]').classList.add('active');
+            
+            forms.forEach(form => form.classList.remove('active'));
+            document.getElementById('registerForm').classList.add('active');
+        }
+        
+        function switchToLogin() {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-tab="login"]').classList.add('active');
+            
+            forms.forEach(form => form.classList.remove('active'));
+            document.getElementById('loginForm').classList.add('active');
+        }
+        
+        function showMagicLinkSent(email) {
+            const forms = document.querySelectorAll('.auth-form');
+            const emailElement = document.getElementById('magicLinkEmail');
+            const resendLink = document.getElementById('resendLink');
+            
+            forms.forEach(form => form.classList.remove('active'));
+            document.getElementById('magicLinkSent').classList.add('active');
+            
+            if (emailElement) {
+                emailElement.textContent = email;
+            }
+            
+            if (resendLink) {
+                resendLink.setAttribute('data-email', email);
+            }
+        }
+        
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const email = form.email.value.trim();
+            const submitBtn = document.getElementById('loginSubmit');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnSpinner = submitBtn.querySelector('.btn-spinner');
+            
+            clearErrors('login');
+            
+            if (!isValidEmail(email)) {
+                showError('loginEmail', 'Please enter a valid email address');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnSpinner.style.display = 'inline-block';
+            
+            try {
+                const response = await requestMagicLink(email);
+                
+                if (response.success) {
+                    showMagicLinkSent(email);
+                } else {
+                    showError('loginEmail', response.error || 'Failed to send magic link');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('loginEmail', 'An error occurred. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline-block';
+                btnSpinner.style.display = 'none';
+            }
+        }
+        
+        async function handleRegisterSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const name = form.name.value.trim();
+            const email = form.email.value.trim();
+            const country = form.country.value;
+            const terms = form.terms.checked;
+            
+            const submitBtn = document.getElementById('registerSubmit');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnSpinner = submitBtn.querySelector('.btn-spinner');
+            
+            clearErrors('register');
+            
+            let isValid = true;
+            
+            if (!name) {
+                showError('registerName', 'Please enter your name');
+                isValid = false;
+            }
+            
+            if (!isValidEmail(email)) {
+                showError('registerEmail', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            if (!country) {
+                showError('registerCountry', 'Please select your country');
+                isValid = false;
+            }
+            
+            if (!terms) {
+                showError('registerTerms', 'You must agree to the terms and privacy policy');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnSpinner.style.display = 'inline-block';
+            
+            try {
+                const response = await requestMagicLink(email, name);
+                
+                if (response.success) {
+                    showMagicLinkSent(email);
+                } else {
+                    showError('registerEmail', response.error || 'Failed to create account');
+                }
+            } catch (error) {
+                console.error('Register error:', error);
+                showError('registerEmail', 'An error occurred. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline-block';
+                btnSpinner.style.display = 'none';
+            }
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(`${fieldId}Error`);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+        
+        function clearErrors(formType) {
+            const errorElements = document.querySelectorAll(`[id$="${formType}Error"]`);
+            errorElements.forEach(element => {
+                element.textContent = '';
+                element.style.display = 'none';
+            });
+        }
+        
+        async function requestMagicLink(email, athleteName = '') {
+            // This would call your Google Apps Script backend
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve({
+                        success: true,
+                        message: 'Magic link sent successfully',
+                        isNewAthlete: !!athleteName
+                    });
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>

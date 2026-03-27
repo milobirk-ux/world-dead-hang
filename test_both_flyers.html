@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Both WDHC Flyers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .flyer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 900px) {
+            .flyer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .flyer-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .flyer-card h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #D4AF37;
+            padding-bottom: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 900px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .fix-summary {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border-left: 4px solid #4caf50;
+        }
+        .fix-summary h4 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .test-instructions {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>WDHC Flyer Footer Fix Verification</h1>
+            <p>Testing both flyer versions to ensure footer content is not cut off</p>
+        </div>
+        
+        <div class="test-instructions">
+            <h3>✅ What to check for each flyer:</h3>
+            <ol>
+                <li>Scroll to the very bottom - can you see all footer content?</li>
+                <li>Are QR codes fully visible (not cut off)?</li>
+                <li>Resize browser window - does mobile view work properly?</li>
+                <li>Use Print Preview (Ctrl+P) - does it print correctly?</li>
+            </ol>
+        </div>
+        
+        <div class="flyer-grid">
+            <div class="flyer-card">
+                <h3>Optimized Flyer (flyer_climbing_gym_optimized.html)</h3>
+                <div class="fix-summary">
+                    <h4>Fixes Applied:</h4>
+                    <ul>
+                        <li>Changed fixed height to min-height</li>
+                        <li>Removed overflow: hidden</li>
+                        <li>Moved QR codes from absolute positioning to normal flow</li>
+                        <li>Adjusted spacing between sections</li>
+                    </ul>
+                </div>
+                <iframe src="flyer_climbing_gym_optimized.html"></iframe>
+            </div>
+            
+            <div class="flyer-card">
+                <h3>Original Flyer (flyer_climbing_gym.html)</h3>
+                <div class="fix-summary">
+                    <h4>Fixes Applied:</h4>
+                    <ul>
+                        <li>Changed fixed height to min-height</li>
+                        <li>Removed overflow: hidden</li>
+                        <li>Updated print height to min-height</li>
+                    </ul>
+                </div>
+                <iframe src="flyer_climbing_gym.html"></iframe>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: white; border-radius: 10px;">
+            <h3>Technical Summary of Changes</h3>
+            <p><strong>Root Cause:</strong> Both flyers had fixed heights with <code>overflow: hidden</code>, which would cut off any content exceeding the container.</p>
+            
+            <h4>For Optimized Flyer:</h4>
+            <ul>
+                <li><code>.flyer</code>: <code>height: 918px</code> → <code>min-height: 918px</code></li>
+                <li><code>.flyer</code>: Removed <code>overflow: hidden</code></li>
+                <li><code>.qr-container</code>: Changed from absolute positioning (<code>position: absolute; bottom: 36px; right: 36px;</code>) to normal flow with <code>margin-top: 30px</code></li>
+                <li><code>.content</code>: Added <code>margin-bottom: 20px</code> for spacing</li>
+                <li><code>.footer</code>: Reduced <code>margin-top</code> from 35px to 20px</li>
+                <li>Print styles: Updated <code>height</code> to <code>min-height</code></li>
+            </ul>
+            
+            <h4>For Original Flyer:</h4>
+            <ul>
+                <li><code>.flyer</code>: <code>height: 816px</code> → <code>min-height: 816px</code></li>
+                <li><code>.flyer</code>: Removed <code>overflow: hidden</code></li>
+                <li>Print styles: Updated <code>height</code> to <code>min-height</code></li>
+            </ul>
+            
+            <p><strong>Result:</strong> Both flyers now expand to fit their content, ensuring no footer cutoff. The optimized version also has better layout flow with QR codes positioned correctly.</p>
+        </div>
+    </div>
+</body>
+</html>

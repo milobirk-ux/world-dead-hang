@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section Design Preview</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background: #050505;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        h1 {
+            color: #D4AF37;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .preview-container {
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        /* Animation Styles */
+        @keyframes subtlePulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(50, 150, 220, 0.2), 0 4px 15px rgba(50, 200, 255, 0.1); }
+            50% { box-shadow: 0 10px 35px rgba(50, 150, 220, 0.3), 0 4px 20px rgba(50, 200, 255, 0.15); }
+        }
+
+        @keyframes subtleShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: rgba(220, 50, 50, 0.4); border-left-color: rgba(220, 50, 50, 0.7); }
+            50% { border-color: rgba(255, 100, 100, 0.5); border-left-color: rgba(255, 100, 100, 0.8); }
+        }
+
+        @keyframes topBorderFlow {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Struggle Description Section */
+        .struggle-description {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 35px;
+            background: linear-gradient(135deg, rgba(40, 10, 10, 0.95), rgba(20, 5, 5, 0.98));
+            border-radius: 8px;
+            border: 2px solid rgba(220, 50, 50, 0.4);
+            border-left: 6px solid rgba(220, 50, 50, 0.7);
+            box-shadow: 0 8px 25px rgba(220, 50, 50, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            animation: subtleShake 3s ease-in-out infinite, borderGlow 4s ease-in-out infinite;
+        }
+
+        .struggle-description .top-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(220, 50, 50, 0.8), transparent);
+            animation: topBorderFlow 3s linear infinite;
+            background-size: 200% 100%;
+        }
+
+        .struggle-description h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .struggle-description p {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 0;
+            color: #ffcccb;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .struggle-description .bottom-border {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(220, 50, 50, 0.8), transparent);
+        }
+
+        /* Motivational Text Section */
+        .motivational-text {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 35px;
+            background: linear-gradient(135deg, rgba(10, 30, 40, 0.95), rgba(5, 20, 30, 0.98));
+            border-radius: 12px;
+            border: 2px solid rgba(50, 150, 220, 0.4);
+            border-top: 6px solid rgba(50, 200, 255, 0.7);
+            box-shadow: 0 10px 30px rgba(50, 150, 220, 0.2), 0 4px 15px rgba(50, 200, 255, 0.1);
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            animation: subtlePulse 4s ease-in-out infinite;
+        }
+
+        .motivational-text .glow-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(50, 200, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .motivational-text h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4fc3f7;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .motivational-text p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 0;
+            color: #e3f2fd;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .motivational-text .subtext {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #90caf9;
+            font-weight: 300;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hover effects */
+        .struggle-description:hover {
+            transform: translateY(-2px);
+            transition: transform 0.3s ease;
+        }
+
+        .motivational-text:hover {
+            transform: translateY(-2px) scale(1.01);
+            transition: transform 0.3s ease;
+        }
+        
+        .design-details {
+            background: rgba(20, 20, 20, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .design-details h3 {
+            color: #D4AF37;
+            margin-bottom: 15px;
+            font-family: 'Oswald', sans-serif;
+        }
+        
+        .design-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .design-item {
+            background: rgba(30, 30, 30, 0.8);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .struggle-design {
+            border-left-color: #ff6b6b;
+        }
+        
+        .motivational-design {
+            border-left-color: #4fc3f7;
+        }
+        
+        .design-item h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .design-item ul {
+            padding-left: 20px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .design-item li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <h1>WDHC Section Design Preview</h1>
+        
+        <div class="struggle-description">
+            <div class="top-border"></div>
+            <h3>⚔️ The Final Battle</h3>
+            <p>
+                The final 20 seconds is pure grit. This is where raw willpower takes over as muscles scream to let go. Champions find a way to hold on through pure determination.
+            </p>
+            <div class="bottom-border"></div>
+        </div>
+        
+        <div class="motivational-text">
+            <div class="glow-effect"></div>
+            <h3>🚀 Build Legendary Grip</h3>
+            <p>
+                Grip strength is the foundation of all upper body power. Every second you hang builds raw endurance that translates to pull-ups, climbing, and real-world strength. Push your limits and watch your grip transform from ordinary to extraordinary.
+            </p>
+            <div class="subtext">— Your journey starts now —</div>
+        </div>
+        
+        <div class="design-details">
+            <h3>Design Differences</h3>
+            <p style="color: #ccc; margin-bottom: 20px;">The two sections now have distinct visual identities:</p>
+            
+            <div class="design-grid">
+                <div class="design-item struggle-design">
+                    <h4>Struggle Description Section</h4>
+                    <ul>
+                        <li><strong>Theme:</strong> Battle/Grit/Intensity</li>
+                        <li><strong>Colors:</strong> Deep red/black gradient</li>
+                        <li><strong>Border:</strong> Red accent with thick left border</li>
+                        <li><strong>Typography:</strong> Rajdhani font (bold, military-style)</li>
+                        <li><strong>Animation:</strong> Subtle shake + border glow</li>
+                        <li><strong>Visual Elements:</strong> Top/bottom battle lines</li>
+                        <li><strong>Emoji:</strong> ⚔️ Crossed swords</li>
+                    </ul>
+                </div>
+                
+                <div class="design-item motivational-design">
+                    <h4>Motivational Text Section</h4>
+                    <ul>
+                        <li><strong>Theme:</strong> Achievement/Inspiration/Growth</li>
+                        <li><strong>Colors:</strong> Deep blue/teal gradient</li>
+                        <li><strong>Border:</strong> Blue accent with thick top border</li>
+                        <li><strong>Typography:</strong> Oswald font (clean, modern)</li>
+                        <li><strong>Animation:</strong> Subtle pulse glow</li>
+                        <li><strong>Visual Elements:</strong> Radial glow effect</li>
+                        <li><strong>Emoji:</strong> 🚀 Rocket</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

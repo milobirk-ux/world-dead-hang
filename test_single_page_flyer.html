@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Single Page WDHC Flyer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-instructions {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+        iframe {
+            width: 100%;
+            height: 1000px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .verification-checklist {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #4caf50;
+        }
+        .checklist-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .checklist-item input {
+            margin-right: 10px;
+        }
+        .print-test {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>WDHC Single Page Flyer Test</h1>
+            <p>Testing the consolidated single-page flyer version</p>
+        </div>
+        
+        <div class="test-instructions">
+            <h3>✅ What to Verify:</h3>
+            <ol>
+                <li>All content fits on a single page (no scrolling needed)</li>
+                <li>All essential elements are present: logo, subtitle, QR codes, "What is WDHC?" section, footer with Instagram and website</li>
+                <li>No page break CSS remains</li>
+                <li>Layout is clean and everything fits properly</li>
+                <li>Use Print Preview (Ctrl+P) - should print as ONE page only</li>
+            </ol>
+        </div>
+        
+        <h2>Single Page Flyer Preview</h2>
+        <iframe src="flyer_single_page.html"></iframe>
+        
+        <div class="verification-checklist">
+            <h3>Verification Checklist</h3>
+            <div class="checklist-item">
+                <input type="checkbox" id="check1">
+                <label for="check1">Logo is present and visible</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check2">
+                <label for="check2">Subtitle "GLOBAL COMPETITION • CASH PRIZES • CLIMBER COMMUNITY" is present</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check3">
+                <label for="check3">QR codes are present (leaderboard and submit)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check4">
+                <label for="check4">"What is WDHC?" section is present with all bullet points</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check5">
+                <label for="check5">Footer contains Instagram (@worlddeadhang) and website (world-dead-hang.pages.dev)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check6">
+                <label for="check6">All content fits on one page (no second/third pages)</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check7">
+                <label for="check7">Layout is clean and well-organized</label>
+            </div>
+        </div>
+        
+        <div class="print-test">
+            <h3>Print Test Instructions</h3>
+            <ol>
+                <li>Click inside the flyer iframe above</li>
+                <li>Press Ctrl+P (or Cmd+P on Mac) to open Print Preview</li>
+                <li>Check that the preview shows only ONE page</li>
+                <li>Verify all content is visible on that single page</li>
+                <li>Check that no content is cut off or extends to additional pages</li>
+            </ol>
+            <p><strong>Expected Result:</strong> The flyer should print as a single 5.5" x 8.5" page with all content visible.</p>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: white; border-radius: 10px;">
+            <h3>Changes Made for Single Page Version</h3>
+            <ul>
+                <li><strong>Removed page break CSS:</strong> Eliminated <code>page-break-inside: avoid</code> and <code>break-inside: avoid</code> from print styles</li>
+                <li><strong>Reduced padding:</strong> Decreased overall padding from 48px/36px to 40px/30px</li>
+                <li><strong>Smaller fonts:</strong> Reduced font sizes throughout for more compact layout</li>
+                <li><strong>Compact benefits section:</strong> Replaced 4-box benefits with more compact 2x2 grid</li>
+                <li><strong>Reduced margins:</strong> Decreased spacing between sections</li>
+                <li><strong>Simplified social section:</strong> Combined social media into one compact section</li>
+                <li><strong>Removed redundant content:</strong> Eliminated duplicate or less critical information</li>
+                <li><strong>Optimized for single-page print:</strong> All content designed to fit on standard 5.5" x 8.5" page</li>
+            </ul>
+            
+            <h4>Essential Content Preserved:</h4>
+            <ul>
+                <li>✓ Logo and branding</li>
+                <li>✓ Subtitle and tagline</li>
+                <li>✓ "What is WDHC?" section</li>
+                <li>✓ Prize pool information</li>
+                <li>✓ How to participate (3 steps)</li>
+                <li>✓ Benefits for climbers</li>
+                <li>✓ Why climbers love WDHC</li>
+                <li>✓ CTA button</li>
+                <li>✓ Website URL</li>
+                <li>✓ Instagram contact</li>
+                <li>✓ Both QR codes (leaderboard and submit)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

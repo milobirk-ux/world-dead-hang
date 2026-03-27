@@ -1,0 +1,46 @@
+The corrected grip age HTML section should end like this:
+
+gripAgeHtml = `
+<div style="margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #e6f7ff, #f0f9ff); border-radius: 8px; border-left: 4px solid #007bff;">
+ <h3 style="margin: 0 0 12px 0; font-size: 1.2em; color: #0056b3; font-weight: 700;">Grip Age Analysis</h3>
+ <p style="margin: 0 0 10px 0; font-size: 1.05em; line-height: 1.5; color: #333;">
+ Your biological grip age is <strong style="color: #0056b3;">${gripAgeResult.gripAge}</strong> (chronological age: ${age}).
+ </p>
+ <div style="background: rgba(0, 123, 255, 0.1); padding: 12px; border-radius: 6px; margin: 15px 0;">
+ <p style="margin: 0; font-size: 0.95em; line-height: 1.5; color: #495057; font-style: italic;">
+ ${gripAgeMessage}
+ </p>
+ </div>
+ <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #666;">
+ <strong>Longevity Insight:</strong> ${longevityFact}
+ </p>
+</div>`;
+ } catch (err) {
+ console.error("Error calculating Grip Age: " + err);
+ gripAgeHtml = `
+<div style="margin: 20px 0;">
+ <h3 style="margin: 0 0 10px 0; font-size: 1.1em; color: #333; font-weight: 600;">Grip Age Analysis</h3>
+ <p style="margin: 0; font-size: 1em; line-height: 1.5; color: #666;">
+ Could not calculate grip age due to incomplete data. Please ensure all fields are filled correctly.
+ </p>
+</div>`;
+ }
+ } else {
+ gripAgeHtml = `
+<div style="margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px; border-left: 4px solid #6c757d;">
+ <h3 style="margin: 0 0 12px 0; font-size: 1.2em; color: #495057; font-weight: 700;">Grip Age Analysis</h3>
+ <p style="margin: 0 0 10px 0; font-size: 1.05em; line-height: 1.5; color: #333;">
+ Complete your profile for personalized insights
+ </p>
+ <div style="background: rgba(108, 117, 125, 0.1); padding: 12px; border-radius: 6px; margin: 15px 0;">
+ <p style="margin: 0; font-size: 0.95em; line-height: 1.5; color: #495057;">
+ Add your date of birth, gender, and bodyweight to calculate your biological grip age and get personalized training recommendations.
+ </p>
+ </div>
+ <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #666;">
+ <strong>Why it matters:</strong> Grip strength is the #1 predictor of longevity - stronger than blood pressure or cholesterol.
+ </p>
+</div>`;
+ }
+
+The key fix is that the gripAgeHtml variable assignment needs to be properly closed with backticks and semicolon, and the rest of the script continues normally.

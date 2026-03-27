@@ -1,0 +1,24 @@
+{
+  "name": "wdhc-athlete-portal-setup",
+  "version": "1.0.0",
+  "description": "Setup script for WDHC Athlete Portal Google Sheets database",
+  "main": "setup.js",
+  "scripts": {
+    "setup": "node setup.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wdhc",
+    "athlete-portal",
+    "google-sheets",
+    "setup"
+  ],
+  "author": "WDHC Team",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "^128.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

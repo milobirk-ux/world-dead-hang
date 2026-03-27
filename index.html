@@ -1,10 +1,21 @@
-﻿﻿﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Full Leaderboard | World Dead Hang Championship</title>
-    <link rel="icon" type="image/jpeg" href="media/new_wdhc_logo.jpg">
+    <link rel="icon" type="image/png" href="media/logo_final_transparent.jpg" sizes="any">
+    <link rel="apple-touch-icon" href="media/logo_final_transparent.jpg">
+    <!-- Open Graph meta tags for social media sharing -->
+    <meta property="og:title" content="World Dead Hang Championship">
+    <meta property="og:description" content="Global grip strength competition for climbers and athletes">
+    <meta property="og:image" content="media/logo_final_transparent.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://worlddeadhang.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="media/logo_final_transparent.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
         
@@ -1594,22 +1605,23 @@
 <body>
 
     <nav>
-        <div class="nav-logo"><img src="media/new_wdhc_logo.jpg" alt="World Dead Hang Championship Logo"></div>
+        <div class="nav-logo"><img src="media/logo_final_transparent.jpg" alt="World Dead Hang Championship Logo"></div>
         <div class="nav-links">
             <a href="index.html">Leaderboard</a>
             <a href="rules.html">Rulebook</a>
             <a href="submit.html">Submit</a>
             <a href="benefits.html">Benefits</a>
             <a href="about.html">About</a>
+            <a href="athlete-portal/index.html">Athlete Portal</a>
         </div>
     </nav>
 
     <div class="marquee-container">
         <div class="marquee-content">
-            <span>🌍 The world's first sanctioned dead hang championship — officially open</span>
+            <span>🏆 The world's first sanctioned dead hang championship ✅ officially open</span>
             <span>⏱️ No minimum time. Every hang is official.</span>
             <span>💪 Grip strength predicts lifespan & dead hang measures it. What's your Grip Age?</span>
-            <span>⚡ 30 seconds puts you in the top half of the global population. Submit yours and start your journey!</span>
+            <span>🚀 30 seconds puts you in the top half of the global population. Submit yours and start your journey!</span>
         </div>
     </div>
 
@@ -1658,8 +1670,8 @@
                     <div class="search-row">
                         <div class="search-container">
                             <input type="text" id="athlete-search" placeholder="Search athlete name..." class="search-input" aria-label="Search athlete names">
-                            <div class="search-icon">🔍</div>
-                            <button id="clear-search" class="clear-search-btn" style="display: none;" aria-label="Clear search">✕</button>
+                            <div class="search-icon">??</div>
+                            <button id="clear-search" class="clear-search-btn" style="display: none;" aria-label="Clear search">?</button>
                         </div>
                         <div id="search-count" class="search-count" style="display: none;"></div>
                     </div>
@@ -1683,7 +1695,7 @@
                 <div class="sidebar-card">
                     <div class="sidebar-header">
                         <h3 class="sidebar-title">🏆 World Leaders</h3>
-                        <div class="sidebar-subtitle">Global Top 10 • All Time</div>
+                        <div class="sidebar-subtitle">Global Top 10 🏆 All Time</div>
                     </div>
                     <div id="top-10-list" class="mini-list">
                         <!-- JS Populated -->
@@ -1748,14 +1760,14 @@
                     </div>
                     <div style="padding: 0 20px 15px;">
                         <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 12px;">
-                            <span style="font-size: 1.2rem; color: var(--gold); line-height: 1.2; width: 20px; text-align: center;">✔</span>
+                            <span style="font-size: 1.2rem; color: var(--gold); line-height: 1.2; width: 20px; text-align: center;">?</span>
                             <div>
                                 <div style="color: #ddd;">Pro-Level Verification</div>
                                 <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Independently reviewed and certified by WDHC. This record stands.</div>
                             </div>
                         </div>
                         <div style="display: flex; align-items: flex-start; gap: 15px;">
-                            <span style="font-size: 1.2rem; color: var(--silver); line-height: 1.2; width: 20px; text-align: center;">⚡</span>
+                            <span style="font-size: 1.2rem; color: var(--silver); line-height: 1.2; width: 20px; text-align: center;">?</span>
                             <div>
                                 <div style="color: #ddd;">Total Personal Records</div>
                                 <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">Times athlete has set a new personal record.</div>
@@ -1764,7 +1776,7 @@
                         <div style="display: flex; align-items: flex-start; gap: 15px; margin-top: 12px;">
                             <span style="font-size: 1.2rem; color: #888; line-height: 1.2; width: 20px; text-align: center;">📊</span>
                             <div>
-                                <div style="color: #ddd;">WDHC Grip Age™</div>
+                                <div style="color: #ddd;">WDHC Grip Age📈</div>
                                 <div style="color: #888; font-size: 0.85rem; line-height: 1.3;">A fitness index comparing your dead hang to population norms for age, sex, and bodyweight.</div>
                             </div>
                         </div>
@@ -2011,7 +2023,7 @@
             position: relative;
             z-index: 1;
         ">
-            — Your journey starts now —
+            🚀 Your journey starts now 🚀
         </div>
     </div>
 
@@ -2031,7 +2043,7 @@
               max-width: 1200px;
               margin: 0 auto 40px;
           ">
-              <img src="media/new_wdhc_logo.jpg" 
+              <img src="media/logo_final_transparent.jpg" 
                    alt="WDHC Logo" 
                    style="
                        width: 100%;
@@ -2214,7 +2226,7 @@
         "occupation": "Athlete",
         "bodyweight": 150,
         "dob": "1990-10-29",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "3:01",
         "lastAttempt": "2026-03-10",
         "history": [
@@ -2234,7 +2246,7 @@
         "occupation": "Test Proffessional",
         "bodyweight": 120,
         "dob": "1990-10-29",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "2:35",
         "lastAttempt": "2026-03-09",
         "history": [
@@ -2258,7 +2270,7 @@
         "occupation": "Bank teller",
         "bodyweight": 125,
         "dob": "1998-12-09",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "1:30",
         "lastAttempt": "2026-03-14",
         "history": [
@@ -2278,7 +2290,7 @@
         "occupation": "Retail",
         "bodyweight": 195,
         "dob": "1996-05-10",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "1:20",
         "lastAttempt": "2026-03-13",
         "history": [
@@ -2298,7 +2310,7 @@
         "occupation": "Athlete",
         "bodyweight": 170,
         "dob": "1992-07-17",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "1:16",
         "lastAttempt": "2026-03-07 4:46:31",
         "history": [
@@ -2318,7 +2330,7 @@
         "occupation": "Astrologer",
         "bodyweight": 170,
         "dob": "1990-10-29",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "1:08",
         "lastAttempt": "2026-03-07 7:11:58",
         "history": [
@@ -2338,7 +2350,7 @@
         "occupation": "Community Outreach",
         "bodyweight": 180,
         "dob": "1967-10-12",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "0:50",
         "lastAttempt": "2026-03-11",
         "history": [
@@ -2358,7 +2370,7 @@
         "occupation": "Athlete",
         "bodyweight": 180,
         "dob": "1990-10-29",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "0:42",
         "lastAttempt": "2026-03-07 6:29:51",
         "history": [
@@ -2378,7 +2390,7 @@
         "occupation": "Security",
         "bodyweight": 150,
         "dob": "1990-10-29",
-        "country": "🇺🇸",
+        "country": "????",
         "currentPR": "0:30",
         "lastAttempt": "2026-03-08 18:40:02",
         "history": [
@@ -2499,7 +2511,7 @@
                         <img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" 
                              alt="YouTube video preview" 
                              class="video-thumbnail">
-                        <div class="play-button">▶</div>
+                        <div class="play-button">?</div>
                         <div class="platform-badge">YouTube</div>
                     </a>
                 `;
@@ -2510,7 +2522,7 @@
         if (url.includes('drive.google.com')) {
             return `
                 <a href="${videoUrl}" target="_blank" class="video-preview drive-preview" title="Watch on Google Drive">
-                    <div class="platform-icon">📁</div>
+                    <div class="platform-icon">??</div>
                     <div class="platform-text">Watch on Drive</div>
                     <div class="platform-badge">Drive</div>
                 </a>
@@ -2521,7 +2533,7 @@
         if (url.includes('reddit.com') || url.includes('redd.it')) {
             return `
                 <a href="${videoUrl}" target="_blank" class="video-preview reddit-preview" title="Watch on Reddit">
-                    <div class="platform-icon">👽</div>
+                    <div class="platform-icon">??</div>
                     <div class="platform-text">Watch on Reddit</div>
                     <div class="platform-badge">Reddit</div>
                 </a>
@@ -2532,7 +2544,7 @@
         if (url.includes('instagram.com') || url.includes('instagr.am')) {
             return `
                 <a href="${videoUrl}" target="_blank" class="video-preview instagram-preview" title="Watch on Instagram">
-                    <div class="platform-icon">📸</div>
+                    <div class="platform-icon">??</div>
                     <div class="platform-text">Watch on Instagram</div>
                     <div class="platform-badge">Instagram</div>
                 </a>
@@ -2543,7 +2555,7 @@
         if (url.includes('tiktok.com')) {
             return `
                 <a href="${videoUrl}" target="_blank" class="video-preview tiktok-preview" title="Watch on TikTok">
-                    <div class="platform-icon">🎵</div>
+                    <div class="platform-icon">??</div>
                     <div class="platform-text">Watch on TikTok</div>
                     <div class="platform-badge">TikTok</div>
                 </a>
@@ -2553,7 +2565,7 @@
         // Generic video link
         return `
             <a href="${videoUrl}" target="_blank" class="video-preview generic-preview" title="Watch Video">
-                <div class="platform-icon">▶</div>
+                <div class="platform-icon">?</div>
                 <div class="platform-text">Watch Video</div>
                 <div class="platform-badge">Video</div>
             </a>

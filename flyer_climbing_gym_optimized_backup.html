@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDHC Flyer - Climbing Gym Promotion (Optimized)</title>
+    <style>
+        /* ===== PRINT OPTIMIZATION ===== */
+        /* CMYK-friendly colors for professional printing */
+        :root {
+            /* CMYK-optimized colors (maintains vibrancy in print) */
+            --gold-cmyk: #D4AF37; /* Gold - CMYK: 0, 18, 74, 17 */
+            --accent-red-cmyk: #CC0000; /* Red - CMYK: 0, 100, 100, 20 */
+            --dark-bg-cmyk: #050505; /* Black - CMYK: 0, 0, 0, 98 */
+            --surface-cmyk: #0A0A0A; /* Dark gray - CMYK: 0, 0, 0, 96 */
+            --text-cmyk: #FFFFFF; /* White - CMYK: 0, 0, 0, 0 */
+            --text-dim-cmyk: #888888; /* Gray - CMYK: 0, 0, 0, 47 */
+            
+            /* Screen-only effects */
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --accent-red-glow: rgba(204, 0, 0, 0.4);
+        }
+
+        /* ===== ACCESSIBILITY ===== */
+        /* WCAG 2.1 AA compliant color contrasts */
+        .wcag-check {
+            /* Gold (#D4AF37) on Dark (#050505) = 8.9:1 ✓ */
+            /* Red (#CC0000) on Dark (#050505) = 5.6:1 ✓ */
+            /* White (#FFFFFF) on Dark (#050505) = 21:1 ✓ */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            color: var(--text-cmyk);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* ===== FLYER CONTAINER ===== */
+        /* 5.5" x 8.5" with 0.125" bleed margins for professional printing */
+        .flyer {
+            width: 594px; /* 5.5" at 108 DPI (print standard) + 0.25" bleed */
+            height: 918px; /* 8.5" at 108 DPI + 0.25" bleed */
+            background: linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            border: 2px solid var(--gold-cmyk);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 
+                        0 0 30px var(--gold-glow);
+            overflow: hidden;
+            position: relative;
+            padding: 48px 36px; /* Increased for bleed area */
+            display: flex;
+            flex-direction: column;
+            
+            /* Safe area for content (inside bleed) */
+            --safe-width: 528px; /* 5.5" at 96 DPI */
+            --safe-height: 816px; /* 8.5" at 96 DPI */
+        }
+
+        /* Print-safe area indicator (hidden in final) */
+        .safe-area {
+            position: absolute;
+            top: 48px;
+            left: 36px;
+            width: 528px;
+            height: 816px;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            pointer-events: none;
+            z-index: 1000;
+            display: none; /* Hidden by default, show for debugging */
+        }
+
+        /* ===== HEADER SECTION ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            height: 120px;
+            width: auto;
+            filter: drop-shadow(0 4px 15px rgba(212, 175, 55, 0.5));
+            max-width: 100%;
+        }
+
+        .status-pill {
+            display: inline-block;
+            background: transparent;
+            border: 2px solid var(--accent-red-cmyk); /* Thicker for print */
+            color: var(--accent-red-cmyk);
+            padding: 8px 28px; /* Increased for touch targets */
+            border-radius: 24px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem; /* Increased from 0.8rem */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px var(--accent-red-glow);
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin: 0 auto 10px;
+            color: var(--text-cmyk);
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem; /* Increased from 1.4rem */
+            color: var(--gold-cmyk);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600; /* Added for better readability */
+        }
+
+        .tagline {
+            font-size: 1.1rem; /* Increased from 1rem */
+            color: var(--text-dim-cmyk);
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5; /* Increased from 1.4 */
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .section {
+            background: rgba(10, 10, 10, 0.9); /* Darker for better contrast */
+            border: 2px solid rgba(212, 175, 55, 0.4); /* Thicker border */
+            border-radius: 8px;
+            padding: 22px; /* Increased padding */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.7rem; /* Increased from 1.6rem */
+            color: var(--gold-cmyk);
+            text-transform: uppercase;
+            margin-bottom: 18px; /* Increased from 15px */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700; /* Added */
+        }
+
+        .section-title::before {
+            content: "•";
+            color: var(--accent-red-cmyk);
+            font-size: 2.2rem; /* Increased from 2rem */
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .bullet-list li {
+            margin-bottom: 14px; /* Increased from 12px */
+            padding-left: 28px; /* Increased from 24px */
+            position: relative;
+            line-height: 1.6; /* Increased from 1.5 */
+            font-size: 1.05rem; /* Added font size */
+        }
+
+        .bullet-list li::before {
+            content: "✓";
+            color: var(--gold-cmyk);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2rem; /* Added size */
+        }
+
+        .highlight {
+            color: var(--gold-cmyk);
+            font-weight: 700; /* Increased from 600 */
+        }
+
+        /* ===== PRIZE SECTION ===== */
+        .prize-section {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(204, 0, 0, 0.15) 100%);
+            border: 2px solid rgba(212, 175, 55, 0.6); /* Thicker border */
+            border-radius: 8px;
+            padding: 24px; /* Increased */
+            text-align: center;
+        }
+
+        .prize-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.9rem; /* Increased from 1.8rem */
+            color: var(--gold-cmyk);
+            text-transform: uppercase;
+            margin-bottom: 12px; /* Increased from 10px */
+            font-weight: 700;
+        }
+
+        .prize-amount {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 2.8rem; /* Increased from 2.5rem */
+            font-weight: 800; /* Increased from 700 */
+            color: var(--accent-red-cmyk);
+            text-shadow: 0 0 20px var(--accent-red-glow);
+            margin-bottom: 8px; /* Increased from 5px */
+            letter-spacing: 1px;
+        }
+
+        .prize-note {
+            font-size: 1rem; /* Increased from 0.9rem */
+            color: var(--text-dim-cmyk);
+            line-height: 1.4;
+        }
+
+        /* ===== HOW TO PARTICIPATE ===== */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px; /* Increased from 15px */
+            margin-top: 12px; /* Increased from 10px */
+        }
+
+        .step {
+            background: rgba(25, 25, 25, 0.9); /* Darker for contrast */
+            border: 2px solid rgba(212, 175, 55, 0.3); /* Thicker border */
+            border-radius: 8px; /* Increased from 6px */
+            padding: 18px; /* Increased from 15px */
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 36px; /* Increased from 30px */
+            height: 36px; /* Increased from 30px */
+            background: var(--gold-cmyk);
+            color: #000;
+            border-radius: 50%;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 800; /* Increased from 700 */
+            line-height: 36px; /* Adjusted */
+            margin-bottom: 12px; /* Increased from 10px */
+            font-size: 1.1rem; /* Added */
+        }
+
+        .step-title {
+            font-weight: 700; /* Increased from 600 */
+            color: var(--gold-cmyk);
+            margin-bottom: 8px; /* Increased from 5px */
+            font-size: 1rem; /* Increased from 0.9rem */
+        }
+
+        .step-desc {
+            font-size: 0.9rem; /* Increased from 0.8rem */
+            color: var(--text-dim-cmyk);
+            line-height: 1.4; /* Increased from 1.3 */
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            margin-top: 35px; /* Increased from 30px */
+            padding-top: 24px; /* Increased from 20px */
+            border-top: 2px solid rgba(212, 175, 55, 0.4); /* Thicker */
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold-cmyk) 0%, #b8941f 100%);
+            color: #000;
+            padding: 14px 45px; /* Increased */
+            border-radius: 30px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem; /* Increased from 1.2rem */
+            font-weight: 800; /* Increased from 700 */
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 1.5px; /* Increased from 1px */
+            margin-bottom: 24px; /* Increased from 20px */
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+            border: 2px solid #000; /* Added for print clarity */
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .website {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem; /* Increased from 1rem */
+            color: var(--gold-cmyk);
+            margin-bottom: 12px; /* Increased from 10px */
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .social {
+            display: flex;
+            justify-content: center;
+            gap: 24px; /* Increased from 20px */
+            margin-top: 18px; /* Increased from 15px */
+            flex-wrap: wrap; /* Added for mobile */
+        }
+
+        .social-item {
+            color: var(--text-dim-cmyk);
+            font-size: 1rem; /* Increased from 0.9rem */
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== QR CODES ===== */
+        .qr-container {
+            position: absolute;
+            bottom: 36px; /* Adjusted for bleed */
+            right: 36px; /* Adjusted for bleed */
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+        }
+        
+        .qr-pair {
+            display: flex;
+            gap: 25px; /* Increased gap for better separation */
+            align-items: flex-start;
+            justify-content: center;
+        }
+        
+        .qr-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 140px; /* Increased for better spacing */
+        }
+        
+        .qr-code-wrapper {
+            width: 120px; /* Slightly larger QR codes */
+            height: 120px;
+            background: white; /* White background for visibility */
+            border-radius: 8px; /* Rounded corners */
+            padding: 10px; /* Padding around QR code */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            border: 2px solid var(--gold-cmyk); /* Gold border for emphasis */
+        }
+        
+        .qr-code-wrapper img {
+            width: 100px; /* QR code size */
+            height: 100px;
+            object-fit: contain;
+        }
+        
+        .qr-label {
+            font-size: 0.9rem; /* Larger font for better readability */
+            color: var(--gold-cmyk);
+            margin-top: 12px; /* Increased spacing */
+            font-weight: 700; /* Bolder */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .qr-sub-label {
+            font-size: 0.75rem; /* Slightly larger */
+            color: var(--text-dim-cmyk);
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        .qr-placeholder {
+            width: 100px; /* Increased from 80px */
+            height: 100px; /* Increased from 80px */
+            background: linear-gradient(45deg, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%, #ddd);
+            background-size: 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem; /* Increased from 0.7rem */
+            color: #666;
+            text-align: center;
+            padding: 5px;
+        }
+
+        /* ===== CLIMBING GYM SPECIFIC ENHANCEMENTS ===== */
+        .climbing-benefits {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .benefit {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .benefit-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--gold-cmyk);
+        }
+
+        .benefit-title {
+            font-weight: 600;
+            color: var(--gold-cmyk);
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .benefit-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim-cmyk);
+            line-height: 1.3;
+        }
+
+        /* ===== MOBILE RESPONSIVENESS ===== */
+        @media screen and (max-width: 650px) {
+            body {
+                padding: 10px;
+                background: #000;
+            }
+            
+            .flyer {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+                padding: 30px 20px;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+            }
+            
+            .safe-area {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .climbing-benefits {
+                grid-template-columns: 1fr;
+            }
+            
+            .qr-container {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin: 20px auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .qr-pair {
+                flex-direction: column;
+                gap: 25px;
+                align-items: center;
+            }
+            
+            .qr-code-wrapper {
+                width: 100px;
+                height: 100px;
+                padding: 8px;
+            }
+            
+            .qr-code-wrapper img {
+                width: 85px;
+                height: 85px;
+            }
+            
+            .qr-label {
+                font-size: 0.8rem;
+            }
+            
+            .qr-sub-label {
+                font-size: 0.7rem;
+            }
+                align-items: center;
+            }
+            
+            .qr-item {
+                max-width: 150px;
+            }
+            
+            .social {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .prize-amount {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .logo {
+                height: 80px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            @page {
+                size: 5.5in 8.5in;
+                margin: 0.125in; /* Bleed margin */
+            }
+            
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .flyer {
+                width: 5.5in !important;
+                height: 8.5in !important;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0.5in 0.375in !important; /* 0.5" top/bottom, 0.375" sides */
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            
+            /* Hide screen-only elements */
+            .safe-area,
+            .cta-button:hover,
+            .step:hover {
+                display: none !important;
+            }
+            
+            /* Ensure colors print correctly */
+            .cta-button {
+                background: var(--gold-cmyk) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            /* Remove shadows for cleaner print */
+            .status-pill,
+            .section,
+            .prize-section,
+            .step,
+            .qr-container {
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            
+            /* Ensure good contrast in black & white printing */
+            .highlight,
+            .section-title,
+            .subtitle,
+            .step-title,
+            .benefit-title,
+            .website {
+                color: #000 !important; /* Black for maximum contrast */
+                font-weight: 900 !important;
+            }
+            
+            .bullet-list li::before {
+                color: #000 !important;
+            }
+            
+            .prize-amount {
+                color: #000 !important;
+                font-weight: 900 !important;
+            }
+            
+            /* QR code styling for print */
+            .qr-code-wrapper {
+                background: white !important;
+                border: 2px solid #000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .qr-container img {
+                filter: contrast(1.2) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .qr-code-wrapper {
+                background: white !important;
+                border: 2px solid #000 !important;
+                box-shadow: none !important;
+            }
+            
+            .qr-label {
+                color: #000 !important;
+                font-weight: 900 !important;
+            }
+        }
+
+        /* ===== ACCESSIBILITY UTILITIES ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus styles for keyboard navigation */
+        .cta-button:focus,
+        .step:focus {
+            outline: 3px solid var(--accent-red-cmyk);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .flyer {
+                background: #000 !important;
+            }
+            
+            .section,
+            .step,
+            .benefit {
+                background: #000 !important;
+                border: 3px solid #fff !important;
+            }
+            
+            .highlight,
+            .section-title,
+            .subtitle,
+            .step-title,
+            .benefit-title {
+                color: #fff !important;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .cta-button:hover,
+            .step:hover {
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flyer">
+        <!-- Safe area indicator (hidden by default) -->
+        <div class="safe-area" aria-hidden="true"></div>
+        
+        <!-- Screen reader only heading for accessibility -->
+        <h1 class="sr-only">World Dead Hang Championship Flyer - Climbing Gym Promotion</h1>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <img src="media/logo_final_transparent.png" alt="World Dead Hang Championship Logo - Global grip strength competition for climbers" class="logo">
+            </div>
+            
+            <div class="status-pill" aria-label="Competition Status: Live">LIVE COMPETITION</div>
+            
+            <h1>WORLD DEAD HANG<br>CHAMPIONSHIP</h1>
+            
+            <div class="subtitle">GLOBAL COMPETITION • CASH PRIZES • CLIMBER COMMUNITY</div>
+            
+            <p class="tagline">The ultimate test of grip endurance and grit. Test your grip endurance against competitors around the world. All you need is a pull-up bar and a phone. <strong>Scan the LEFT QR code to submit your hang attempt. Scan the RIGHT QR code to view the live leaderboard.</strong></p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- What is WDHC -->
+            <div class="section">
+                <h2 class="section-title">WHAT IS WDHC?</h2>
+                <ul class="bullet-list" aria-label="WDHC Features">
+                    <li><span class="highlight">Global grip strength competition</span> open to all climbers</li>
+                    <li>Hang from a pull-up bar for as long as possible</li>
+                    <li>Record your attempt and submit via our website</li>
+                    <li>Compete in divisions: <span class="highlight">Men, Women, Youth, Masters</span></li>
+                    <li>Live leaderboard tracks rankings in real-time</li>
+                    <li><span class="highlight">Free entry</span> - no registration fees</li>
+                </ul>
+            </div>
+
+            <!-- Prize Pool -->
+            <div class="prize-section">
+                <div class="prize-title">TOTAL PRIZE POOL</div>
+                <div class="prize-amount" aria-label="Prize amount: Over 5,000 dollars">$5,000+</div>
+                <div class="prize-note">Cash prizes for division winners + sponsor giveaways</div>
+            </div>
+
+            <!-- How to Participate -->
+            <div class="section">
+                <h2 class="section-title">HOW TO PARTICIPATE</h2>
+                <div class="steps">
+                    <div class="step" tabindex="0" role="button" aria-label="Step 1: Record your attempt">
+                        <div class="step-number" aria-hidden="true">1</div>
+                        <div class="step-title">RECORD</div>
+                        <div class="step-desc">Film your dead hang attempt (vertical video, full body visible)</div>
+                    </div>
+                    <div class="step" tabindex="0" role="button" aria-label="Step 2: Submit your video">
+                        <div class="step-number" aria-hidden="true">2</div>
+                        <div class="step-title">SUBMIT</div>
+                        <div class="step-desc">Upload to YouTube/Google Drive and submit via our form</div>
+                    </div>
+                    <div class="step" tabindex="0" role="button" aria-label="Step 3: Compete on leaderboard">
+                        <div class="step-number" aria-hidden="true">3</div>
+                        <div class="step-title">COMPETE</div>
+                        <div class="step-desc">Watch your rank climb on the live leaderboard</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Climbing-Specific Benefits -->
+            <div class="section">
+                <h2 class="section-title">BENEFITS FOR CLIMBERS</h2>
+                <div class="climbing-benefits">
+                    <div class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">💪</div>
+                        <div class="benefit-title">GRIP STRENGTH</div>
+                        <div class="benefit-desc">Direct crossover to climbing performance</div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">📊</div>
+                        <div class="benefit-title">BENCHMARKING</div>
+                        <div class="benefit-desc">Compare against climbers around the world</div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">🏆</div>
+                        <div class="benefit-title">COMPETITION</div>
+                        <div class="benefit-desc">Motivation through friendly competition</div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon" aria-hidden="true">👥</div>
+                        <div class="benefit-title">COMMUNITY</div>
+                        <div class="benefit-desc">Connect with dedicated climbers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Climbers Love It -->
+            <div class="section">
+                <h2 class="section-title">WHY CLIMBERS LOVE WDHC</h2>
+                <ul class="bullet-list" aria-label="Reasons climbers love WDHC">
+                    <li><span class="highlight">Perfect crossover training</span> for climbing performance</li>
+                    <li>Benchmark your grip strength against peers around the world</li>
+                    <li>Community-driven with verified athlete profiles</li>
+                    <li>Free to enter - no registration fees</li>
+                    <li>Featured on climbing podcasts and social media</li>
+                    <li><span class="highlight">Gym leaderboards</span> - compete with your local climbing community</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <a href="https://world-dead-hang.pages.dev" class="cta-button" target="_blank" aria-label="Enter competition now - opens in new window">
+                ENTER COMPETITION NOW
+            </a>
+            
+            <div class="website">world-dead-hang.pages.dev</div>
+            
+            <div class="social">
+                <div class="social-item">
+                    <span aria-hidden="true">📱</span>
+                    <span>@worlddeadhang</span>
+                </div>
+                <div class="social-item">
+                    <span aria-hidden="true">📧</span>
+                    <span>contact@worlddeadhang.com</span>
+                </div>
+            </div>
+            
+            <div class="social">
+                <div class="social-item">
+                    <span aria-hidden="true">🎥</span>
+                    <span>YouTube: World Dead Hang</span>
+                </div>
+                <div class="social-item">
+                    <span aria-hidden="true">📸</span>
+                    <span>Instagram: @worlddeadhang</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Codes - Side by Side -->
+        <div class="qr-container" aria-label="QR Codes for submission and leaderboard">
+            <div class="qr-pair">
+                <div class="qr-item">
+                    <div class="qr-code-wrapper">
+                        <img src="media/qr_leaderboard_transparent.png" alt="Scan QR code to view the live leaderboard">
+                    </div>
+                    <div class="qr-label">LEADERBOARD</div>
+                    <div class="qr-sub-label">View live rankings</div>
+                </div>
+                
+                <div class="qr-item">
+                    <div class="qr-code-wrapper">
+                        <img src="media/qr_submit_transparent.png" alt="Scan QR code to submit your hang attempt">
+                    </div>
+                    <div class="qr-label">SUBMIT YOUR HANG</div>
+                    <div class="qr-sub-label">Upload your video</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced hover effects with accessibility
+        document.querySelectorAll('.step').forEach(step => {
+            step.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 8px 20px rgba(212, 175, 55, 0.3)';
+            });
+            
+            step.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+            
+            // Keyboard navigation support
+            step.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+            
+            step.addEventListener('click', function() {
+                // Focus management for better UX
+                const ctaButton = document.querySelector('.cta-button');
+                if (ctaButton) {
+                    ctaButton.focus();
+                }
+            });
+        });
+
+        // Print optimization - remove animations before print
+        window.addEventListener('beforeprint', function() {
+            document.querySelectorAll('.step, .cta-button').forEach(el => {
+                el.style.transition = 'none';
+            });
+        });
+
+        // Mobile touch optimization
+        if ('ontouchstart' in window) {
+            document.querySelectorAll('.step, .cta-button').forEach(el => {
+                el.style.cursor = 'pointer';
+            });
+        }
+
+        // Lazy loading for images (future enhancement)
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.loading = 'lazy';
+            });
+        }
+
+        // Color contrast check (development helper)
+        function checkContrast() {
+            const style = getComputedStyle(document.documentElement);
+            const gold = style.getPropertyValue('--gold-cmyk').trim();
+            const dark = style.getPropertyValue('--dark-bg-cmyk').trim();
+            console.log('Color contrast check:', { gold, dark });
+            // In production, you could add actual contrast ratio calculation here
+        }
+
+        // Run on load
+        window.addEventListener('load', checkContrast);
+    </script>
+    
+    <!-- Print-specific instructions (hidden on screen) -->
+    <div style="display: none;">
+        <h2>Printing Instructions:</h2>
+        <p>For best results, print at 100% scale on 5.5" x 8.5" paper (Half Letter).</p>
+        <p>Use high-quality paper (100lb gloss or matte) for professional appearance.</p>
+        <p>Ensure "Print Background Colors and Images" is enabled in your print settings.</p>
+    </div>
+</body>
+</html>

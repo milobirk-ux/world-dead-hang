@@ -13,9 +13,14 @@ function doPost(e) {
       return createErrorResponse(validation.message, 400);
     }
     
-    // Get the active sheet
+    // Get the Custom Form Submissions sheet
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getActiveSheet();
+    const sheet = ss.getSheetByName('Custom Form Submissions');
+    
+    if (!sheet) {
+      return createErrorResponse('Custom Form Submissions sheet not found. Please create a sheet with that name.', 500);
+    }
+    
     const headers = sheet.getDataRange().getValues()[0];
     
     // Ensure all required columns exist
@@ -63,7 +68,10 @@ function doGet(e) {
 // ========== HELPER FUNCTIONS ==========
 
 function validateFormData(data) {
-  const required = ['athleteName', 'email', 'dob', 'gender', 'weight', 'hangTime', 'videoUrl'];
+  const required = [
+    'athleteName', 'email', 'cityState', 'country', 'dob', 'gender', 
+    'weight', 'attemptDate', 'hangTime', 'videoUrl', 'hearAbout', 'consent'
+  ];
   const missing = required.filter(field => !data[field]);
   
   if (missing.length > 0) {
@@ -96,15 +104,37 @@ function validateFormData(data) {
     }
   }
   
+  // Validate attempt date
+  if (data.attemptDate) {
+    const attemptDate = new Date(data.attemptDate);
+    if (isNaN(attemptDate.getTime())) {
+      return { valid: false, message: 'Invalid attempt date format' };
+    }
+    
+    // Ensure attempt date is not in the future
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (attemptDate > today) {
+      return { valid: false, message: 'Attempt date cannot be in the future' };
+    }
+  }
+  
+  // Validate consent
+  if (!data.consent) {
+    return { valid: false, message: 'You must agree to the terms and conditions' };
+  }
+  
   return { valid: true, message: 'Validation passed' };
 }
 
 function ensureColumnsExist(sheet, headers) {
   const requiredColumns = [
-    'Timestamp', 'Submission ID', 'Athlete Name', 'Email Address', 
-    'Date of Birth', 'Gender', 'Bodyweight lbs', 'Height (inches)',
-    'Grip Training Experience', 'Official Time', 'Video Proof URL',
-    'Additional Notes', 'Emailed', 'Is PR', 'Previous Best', 'PR Badge'
+    'Timestamp', 'Submission ID', 'Athlete Name', 'Email Address',
+    'City/State', 'Country', 'Date of Birth', 'Gender', 'Bodyweight lbs',
+    'Height (inches)', 'Grip Training Experience', 'Attempt Date',
+    'Official Time', 'Video Proof URL', 'Additional Notes',
+    'How did you hear about us?', 'Consent', 'Emailed', 'Is PR',
+    'Previous Best', 'PR Badge'
   ];
   
   let lastCol = headers.length;
@@ -131,14 +161,19 @@ function mapFormDataToRow(data, headers) {
     'Submission ID': generateSubmissionId(),
     'Athlete Name': data.athleteName,
     'Email Address': data.email,
+    'City/State': data.cityState,
+    'Country': data.country,
     'Date of Birth': formatDateForSheet(data.dob),
     'Gender': data.gender,
     'Bodyweight lbs': parseFloat(data.weight),
     'Height (inches)': data.height ? parseInt(data.height) : '',
     'Grip Training Experience': data.gripTraining || '',
+    'Attempt Date': formatDateForSheet(data.attemptDate),
     'Official Time': data.hangTime,
     'Video Proof URL': data.videoUrl,
     'Additional Notes': data.notes || '',
+    'How did you hear about us?': data.hearAbout,
+    'Consent': data.consent ? 'Yes' : 'No',
     'Emailed': 'No', // Will be updated by email automation
     'Is PR': '', // Will be calculated by email automation
     'Previous Best': '', // Will be calculated by email automation
