@@ -1,0 +1,1036 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - WDHC Athlete Portal</title>
+    <link rel="icon" type="image/png" href="/media/logo_final_transparent.jpg" sizes="any">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/media/logo_final_transparent.jpg">
+    
+    <!-- Simple API for testing -->
+    <script src="js/api-simple.js"></script>
+</head>
+<body class="dashboard-page">
+    <!-- Authentication check -->
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // If user is not authenticated, redirect to auth page
+            if (typeof WDHC_API === 'undefined' || !WDHC_API.isAuthenticated()) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            
+            // User is authenticated, continue loading dashboard
+            console.log('User authenticated, loading dashboard...');
+        });
+    </script>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+                <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="#leaderboard" class="nav-link">Leaderboard</a>
+                <a href="#features" class="nav-link">Training</a>
+                <a href="dashboard.html" class="nav-link">Profile</a>
+                <div class="nav-user">
+                    <img src="/media/logo_final_transparent.jpg" alt="User" class="user-avatar" id="userAvatar">
+                    <span class="user-name" id="userName">Loading...</span>
+                    <div class="user-dropdown">
+                        <a href="dashboard.html" class="dropdown-item">Profile</a>
+                        <a href="#features" class="dropdown-item">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <main class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-user">
+                    <img src="assets/default-avatar.jpg" alt="User" class="sidebar-avatar" id="sidebarAvatar">
+                    <div class="sidebar-user-info">
+                        <h3 class="sidebar-user-name" id="sidebarUserName">Loading...</h3>
+                        <p class="sidebar-user-rank" id="sidebarUserRank">Rank: #--</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/dashboard.html" class="sidebar-link active">
+                    <span class="sidebar-icon">ðŸ“Š</span>
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+                <a href="/prs.html" class="sidebar-link">
+                    <span class="sidebar-icon">ðŸ†</span>
+                    <span class="sidebar-text">PRs</span>
+                    <span class="sidebar-badge" id="prCountBadge">0</span>
+                </a>
+                <a href="/training.html" class="sidebar-link">
+                    <span class="sidebar-icon">ðŸ’ª</span>
+                    <span class="sidebar-text">Training</span>
+                    <span class="sidebar-badge" id="trainingCountBadge">0</span>
+                </a>
+                <a href="/leaderboard.html" class="sidebar-link">
+                    <span class="sidebar-icon">ðŸ“ˆ</span>
+                    <span class="sidebar-text">Leaderboard</span>
+                </a>
+                <a href="/profile.html" class="sidebar-link">
+                    <span class="sidebar-icon">ðŸ‘¤</span>
+                    <span class="sidebar-text">Profile</span>
+                </a>
+                <a href="/settings.html" class="sidebar-link">
+                    <span class="sidebar-icon">âš™ï¸</span>
+                    <span class="sidebar-text">Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="sidebar-stats">
+                    <div class="sidebar-stat">
+                        <span class="sidebar-stat-label">Grip Age</span>
+                        <span class="sidebar-stat-value" id="sidebarGripAge">0 mo</span>
+                    </div>
+                    <div class="sidebar-stat">
+                        <span class="sidebar-stat-label">Best Hang</span>
+                        <span class="sidebar-stat-value" id="sidebarBestHang">0:00</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="addPRBtn">
+                    <span class="btn-icon">+</span>
+                    Add New PR
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h1 class="welcome-title" id="welcomeTitle">Welcome back!</h1>
+                    <p class="welcome-subtitle" id="welcomeSubtitle">Here's your training overview</p>
+                </div>
+                <div class="welcome-actions">
+                    <button class="btn btn-secondary" id="quickLogBtn">
+                        <span class="btn-icon">ðŸ“</span>
+                        Quick Log
+                    </button>
+                    <button class="btn btn-primary" id="viewLeaderboardBtn">
+                        <span class="btn-icon">ðŸ†</span>
+                        View Leaderboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-content">
+                        <div class="stat-icon">ðŸ†</div>
+                        <div class="stat-info">
+                            <h3 class="stat-title">Current Rank</h3>
+                            <p class="stat-value" id="currentRank">#--</p>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <span class="trend-icon" id="rankTrendIcon">â†’</span>
+                        <span class="trend-text" id="rankTrendText">No change</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card success">
+                    <div class="stat-content">
+                        <div class="stat-icon">â±ï¸</div>
+                        <div class="stat-info">
+                            <h3 class="stat-title">Best Hang</h3>
+                            <p class="stat-value" id="bestHang">0:00</p>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <span class="trend-icon" id="hangTrendIcon">â†’</span>
+                        <span class="trend-text" id="hangTrendText">No change</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card warning">
+                    <div class="stat-content">
+                        <div class="stat-icon">ðŸ“…</div>
+                        <div class="stat-info">
+                            <h3 class="stat-title">Grip Age</h3>
+                            <p class="stat-value" id="gripAge">0 mo</p>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <span class="trend-icon">+</span>
+                        <span class="trend-text">Growing</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card info">
+                    <div class="stat-content">
+                        <div class="stat-icon">ðŸ’ª</div>
+                        <div class="stat-info">
+                            <h3 class="stat-title">Total PRs</h3>
+                            <p class="stat-value" id="totalPRs">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <span class="trend-icon" id="prTrendIcon">â†’</span>
+                        <span class="trend-text" id="prTrendText">No change</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">PR Progression</h3>
+                        <select class="chart-period" id="prChartPeriod">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="365">Last year</option>
+                            <option value="all">All time</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="prProgressionChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Training Frequency</h3>
+                        <select class="chart-period" id="trainingChartPeriod">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trainingFrequencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grip Age vs Hang Time Analysis -->
+            <div class="analysis-section">
+                <div class="section-header">
+                    <h2 class="section-title">Grip Age vs Hang Time Analysis</h2>
+                    <div class="analysis-controls">
+                        <select class="chart-period" id="gripAgeChartPeriod">
+                            <option value="30">Last 30 days</option>
+                            <option value="90" selected>Last 90 days</option>
+                            <option value="180">Last 6 months</option>
+                            <option value="365">Last year</option>
+                            <option value="all">All time</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" id="toggleCorrelationBtn">
+                            <span class="btn-icon">ðŸ“Š</span>
+                            Show Correlation
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card full-width">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Dead Hang Time vs Grip Age</h3>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color hang-time"></span>
+                                    <span class="legend-label">Hang Time (seconds)</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color grip-age"></span>
+                                    <span class="legend-label">Grip Age (months)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="gripAgeHangTimeChart"></canvas>
+                        </div>
+                        <div class="chart-insights">
+                            <div class="insight-card">
+                                <div class="insight-icon">ðŸ“ˆ</div>
+                                <div class="insight-content">
+                                    <h4 class="insight-title">Correlation Strength</h4>
+                                    <p class="insight-value" id="correlationStrength">Strong (0.85)</p>
+                                </div>
+                            </div>
+                            <div class="insight-card">
+                                <div class="insight-icon">â±ï¸</div>
+                                <div class="insight-content">
+                                    <h4 class="insight-title">Avg Improvement</h4>
+                                    <p class="insight-value" id="avgImprovement">+0.8s/month</p>
+                                </div>
+                            </div>
+                            <div class="insight-card">
+                                <div class="insight-icon">ðŸŽ¯</div>
+                                <div class="insight-content">
+                                    <h4 class="insight-title">Next Milestone</h4>
+                                    <p class="insight-value" id="nextMilestone">3:00 at 6 months</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Grip Age Distribution</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="gripAgeDistributionChart"></canvas>
+                        </div>
+                        <div class="chart-summary">
+                            <p class="summary-text">Your grip age is in the <strong id="gripAgePercentile">75th</strong> percentile</p>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Hang Time Distribution</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="hangTimeDistributionChart"></canvas>
+                        </div>
+                        <div class="chart-summary">
+                            <p class="summary-text">Your best hang is in the <strong id="hangTimePercentile">60th</strong> percentile</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-insights">
+                    <h3 class="insights-title">Key Insights</h3>
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <div class="insight-icon positive">ðŸ“ˆ</div>
+                            <div class="insight-content">
+                                <h4 class="insight-title">Consistent Growth</h4>
+                                <p class="insight-description">Your hang time increases by an average of <strong>0.8 seconds per month</strong> of grip age.</p>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon neutral">ðŸ“…</div>
+                            <div class="insight-content">
+                                <h4 class="insight-title">Training Consistency</h4>
+                                <p class="insight-description">You've maintained training for <strong>3 consecutive months</strong> without significant breaks.</p>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon positive">âš¡</div>
+                            <div class="insight-content">
+                                <h4 class="insight-title">Accelerated Progress</h4>
+                                <p class="insight-description">Your progress rate has increased by <strong>15%</strong> in the last month compared to previous periods.</p>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon warning">ðŸŽ¯</div>
+                            <div class="insight-content">
+                                <h4 class="insight-title">Next Goal</h4>
+                                <p class="insight-description">At your current rate, you'll reach <strong>3:00 hang time</strong> in approximately <strong>3 months</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="activity-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Activity</h2>
+                    <a href="/activity.html" class="view-all">View All â†’</a>
+                </div>
+                
+                <div class="activity-list" id="activityList">
+                    <!-- Activities will be loaded here -->
+                    <div class="activity-empty">
+                        <div class="empty-icon">ðŸ“Š</div>
+                        <h3 class="empty-title">No activity yet</h3>
+                        <p class="empty-description">Start by logging your first PR or training session!</p>
+                        <button class="btn btn-primary" id="startActivityBtn">
+                            <span class="btn-icon">+</span>
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="actions-section">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="actions-grid">
+                    <button class="action-card" id="logPRBtn">
+                        <div class="action-icon">ðŸ†</div>
+                        <h3 class="action-title">Log New PR</h3>
+                        <p class="action-description">Submit a new personal record</p>
+                    </button>
+                    
+                    <button class="action-card" id="logTrainingBtn">
+                        <div class="action-icon">ðŸ’ª</div>
+                        <h3 class="action-title">Log Training</h3>
+                        <p class="action-description">Record a workout session</p>
+                    </button>
+                    
+                    <button class="action-card" id="viewProgressBtn">
+                        <div class="action-icon">ðŸ“ˆ</div>
+                        <h3 class="action-title">View Progress</h3>
+                        <p class="action-description">See detailed analytics</p>
+                    </button>
+                    
+                    <button class="action-card" id="compareBtn">
+                        <div class="action-icon">ðŸ‘¥</div>
+                        <h3 class="action-title">Compare</h3>
+                        <p class="action-description">Compare with other athletes</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Milestones -->
+            <div class="milestones-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Milestones</h2>
+                    <a href="/milestones.html" class="view-all">View All â†’</a>
+                </div>
+                
+                <div class="milestones-grid" id="milestonesGrid">
+                    <!-- Milestones will be loaded here -->
+                    <div class="milestone-empty">
+                        <div class="empty-icon">ðŸ†</div>
+                        <h3 class="empty-title">No milestones yet</h3>
+                        <p class="empty-description">Keep training to unlock achievements!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    Â© 2024 World Dead Hang Championship. All rights reserved.
+                </p>
+                <div class="footer-links-bottom">
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/terms.html">Terms of Service</a>
+                    <a href="/help.html">Help Center</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            const sessionToken = localStorage.getItem('wdhc_session');
+            if (!sessionToken) {
+                window.location.href = '/auth.html';
+                return;
+            }
+            
+            // Initialize dashboard
+            initializeDashboard();
+            
+            // Mobile menu toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (navToggle) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            
+            // User dropdown
+            const userElement = document.querySelector('.nav-user');
+            if (userElement) {
+                userElement.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function() {
+                    userElement.classList.remove('active');
+                });
+            }
+            
+            // Logout
+            const logoutBtn = document.querySelector('.logout');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('wdhc_session');
+                    window.location.href = '/auth.html';
+                });
+            }
+            
+            // Quick action buttons
+            document.getElementById('addPRBtn')?.addEventListener('click', () => {
+                window.location.href = '/prs.html?action=add';
+            });
+            
+            document.getElementById('quickLogBtn')?.addEventListener('click', () => {
+                window.location.href = '/training.html?action=add';
+            });
+            
+            document.getElementById('viewLeaderboardBtn')?.addEventListener('click', () => {
+                window.location.href = '/leaderboard.html';
+            });
+            
+            document.getElementById('startActivityBtn')?.addEventListener('click', () => {
+                window.location.href = '/prs.html?action=add';
+            });
+            
+            document.getElementById('logPRBtn')?.addEventListener('click', () => {
+                window.location.href = '/prs.html?action=add';
+            });
+            
+            document.getElementById('logTrainingBtn')?.addEventListener('click', () => {
+                window.location.href = '/training.html?action=add';
+            });
+            
+            document.getElementById('viewProgressBtn')?.addEventListener('click', () => {
+                window.location.href = '/analytics.html';
+            });
+            
+            document.getElementById('compareBtn')?.addEventListener('click', () => {
+                window.location.href = '/compare.html';
+            });
+            
+            // Chart period changes
+            document.getElementById('prChartPeriod')?.addEventListener('change', function() {
+                updatePRChart(this.value);
+            });
+            
+            document.getElementById('trainingChartPeriod')?.addEventListener('change', function() {
+                updateTrainingChart(this.value);
+            });
+        });
+        
+        async function initializeDashboard() {
+            try {
+                // Load athlete data
+                const athleteData = await getAthleteData();
+                updateAthleteInfo(athleteData);
+                
+                // Load stats
+                const statsData = await getAthleteStats();
+                updateStats(statsData);
+                
+                // Load recent activity
+                const activityData = await getRecentActivity();
+                updateActivity(activityData);
+                
+                // Load milestones
+                const milestonesData = await getMilestones();
+                updateMilestones(milestonesData);
+                
+                // Initialize charts
+                initializeCharts();
+                
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+                showError('Failed to load dashboard data');
+            }
+        }
+        
+        function updateAthleteInfo(data) {
+            // Update user info
+            const userNameElements = document.querySelectorAll('#userName, #sidebarUserName, #welcomeTitle');
+            userNameElements.forEach(el => {
+                if (el.id === 'welcomeTitle') {
+                    el.textContent = `Welcome back, ${data.name || 'Athlete'}!`;
+                } else {
+                    el.textContent = data.name || 'Athlete';
+                }
+            });
+            
+            // Update rank
+            document.getElementById('sidebarUserRank').textContent = `Rank: #${data.rank || '--'}`;
+            document.getElementById('currentRank').textContent = `#${data.rank || '--'}`;
+            
+            // Update best hang
+            document.getElementById('sidebarBestHang').textContent = data.bestHangTime || '0:00';
+            document.getElementById('bestHang').textContent = data.bestHangTime || '0:00';
+            
+            // Update grip age
+            document.getElementById('sidebarGripAge').textContent = `${data.gripAge || 0} mo`;
+            document.getElementById('gripAge').textContent = `${data.gripAge || 0} mo`;
+            
+            // Update welcome subtitle
+            const welcomeSubtitle = document.getElementById('welcomeSubtitle');
+            if (welcomeSubtitle) {
+                const today = new Date();
+                const hour = today.getHours();
+                let greeting = 'Good ';
+                
+                if (hour < 12) greeting += 'morning';
+                else if (hour < 18) greeting += 'afternoon';
+                else greeting += 'evening';
+                
+                welcomeSubtitle.textContent = `${greeting}! Here's your training overview`;
+            }
+            
+            // Update avatar if available
+            if (data.profileImage) {
+                const avatarElements = document.querySelectorAll('.user-avatar, .sidebar-avatar');
+                avatarElements.forEach(el => {
+                    el.src = data.profileImage;
+                });
+            }
+        }
+        
+        function updateStats(data) {
+            // Update total PRs
+            document.getElementById('totalPRs').textContent = data.totalPRs || 0;
+            document.getElementById('prCountBadge').textContent = data.totalPRs || 0;
+            
+            // Update training count
+            document.getElementById('trainingCountBadge').textContent = data.trainingSessions || 0;
+            
+            // Update trends
+            updateTrends(data.trends || {});
+        }
+        
+        function updateTrends(trends) {
+            // Rank trend
+            const rankTrend = trends.rank || 0;
+            const rankIcon = document.getElementById('rankTrendIcon');
+            const rankText = document.getElementById('rankTrendText');
+            
+            if (rankTrend > 0) {
+                rankIcon.textContent = 'â†‘';
+                rankIcon.style.color = 'var(--success)';
+                rankText.textContent = `+${rankTrend} spots`;
+            } else if (rankTrend < 0) {
+                rankIcon.textContent = 'â†“';
+                rankIcon.style.color = 'var(--error)';
+                rankText.textContent = `${rankTrend} spots`;
+            } else {
+                rankIcon.textContent = 'â†’';
+                rankIcon.style.color = 'var(--gray-500)';
+                rankText.textContent = 'No change';
+            }
+            
+            // Hang time trend
+            const hangTrend = trends.hangTime || 0;
+            const hangIcon = document.getElementById('hangTrendIcon');
+            const hangText = document.getElementById('hangTrendText');
+            
+            if (hangTrend > 0) {
+                hangIcon.textContent = 'â†‘';
+                hangIcon.style.color = 'var(--success)';
+                hangText.textContent = `+${hangTrend}s`;
+            } else if (hangTrend < 0) {
+                hangIcon.textContent = 'â†“';
+                hangIcon.style.color = 'var(--error)';
+                hangText.textContent = `${hangTrend}s`;
+            } else {
+                hangIcon.textContent = 'â†’';
+                hangIcon.style.color = 'var(--gray-500)';
+                hangText.textContent = 'No change';
+            }
+            
+            // PR trend
+            const prTrend = trends.prs || 0;
+            const prIcon = document.getElementById('prTrendIcon');
+            const prText = document.getElementById('prTrendText');
+            
+            if (prTrend > 0) {
+                prIcon.textContent = 'â†‘';
+                prIcon.style.color = 'var(--success)';
+                prText.textContent = `+${prTrend}`;
+            } else if (prTrend < 0) {
+                prIcon.textContent = 'â†“';
+                prIcon.style.color = 'var(--error)';
+                prText.textContent = `${prTrend}`;
+            } else {
+                prIcon.textContent = 'â†’';
+                prIcon.style.color = 'var(--gray-500)';
+                prText.textContent = 'No change';
+            }
+        }
+        
+        function updateActivity(activities) {
+            const container = document.getElementById('activityList');
+            if (!container) return;
+            
+            if (!activities || activities.length === 0) {
+                container.innerHTML = `
+                    <div class="activity-empty">
+                        <div class="empty-icon">ðŸ“Š</div>
+                        <h3 class="empty-title">No activity yet</h3>
+                        <p class="empty-description">Start by logging your first PR or training session!</p>
+                        <button class="btn btn-primary" id="startActivityBtn">
+                            <span class="btn-icon">+</span>
+                            Get Started
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item ${activity.type}">
+                    <div class="activity-icon">
+                        ${getActivityIcon(activity.type)}
+                    </div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">${activity.title}</h4>
+                        <p class="activity-description">${activity.description}</p>
+                        <div class="activity-meta">
+                            <span class="activity-time">${formatTime(activity.timestamp)}</span>
+                            ${activity.details ? `<span class="activity-details">${activity.details}</span>` : ''}
+                        </div>
+                    </div>
+                    ${activity.action ? `
+                    <div class="activity-action">
+                        <a href="${activity.action.url}" class="btn btn-sm btn-secondary">${activity.action.text}</a>
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function updateMilestones(milestones) {
+            const container = document.getElementById('milestonesGrid');
+            if (!container) return;
+            
+            if (!milestones || milestones.length === 0) {
+                container.innerHTML = `
+                    <div class="milestone-empty">
+                        <div class="empty-icon">ðŸ†</div>
+                        <h3 class="empty-title">No milestones yet</h3>
+                        <p class="empty-description">Keep training to unlock achievements!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = milestones.map(milestone => `
+                <div class="milestone-card ${milestone.achieved ? 'achieved' : 'locked'}">
+                    <div class="milestone-icon">
+                        ${milestone.achieved ? 'ðŸ†' : 'ðŸ”’'}
+                    </div>
+                    <div class="milestone-content">
+                        <h4 class="milestone-title">${milestone.title}</h4>
+                        <p class="milestone-description">${milestone.description}</p>
+                        ${milestone.progress ? `
+                        <div class="milestone-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${milestone.progress}%"></div>
+                            </div>
+                            <span class="progress-text">${milestone.progress}%</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    ${milestone.achieved ? `
+                    <div class="milestone-date">
+                        ${formatDate(milestone.achievedAt)}
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function initializeCharts() {
+            // PR Progression Chart
+            const prCtx = document.getElementById('prProgressionChart').getContext('2d');
+            window.prChart = new Chart(prCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Hang Time (seconds)',
+                        data: [45, 52, 48, 61, 58, 67],
+                        borderColor: 'var(--primary)',
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + 's';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Training Frequency Chart
+            const trainingCtx = document.getElementById('trainingFrequencyChart').getContext('2d');
+            window.trainingChart = new Chart(trainingCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Training Sessions',
+                        data: [2, 3, 1, 2, 4, 1, 0],
+                        backgroundColor: 'var(--primary)',
+                        borderColor: 'var(--primary-dark)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                stepSize: 1
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updatePRChart(period) {
+            // In production, this would fetch new data based on period
+            console.log('Updating PR chart for period:', period);
+        }
+        
+        function updateTrainingChart(period) {
+            // In production, this would fetch new data based on period
+            console.log('Updating training chart for period:', period);
+        }
+        
+        function getActivityIcon(type) {
+            const icons = {
+                'pr': 'ðŸ†',
+                'training': 'ðŸ’ª',
+                'milestone': 'ðŸŽ¯',
+                'rank': 'ðŸ“ˆ',
+                'social': 'ðŸ‘¥',
+                'system': 'ðŸ””'
+            };
+            return icons[type] || 'ðŸ“Š';
+        }
+        
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            
+            return date.toLocaleDateString();
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        
+        function showError(message) {
+            // Create error toast
+            const toast = document.createElement('div');
+            toast.className = 'error-toast';
+            toast.innerHTML = `
+                <span class="toast-icon">âŒ</span>
+                <span class="toast-message">${message}</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 5000);
+        }
+        
+        // Mock API functions (would be replaced with real API calls)
+        async function getAthleteData() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve({
+                        name: 'John Smith',
+                        rank: 42,
+                        bestHangTime: '2:45',
+                        gripAge: 8,
+                        profileImage: 'assets/default-avatar.jpg'
+                    });
+                }, 500);
+            });
+        }
+        
+        async function getAthleteStats() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve({
+                        totalPRs: 12,
+                        trainingSessions: 24,
+                        trends: {
+                            rank: 3,
+                            hangTime: 5,
+                            prs: 2
+                        }
+                    });
+                }, 500);
+            });
+        }
+        
+        async function getRecentActivity() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve([
+                        {
+                            type: 'pr',
+                            title: 'New Personal Record!',
+                            description: 'You achieved a new best hang time of 2:45',
+                            timestamp: new Date(Date.now() - 3600000).toISOString(),
+                            details: '+5 seconds from previous PR',
+                            action: {
+                                text: 'View',
+                                url: '/prs/123'
+                            }
+                        },
+                        {
+                            type: 'training',
+                            title: 'Training Session Logged',
+                            description: 'Completed a grip endurance workout',
+                            timestamp: new Date(Date.now() - 86400000).toISOString(),
+                            details: '4 sets of max hangs'
+                        },
+                        {
+                            type: 'rank',
+                            title: 'Rank Improved',
+                            description: 'You moved up 3 spots on the global leaderboard',
+                            timestamp: new Date(Date.now() - 172800000).toISOString(),
+                            details: 'Now ranked #42 globally'
+                        }
+                    ]);
+                }, 500);
+            });
+        }
+        
+        async function getMilestones() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve([
+                        {
+                            title: 'First PR',
+                            description: 'Submitted your first dead hang PR',
+                            achieved: true,
+                            achievedAt: new Date(Date.now() - 2592000000).toISOString()
+                        },
+                        {
+                            title: '5 PRs',
+                            description: 'Achieved 5 personal records',
+                            achieved: true,
+                            achievedAt: new Date(Date.now() - 1728000000).toISOString()
+                        },
+                        {
+                            title: '1-Minute Hang',
+                            description: 'Hang for 60 seconds or more',
+                            achieved: false,
+                            progress: 75
+                        },
+                        {
+                            title: 'Consistent Training',
+                            description: 'Maintain 80%+ consistency for 4 weeks',
+                            achieved: false,
+                            progress: 60
+                        }
+                    ]);
+                }, 500);
+            });
+        }
+    </script>
+    
+    <!-- Dashboard JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

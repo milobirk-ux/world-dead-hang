@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Rules | World Dead Hang Championship</title>
+    <link rel="icon" type="image/png" href="media/logo_final_transparent.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
+        
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --gold: #D4AF37;
+            --gold-dim: #8a702a;
+            --text: #ffffff;
+            --text-dim: #888;
+            --border: #222;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            background-image: linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        nav { padding: 5px 30px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo { 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-logo img { height: 40px; width: auto; }
+        .nav-logo span {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px 80px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4rem;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-family: 'Roboto Mono', monospace;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        h2::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 24px;
+            background: var(--gold);
+        }
+
+        .rule-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 4px;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+        li strong {
+            color: #fff;
+            text-transform: uppercase;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        li::before {
+            content: '→';
+            color: var(--gold);
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        .note-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid var(--gold-dim);
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--gold);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            color: #444;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 901px) {
+            .nav-logo img { height: 50px !important; width: auto; margin-top: -3px !important; }
+            .nav-links a { font-size: 1.1rem !important; margin-left: 30px !important; }
+            header { text-align: center !important; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo">
+            <a href="index.html"><img src="media/logo_final_transparent.jpg" alt="WDHC Logo"></a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Leaderboard</a>
+            <a href="rules.html" style="color: var(--gold);">Rulebook</a>
+            <a href="submit.html">Submit</a>
+            <a href="benefits.html">Benefits</a>
+            <a href="about.html">About</a>
+            <a href="athlete-portal/index.html">Athlete Portal</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>OFFICIAL RULEBOOK</h1>
+            <div class="subtitle">The Global Standard for Grip Endurance</div>
+        </header>
+
+        <section>
+            <h2>1. Equipment Standards</h2>
+            <div class="rule-card">
+                <ul>
+                    <li>
+                        <strong>The Regulation Bar</strong>
+                        The attempt must be performed on a standard, smooth cylindrical pull-up bar with a diameter of 1.25 inches (32mm).
+                    </li>
+                    <li>
+                        <strong>No Bar Adhesives</strong>
+                        The bar must be bare steel or standard powder coat. No athletic tape, foam, or rubberized grips are permitted on the bar surface.
+                    </li>
+                    <li>
+                        <strong>Chalk Policy</strong>
+                        Both standard dry magnesium carbonate (block/powder) and liquid chalk are APPROVED. However, the use of rosin, pine tar, or any "tacky" grip aids containing adhesives is strictly prohibited.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. The Performance</h2>
+            <div class="rule-card">
+                <ul>
+                    <li>
+                        <strong>The Grip Style</strong>
+                        Athletes must use an overhand (pronated) grip. Thumbs can be wrapped around the bar or kept on top (thumbless). Underhand or mixed grips are disqualified.
+                    </li>
+                    <li>
+                        <strong>Full Extension</strong>
+                        Arms must remain fully extended at the elbows for the duration of the hang. Slight engagement of the lats/scapula (Active Hang) is permitted and recommended, provided the elbows do not bend.
+                    </li>
+                    <li>
+                        <strong>Zero Assistance</strong>
+                        No lifting straps, gloves, or wrist wraps are permitted. The hands must make direct contact with the bar.
+                    </li>
+                    <li>
+                        <strong>Vertical Hang</strong>
+                        The athlete must hang freely. No cycling of the legs, "kipping," or resting the chin/body against the rig or uprights.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Video Verification</h2>
+            <div class="rule-card">
+                <ul>
+                    <li>
+                        <strong>Unedited Footage</strong>
+                        The video must be a single, continuous, unedited shot. Any cuts or speed adjustments will result in an immediate rejection.
+                    </li>
+                    <li>
+                        <strong>Full Body Frame</strong>
+                        The entire body (from the hands on the bar to the feet) must remain in the camera frame for the entire duration of the attempt.
+                    </li>
+                    <li>
+                        <strong>The Start & Finish</strong>
+                        the timer begins the moment the hands are on the bar and the feet leave the ground and stops the moment any part of the athlete (feet or hands) touches the ground or leaves the bar.
+                    </li>
+                    <li>
+                        <strong>Tiered Verification System</strong>
+                        To encourage participation, the WDHC uses a two-level verification system.
+                        <ul>
+                            <li style="font-size: 1rem; margin-top: 15px;">
+                                <strong>Standard Verification (Rookie & Contender Tiers):</strong>
+                                Submissions for these tiers do not require a caliper measurement of the bar or a close-up inspection for bar materials. The hang must simply be performed on a standard pull-up bar.
+                            </li>
+                            <li style="font-size: 1rem;">
+                                <strong>Pro-Level Verification (Pro, Elite, Legend & Freak Tiers):</strong>
+                                To be ranked in these highly competitive tiers, all video evidence rules must be strictly followed, including caliper measurement of the bar diameter and close-up footage to verify the bar is free of any prohibited materials.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="note-box">
+                ALIGNMENT: These standards are designed to align with Guinness World Record criteria to ensure all WDHC records are globally recognized.
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        © 2026 World Dead Hang Championship
+    </footer>
+</body>
+</html>

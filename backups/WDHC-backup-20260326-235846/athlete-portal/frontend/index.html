@@ -1,0 +1,462 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDHC Athlete Portal - World Dead Hang Championship</title>
+    <link rel="icon" type="image/png" href="/media/logo_final_transparent.jpg" sizes="any">
+    <link rel="apple-touch-icon" href="/media/logo_final_transparent.jpg">
+    
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="WDHC Athlete Portal">
+    <meta property="og:description" content="Track your grip strength progress, compete on leaderboards, and join the global dead hang community">
+    <meta property="og:image" content="/media/logo_final_transparent.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://athletes.worlddeadhang.com">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/media/logo_final_transparent.jpg">
+    
+    <!-- Simple API for testing -->
+    <script src="js/api-simple.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+                <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#leaderboard" class="nav-link">Leaderboard</a>
+                <a href="#community" class="nav-link">Community</a>
+                <a href="auth.html" class="nav-link nav-login">Login</a>
+                <a href="auth.html?register=true" class="nav-button">Join Free</a>
+            </div>
+            
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="hero-gradient">Track Your Grip Strength</span><br>
+                    <span class="hero-subtitle">Compete. Improve. Dominate.</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Join thousands of athletes tracking their dead hang progress, 
+                    competing on global leaderboards, and achieving new personal records.
+                </p>
+                
+                <div class="hero-buttons">
+                    <a href="/auth.html?register=true" class="btn btn-primary btn-large">
+                        Start Free Trial
+                    </a>
+                    <a href="#features" class="btn btn-secondary btn-large">
+                        Learn More
+                    </a>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="athlete-count">2,500+</span>
+                        <span class="stat-label">Athletes</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="pr-count">15,000+</span>
+                        <span class="stat-label">PRs Logged</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="country-count">85+</span>
+                        <span class="stat-label">Countries</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="dashboard-preview">
+                    <div class="preview-header">
+                        <div class="preview-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="preview-title">Athlete Dashboard</span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-stats">
+                            <div class="preview-stat">
+                                <div class="preview-stat-label">Best Hang</div>
+                                <div class="preview-stat-value">2:45</div>
+                            </div>
+                            <div class="preview-stat">
+                                <div class="preview-stat-label">Rank</div>
+                                <div class="preview-stat-value">#42</div>
+                            </div>
+                            <div class="preview-stat">
+                                <div class="preview-stat-label">Grip Age</div>
+                                <div class="preview-stat-value">8 mo</div>
+                            </div>
+                        </div>
+                        <div class="preview-chart">
+                            <div class="chart-bar" style="height: 70%;"></div>
+                            <div class="chart-bar" style="height: 85%;"></div>
+                            <div class="chart-bar" style="height: 60%;"></div>
+                            <div class="chart-bar" style="height: 95%;"></div>
+                            <div class="chart-bar" style="height: 75%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Everything You Need to Improve</h2>
+            <p class="section-subtitle">Track, analyze, and compete with the most comprehensive grip strength platform</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">ðŸ“Š</div>
+                    <h3 class="feature-title">PR Tracking</h3>
+                    <p class="feature-description">
+                        Log and track every personal record with video verification. 
+                        Watch your progress over time with detailed analytics.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">ðŸ†</div>
+                    <h3 class="feature-title">Live Leaderboards</h3>
+                    <p class="feature-description">
+                        Compete on global, country, and age-group leaderboards. 
+                        See how you rank against athletes worldwide.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">ðŸ“ˆ</div>
+                    <h3 class="feature-title">Progress Analytics</h3>
+                    <p class="feature-description">
+                        Advanced charts and insights showing your improvement rate, 
+                        consistency, and grip age progression.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">ðŸ’ª</div>
+                    <h3 class="feature-title">Training Logs</h3>
+                    <p class="feature-description">
+                        Log workouts, track volume, and monitor fatigue. 
+                        Plan your training for optimal grip strength development.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">ðŸ‘¥</div>
+                    <h3 class="feature-title">Athlete Community</h3>
+                    <p class="feature-description">
+                        Connect with other grip athletes, share tips, 
+                        and get motivated by others' progress.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">ðŸ””</div>
+                    <h3 class="feature-title">Smart Reminders</h3>
+                    <p class="feature-description">
+                        Get personalized training reminders and weekly progress reports 
+                        to keep you consistent and motivated.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard Preview -->
+    <section id="leaderboard" class="leaderboard-preview">
+        <div class="container">
+            <h2 class="section-title">Global Leaderboard</h2>
+            <p class="section-subtitle">See where you stand among the world's best</p>
+            
+            <div class="leaderboard-table">
+                <div class="table-header">
+                    <div class="table-row">
+                        <div class="table-cell rank-header">Rank</div>
+                        <div class="table-cell">Athlete</div>
+                        <div class="table-cell">Country</div>
+                        <div class="table-cell">Best Time</div>
+                        <div class="table-cell">PRs</div>
+                    </div>
+                </div>
+                
+                <div class="table-body" id="leaderboard-preview">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <a href="/leaderboard.html" class="btn btn-secondary">
+                    View Full Leaderboard
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Level Up Your Grip?</h2>
+                <p class="cta-description">
+                    Join athletes from 85+ countries tracking their progress and setting new records.
+                    Start your free trial today.
+                </p>
+                
+                <div class="cta-buttons">
+                    <a href="/auth.html?register=true" class="btn btn-primary btn-large">
+                        Start Free Trial
+                    </a>
+                    <a href="#features" class="btn btn-outline btn-large">
+                        See All Features
+                    </a>
+                </div>
+                
+                <div class="cta-features">
+                    <div class="cta-feature">
+                        <span class="checkmark">âœ“</span>
+                        <span>No credit card required</span>
+                    </div>
+                    <div class="cta-feature">
+                        <span class="checkmark">âœ“</span>
+                        <span>Free forever plan available</span>
+                    </div>
+                    <div class="cta-feature">
+                        <span class="checkmark">âœ“</span>
+                        <span>Cancel anytime</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="footer-logo-img">
+                        <span class="footer-logo-text">WDHC Athlete Portal</span>
+                    </div>
+                    <p class="footer-description">
+                        The world's premier platform for tracking and competing in grip strength.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">Discord</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3 class="footer-heading">Platform</h3>
+                    <ul class="footer-links">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="#leaderboard">Leaderboard</a></li>
+                        <li><a href="#features">Training Log</a></li>
+                        <li><a href="dashboard.html">Profile</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3 class="footer-heading">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Help Center</a></li>
+                        <li><a href="#community">Blog</a></li>
+                        <li><a href="#features">Training Guides</a></li>
+                        <li><a href="#features">API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3 class="footer-heading">Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="/about.html">About</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                        <li><a href="/privacy.html">Privacy</a></li>
+                        <li><a href="/terms.html">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    Â© 2024 World Dead Hang Championship. All rights reserved.
+                </p>
+                <div class="footer-links-bottom">
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/terms.html">Terms of Service</a>
+                    <a href="/cookies.html">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // If user is already authenticated, redirect to dashboard
+            if (typeof WDHC_API !== 'undefined' && WDHC_API.isAuthenticated()) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            // Check for magic link token in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionToken = urlParams.get('session');
+            if (sessionToken) {
+                // Verify the magic link token
+                WDHC_API.verifyMagicLink(sessionToken).then(result => {
+                    if (result.success) {
+                        window.location.href = 'dashboard.html';
+                    }
+                });
+                return;
+            }
+            
+            // Continue with normal page initialization
+            initializeLandingPage();
+        });
+        
+        function initializeLandingPage() {
+            // Load leaderboard preview
+            loadLeaderboardPreview();
+            
+            // Animate stats
+            animateStats();
+            
+            // Mobile menu toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (navToggle) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu if open
+                        if (navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                            navToggle.classList.remove('active');
+                        }
+                    }
+                });
+            });
+        });
+        
+        function loadLeaderboardPreview() {
+            const leaderboardData = [
+                { rank: 1, name: 'Alex Chen', country: 'ðŸ‡ºðŸ‡¸ USA', time: '5:22', prs: 24 },
+                { rank: 2, name: 'Maria Rodriguez', country: 'ðŸ‡ªðŸ‡¸ Spain', time: '5:18', prs: 19 },
+                { rank: 3, name: 'Kenji Tanaka', country: 'ðŸ‡¯ðŸ‡µ Japan', time: '5:15', prs: 31 },
+                { rank: 4, name: 'Sarah Johnson', country: 'ðŸ‡¬ðŸ‡§ UK', time: '5:08', prs: 16 },
+                { rank: 5, name: 'Lars Schmidt', country: 'ðŸ‡©ðŸ‡ª Germany', time: '5:05', prs: 22 }
+            ];
+            
+            const container = document.getElementById('leaderboard-preview');
+            if (!container) return;
+            
+            container.innerHTML = leaderboardData.map(athlete => `
+                <div class="table-row ${athlete.rank <= 3 ? 'podium' : ''}">
+                    <div class="table-cell rank-cell">
+                        <span class="rank-number">${athlete.rank}</span>
+                        ${athlete.rank === 1 ? 'ðŸ¥‡' : athlete.rank === 2 ? 'ðŸ¥ˆ' : athlete.rank === 3 ? 'ðŸ¥‰' : ''}
+                    </div>
+                    <div class="table-cell athlete-cell">
+                        <div class="athlete-name">${athlete.name}</div>
+                    </div>
+                    <div class="table-cell country-cell">${athlete.country}</div>
+                    <div class="table-cell time-cell">${athlete.time}</div>
+                    <div class="table-cell prs-cell">${athlete.prs}</div>
+                </div>
+            `).join('');
+        }
+        
+        function animateStats() {
+            const stats = [
+                { id: 'athlete-count', target: 2500, duration: 2000 },
+                { id: 'pr-count', target: 15000, duration: 2000 },
+                { id: 'country-count', target: 85, duration: 2000 }
+            ];
+            
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                if (!element) return;
+                
+                const start = 0;
+                const end = stat.target;
+                const duration = stat.duration;
+                const startTime = performance.now();
+                
+                function updateNumber(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Easing function
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = Math.floor(start + (end - start) * easeOutQuart);
+                    
+                    element.textContent = current.toLocaleString() + '+';
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateNumber);
+                    }
+                }
+                
+                requestAnimationFrame(updateNumber);
+            });
+        }
+    </script>
+</body>
+</html>
