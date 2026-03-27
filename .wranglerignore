@@ -1,1 +1,10 @@
 main.sqlite
+ffmpeg.exe
+*.exe
+*.dll
+*.pdb
+*.so
+*.dylib
+node_modules/
+.DS_Store
+Thumbs.db
