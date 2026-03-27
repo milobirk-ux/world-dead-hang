@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDHC Celebration Graphic Generator</title>
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-surface: #0a0a0a;
+            --gold: #D4AF37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --text-light: #ffffff;
+            --text-dim: #888888;
+            
+            /* Tier colors */
+            --freak: #FFD700;
+            --legend: #C0C0C0;
+            --elite: #CD7F32;
+            --pro: #4CAF50;
+            --contender: #2196F3;
+            --challenger: #9C27B0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .graphic-container {
+            width: 1200px;
+            height: 630px; /* Standard social media graphic size */
+            background: linear-gradient(135deg, var(--bg-surface) 0%, #111 100%);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Background pattern */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: 
+                radial-gradient(circle at 25% 25%, var(--gold) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, var(--gold) 2px, transparent 2px);
+            background-size: 100px 100px;
+        }
+        
+        /* Header */
+        .header {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            padding: 10px;
+            background: var(--bg-surface);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+        
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+        }
+        
+        /* Main content */
+        .content {
+            position: absolute;
+            top: 200px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .athlete-name {
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .achievement {
+            font-size: 36px;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+        }
+        
+        .hang-time {
+            font-size: 120px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px var(--gold-glow);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { text-shadow: 0 0 30px var(--gold-glow); }
+            50% { text-shadow: 0 0 50px var(--gold-glow); }
+            100% { text-shadow: 0 0 30px var(--gold-glow); }
+        }
+        
+        /* Tier badge */
+        .tier-badge {
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tier-freak {
+            background: linear-gradient(135deg, var(--freak) 0%, #FFA500 100%);
+            color: #000;
+        }
+        
+        .tier-legend {
+            background: linear-gradient(135deg, var(--legend) 0%, #888 100%);
+            color: #000;
+        }
+        
+        .tier-elite {
+            background: linear-gradient(135deg, var(--elite) 0%, #8B4513 100%);
+            color: #fff;
+        }
+        
+        .tier-pro {
+            background: linear-gradient(135deg, var(--pro) 0%, #2E7D32 100%);
+            color: #fff;
+        }
+        
+        .tier-contender {
+            background: linear-gradient(135deg, var(--contender) 0%, #0D47A1 100%);
+            color: #fff;
+        }
+        
+        .tier-challenger {
+            background: linear-gradient(135deg, var(--challenger) 0%, #6A1B9A 100%);
+            color: #fff;
+        }
+        
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .cta {
+            font-size: 24px;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+        
+        .website {
+            font-size: 28px;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .timestamp {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 18px;
+            color: var(--text-dim);
+        }
+        
+        /* Decorative elements */
+        .corner-decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+        }
+        
+        .corner-tl {
+            top: -100px;
+            left: -100px;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+        }
+        
+        .corner-br {
+            bottom: -100px;
+            right: -100px;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1250px) {
+            .graphic-container {
+                transform: scale(0.8);
+            }
+        }
+        
+        @media (max-width: 1000px) {
+            .graphic-container {
+                transform: scale(0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="graphic-container" id="graphic">
+        <!-- Background pattern -->
+        <div class="bg-pattern"></div>
+        
+        <!-- Decorative corners -->
+        <div class="corner-decoration corner-tl"></div>
+        <div class="corner-decoration corner-br"></div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <!-- Logo would be inserted here -->
+                <div style="width: 100%; height: 100%; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; font-weight: bold;">
+                    WDHC
+                </div>
+            </div>
+            <h1 class="title">World Dead Hang Championship</h1>
+            <p class="subtitle">Celebrating Grip Strength Achievements</p>
+        </div>
+        
+        <!-- Main content -->
+        <div class="content">
+            <h2 class="athlete-name" id="athleteName">ATHLETE NAME</h2>
+            <p class="achievement">Just achieved an incredible hang time of</p>
+            <div class="hang-time" id="hangTime">4:26</div>
+            <div class="tier-badge" id="tierBadge">LEGEND TIER</div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="cta">Join the competition and test your grip strength</p>
+            <p class="website">worlddeadhang.com/submit</p>
+            <div class="timestamp" id="timestamp">March 26, 2026</div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - would be replaced by actual data from Google Apps Script
+        const sampleData = {
+            athleteName: "John Doe",
+            hangTime: "4:26",
+            tier: "LEGEND",
+            timestamp: "March 26, 2026"
+        };
+        
+        // Update graphic with data
+        function updateGraphic(data) {
+            document.getElementById('athleteName').textContent = data.athleteName;
+            document.getElementById('hangTime').textContent = data.hangTime;
+            document.getElementById('timestamp').textContent = data.timestamp;
+            
+            // Update tier badge
+            const tierBadge = document.getElementById('tierBadge');
+            tierBadge.textContent = `${data.tier} TIER`;
+            tierBadge.className = 'tier-badge'; // Reset classes
+            
+            // Add appropriate tier class
+            const tierClass = `tier-${data.tier.toLowerCase()}`;
+            tierBadge.classList.add(tierClass);
+        }
+        
+        // Initialize with sample data
+        updateGraphic(sampleData);
+        
+        // Function to capture graphic as image
+        function captureGraphic() {
+            // This would use html2canvas or similar library
+            // For now, just log that capture would happen
+            console.log('Graphic capture triggered');
+            
+            // In production, this would:
+            // 1. Use html2canvas to capture the #graphic element
+            // 2. Convert to blob
+            // 3. Upload to cloud storage
+            // 4. Return URL for social media posting
+        }
+        
+        // Export function for Google Apps Script
+        if (typeof module !== 'undefined') {
+            module.exports = {
+                updateGraphic,
+                captureGraphic
+            };
+        }
+    </script>
+    
+    <!-- In production, include html2canvas library -->
+    <!-- <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script> -->
+</body>
+</html>
