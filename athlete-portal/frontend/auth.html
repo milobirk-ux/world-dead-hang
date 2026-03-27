@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - WDHC Athlete Portal</title>
-    <link rel="icon" type="image/png" href="../media/logo_final_transparent.jpg" sizes="any">
+    <link rel="icon" type="image/png" href="/media/logo_final_transparent.jpg" sizes="any">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -13,14 +13,17 @@
     <link rel="stylesheet" href="css/styles.css">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../media/logo_final_transparent.jpg">
+    <link rel="icon" type="image/x-icon" href="/media/logo_final_transparent.jpg">
+    
+    <!-- Simple API for testing -->
+    <script src="js/api-simple.js"></script>
 </head>
 <body class="auth-page">
     <!-- Navigation -->
     <nav class="navbar auth-navbar">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
-                <img src="../media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
                 <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
             </a>
             
@@ -33,7 +36,7 @@
         <div class="auth-card">
             <!-- Logo -->
             <div class="auth-logo">
-                <img src="../media/logo_final_transparent.jpg" alt="WDHC Logo" class="auth-logo-img">
+                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="auth-logo-img">
                 <h1 class="auth-logo-text">WDHC Athlete Portal</h1>
             </div>
             
@@ -174,7 +177,7 @@
             <!-- Magic Link Sent -->
             <div class="auth-form" id="magicLinkSent">
                 <div class="auth-success">
-                    <div class="success-icon">✉️</div>
+                    <div class="success-icon">âœ‰ï¸</div>
                     <h2 class="auth-title">Check Your Email</h2>
                     <p class="auth-subtitle" id="magicLinkEmail"></p>
                     
@@ -183,15 +186,15 @@
                         
                         <div class="success-tips">
                             <div class="tip">
-                                <span class="tip-icon">⏰</span>
+                                <span class="tip-icon">â°</span>
                                 <span class="tip-text">Link expires in 24 hours</span>
                             </div>
                             <div class="tip">
-                                <span class="tip-icon">📧</span>
+                                <span class="tip-icon">ðŸ“§</span>
                                 <span class="tip-text">Check your spam folder</span>
                             </div>
                             <div class="tip">
-                                <span class="tip-icon">🔄</span>
+                                <span class="tip-icon">ðŸ”„</span>
                                 <span class="tip-text">Can't find it? <a href="#" id="resendLink">Resend</a></span>
                             </div>
                         </div>
@@ -210,7 +213,7 @@
             
             <div class="benefits-list">
                 <div class="benefit">
-                    <span class="benefit-icon">📊</span>
+                    <span class="benefit-icon">ðŸ“Š</span>
                     <div class="benefit-content">
                         <h4 class="benefit-title">Track Your Progress</h4>
                         <p class="benefit-description">
@@ -220,7 +223,7 @@
                 </div>
                 
                 <div class="benefit">
-                    <span class="benefit-icon">🏆</span>
+                    <span class="benefit-icon">ðŸ†</span>
                     <div class="benefit-content">
                         <h4 class="benefit-title">Compete Globally</h4>
                         <p class="benefit-description">
@@ -230,7 +233,7 @@
                 </div>
                 
                 <div class="benefit">
-                    <span class="benefit-icon">💪</span>
+                    <span class="benefit-icon">ðŸ’ª</span>
                     <div class="benefit-content">
                         <h4 class="benefit-title">Training Tools</h4>
                         <p class="benefit-description">
@@ -240,7 +243,7 @@
                 </div>
                 
                 <div class="benefit">
-                    <span class="benefit-icon">👥</span>
+                    <span class="benefit-icon">ðŸ‘¥</span>
                     <div class="benefit-content">
                         <h4 class="benefit-title">Join the Community</h4>
                         <p class="benefit-description">
@@ -266,7 +269,7 @@
     <footer class="auth-footer">
         <div class="container">
             <p class="footer-copyright">
-                © 2024 World Dead Hang Championship. All rights reserved.
+                Â© 2024 World Dead Hang Championship. All rights reserved.
             </p>
             <div class="footer-links">
                 <a href="/privacy.html">Privacy</a>
@@ -387,20 +390,29 @@
         }
         
         function showMagicLinkSent(email) {
-            const forms = document.querySelectorAll('.auth-form');
-            const emailElement = document.getElementById('magicLinkEmail');
-            const resendLink = document.getElementById('resendLink');
+            // For testing: Immediately redirect to dashboard
+            // In production, this would show "check your email" message
             
+            // Show a brief message then redirect
+            const forms = document.querySelectorAll('.auth-form');
             forms.forEach(form => form.classList.remove('active'));
             document.getElementById('magicLinkSent').classList.add('active');
             
+            const emailElement = document.getElementById('magicLinkEmail');
             if (emailElement) {
                 emailElement.textContent = email;
             }
             
-            if (resendLink) {
-                resendLink.setAttribute('data-email', email);
+            // Update message for testing
+            const messageElement = document.querySelector('#magicLinkSent .success-message p');
+            if (messageElement) {
+                messageElement.textContent = 'TEST MODE: Redirecting to your dashboard...';
             }
+            
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 2000);
         }
         
         async function handleLoginSubmit(e) {
@@ -524,16 +536,8 @@
         }
         
         async function requestMagicLink(email, athleteName = '') {
-            // This would call your Google Apps Script backend
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve({
-                        success: true,
-                        message: 'Magic link sent successfully',
-                        isNewAthlete: !!athleteName
-                    });
-                }, 1500);
-            });
+            // Use the simple API
+            return await WDHC_API.requestMagicLink(email, athleteName);
         }
     </script>
 </body>

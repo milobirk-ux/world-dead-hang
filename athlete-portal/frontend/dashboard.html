@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - WDHC Athlete Portal</title>
-    <link rel="icon" type="image/png" href="../media/logo_final_transparent.jpg" sizes="any">
+    <link rel="icon" type="image/png" href="/media/logo_final_transparent.jpg" sizes="any">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -17,14 +17,32 @@
     <link rel="stylesheet" href="css/dashboard.css">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../media/logo_final_transparent.jpg">
+    <link rel="icon" type="image/x-icon" href="/media/logo_final_transparent.jpg">
+    
+    <!-- Simple API for testing -->
+    <script src="js/api-simple.js"></script>
 </head>
 <body class="dashboard-page">
+    <!-- Authentication check -->
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // If user is not authenticated, redirect to auth page
+            if (typeof WDHC_API === 'undefined' || !WDHC_API.isAuthenticated()) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            
+            // User is authenticated, continue loading dashboard
+            console.log('User authenticated, loading dashboard...');
+        });
+    </script>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
-                <img src="../media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
                 <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
             </a>
             
@@ -34,7 +52,7 @@
                 <a href="#features" class="nav-link">Training</a>
                 <a href="dashboard.html" class="nav-link">Profile</a>
                 <div class="nav-user">
-                    <img src="../media/logo_final_transparent.jpg" alt="User" class="user-avatar" id="userAvatar">
+                    <img src="/media/logo_final_transparent.jpg" alt="User" class="user-avatar" id="userAvatar">
                     <span class="user-name" id="userName">Loading...</span>
                     <div class="user-dropdown">
                         <a href="dashboard.html" class="dropdown-item">Profile</a>
@@ -67,29 +85,29 @@
             
             <nav class="sidebar-nav">
                 <a href="/dashboard.html" class="sidebar-link active">
-                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-icon">ðŸ“Š</span>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
                 <a href="/prs.html" class="sidebar-link">
-                    <span class="sidebar-icon">🏆</span>
+                    <span class="sidebar-icon">ðŸ†</span>
                     <span class="sidebar-text">PRs</span>
                     <span class="sidebar-badge" id="prCountBadge">0</span>
                 </a>
                 <a href="/training.html" class="sidebar-link">
-                    <span class="sidebar-icon">💪</span>
+                    <span class="sidebar-icon">ðŸ’ª</span>
                     <span class="sidebar-text">Training</span>
                     <span class="sidebar-badge" id="trainingCountBadge">0</span>
                 </a>
                 <a href="/leaderboard.html" class="sidebar-link">
-                    <span class="sidebar-icon">📈</span>
+                    <span class="sidebar-icon">ðŸ“ˆ</span>
                     <span class="sidebar-text">Leaderboard</span>
                 </a>
                 <a href="/profile.html" class="sidebar-link">
-                    <span class="sidebar-icon">👤</span>
+                    <span class="sidebar-icon">ðŸ‘¤</span>
                     <span class="sidebar-text">Profile</span>
                 </a>
                 <a href="/settings.html" class="sidebar-link">
-                    <span class="sidebar-icon">⚙️</span>
+                    <span class="sidebar-icon">âš™ï¸</span>
                     <span class="sidebar-text">Settings</span>
                 </a>
             </nav>
@@ -122,11 +140,11 @@
                 </div>
                 <div class="welcome-actions">
                     <button class="btn btn-secondary" id="quickLogBtn">
-                        <span class="btn-icon">📝</span>
+                        <span class="btn-icon">ðŸ“</span>
                         Quick Log
                     </button>
                     <button class="btn btn-primary" id="viewLeaderboardBtn">
-                        <span class="btn-icon">🏆</span>
+                        <span class="btn-icon">ðŸ†</span>
                         View Leaderboard
                     </button>
                 </div>
@@ -136,35 +154,35 @@
             <div class="stats-grid">
                 <div class="stat-card primary">
                     <div class="stat-content">
-                        <div class="stat-icon">🏆</div>
+                        <div class="stat-icon">ðŸ†</div>
                         <div class="stat-info">
                             <h3 class="stat-title">Current Rank</h3>
                             <p class="stat-value" id="currentRank">#--</p>
                         </div>
                     </div>
                     <div class="stat-trend">
-                        <span class="trend-icon" id="rankTrendIcon">→</span>
+                        <span class="trend-icon" id="rankTrendIcon">â†’</span>
                         <span class="trend-text" id="rankTrendText">No change</span>
                     </div>
                 </div>
                 
                 <div class="stat-card success">
                     <div class="stat-content">
-                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-icon">â±ï¸</div>
                         <div class="stat-info">
                             <h3 class="stat-title">Best Hang</h3>
                             <p class="stat-value" id="bestHang">0:00</p>
                         </div>
                     </div>
                     <div class="stat-trend">
-                        <span class="trend-icon" id="hangTrendIcon">→</span>
+                        <span class="trend-icon" id="hangTrendIcon">â†’</span>
                         <span class="trend-text" id="hangTrendText">No change</span>
                     </div>
                 </div>
                 
                 <div class="stat-card warning">
                     <div class="stat-content">
-                        <div class="stat-icon">📅</div>
+                        <div class="stat-icon">ðŸ“…</div>
                         <div class="stat-info">
                             <h3 class="stat-title">Grip Age</h3>
                             <p class="stat-value" id="gripAge">0 mo</p>
@@ -178,14 +196,14 @@
                 
                 <div class="stat-card info">
                     <div class="stat-content">
-                        <div class="stat-icon">💪</div>
+                        <div class="stat-icon">ðŸ’ª</div>
                         <div class="stat-info">
                             <h3 class="stat-title">Total PRs</h3>
                             <p class="stat-value" id="totalPRs">0</p>
                         </div>
                     </div>
                     <div class="stat-trend">
-                        <span class="trend-icon" id="prTrendIcon">→</span>
+                        <span class="trend-icon" id="prTrendIcon">â†’</span>
                         <span class="trend-text" id="prTrendText">No change</span>
                     </div>
                 </div>
@@ -237,7 +255,7 @@
                             <option value="all">All time</option>
                         </select>
                         <button class="btn btn-secondary btn-sm" id="toggleCorrelationBtn">
-                            <span class="btn-icon">📊</span>
+                            <span class="btn-icon">ðŸ“Š</span>
                             Show Correlation
                         </button>
                     </div>
@@ -263,21 +281,21 @@
                         </div>
                         <div class="chart-insights">
                             <div class="insight-card">
-                                <div class="insight-icon">📈</div>
+                                <div class="insight-icon">ðŸ“ˆ</div>
                                 <div class="insight-content">
                                     <h4 class="insight-title">Correlation Strength</h4>
                                     <p class="insight-value" id="correlationStrength">Strong (0.85)</p>
                                 </div>
                             </div>
                             <div class="insight-card">
-                                <div class="insight-icon">⏱️</div>
+                                <div class="insight-icon">â±ï¸</div>
                                 <div class="insight-content">
                                     <h4 class="insight-title">Avg Improvement</h4>
                                     <p class="insight-value" id="avgImprovement">+0.8s/month</p>
                                 </div>
                             </div>
                             <div class="insight-card">
-                                <div class="insight-icon">🎯</div>
+                                <div class="insight-icon">ðŸŽ¯</div>
                                 <div class="insight-content">
                                     <h4 class="insight-title">Next Milestone</h4>
                                     <p class="insight-value" id="nextMilestone">3:00 at 6 months</p>
@@ -315,28 +333,28 @@
                     <h3 class="insights-title">Key Insights</h3>
                     <div class="insights-grid">
                         <div class="insight-item">
-                            <div class="insight-icon positive">📈</div>
+                            <div class="insight-icon positive">ðŸ“ˆ</div>
                             <div class="insight-content">
                                 <h4 class="insight-title">Consistent Growth</h4>
                                 <p class="insight-description">Your hang time increases by an average of <strong>0.8 seconds per month</strong> of grip age.</p>
                             </div>
                         </div>
                         <div class="insight-item">
-                            <div class="insight-icon neutral">📅</div>
+                            <div class="insight-icon neutral">ðŸ“…</div>
                             <div class="insight-content">
                                 <h4 class="insight-title">Training Consistency</h4>
                                 <p class="insight-description">You've maintained training for <strong>3 consecutive months</strong> without significant breaks.</p>
                             </div>
                         </div>
                         <div class="insight-item">
-                            <div class="insight-icon positive">⚡</div>
+                            <div class="insight-icon positive">âš¡</div>
                             <div class="insight-content">
                                 <h4 class="insight-title">Accelerated Progress</h4>
                                 <p class="insight-description">Your progress rate has increased by <strong>15%</strong> in the last month compared to previous periods.</p>
                             </div>
                         </div>
                         <div class="insight-item">
-                            <div class="insight-icon warning">🎯</div>
+                            <div class="insight-icon warning">ðŸŽ¯</div>
                             <div class="insight-content">
                                 <h4 class="insight-title">Next Goal</h4>
                                 <p class="insight-description">At your current rate, you'll reach <strong>3:00 hang time</strong> in approximately <strong>3 months</strong>.</p>
@@ -350,13 +368,13 @@
             <div class="activity-section">
                 <div class="section-header">
                     <h2 class="section-title">Recent Activity</h2>
-                    <a href="/activity.html" class="view-all">View All →</a>
+                    <a href="/activity.html" class="view-all">View All â†’</a>
                 </div>
                 
                 <div class="activity-list" id="activityList">
                     <!-- Activities will be loaded here -->
                     <div class="activity-empty">
-                        <div class="empty-icon">📊</div>
+                        <div class="empty-icon">ðŸ“Š</div>
                         <h3 class="empty-title">No activity yet</h3>
                         <p class="empty-description">Start by logging your first PR or training session!</p>
                         <button class="btn btn-primary" id="startActivityBtn">
@@ -372,25 +390,25 @@
                 <h2 class="section-title">Quick Actions</h2>
                 <div class="actions-grid">
                     <button class="action-card" id="logPRBtn">
-                        <div class="action-icon">🏆</div>
+                        <div class="action-icon">ðŸ†</div>
                         <h3 class="action-title">Log New PR</h3>
                         <p class="action-description">Submit a new personal record</p>
                     </button>
                     
                     <button class="action-card" id="logTrainingBtn">
-                        <div class="action-icon">💪</div>
+                        <div class="action-icon">ðŸ’ª</div>
                         <h3 class="action-title">Log Training</h3>
                         <p class="action-description">Record a workout session</p>
                     </button>
                     
                     <button class="action-card" id="viewProgressBtn">
-                        <div class="action-icon">📈</div>
+                        <div class="action-icon">ðŸ“ˆ</div>
                         <h3 class="action-title">View Progress</h3>
                         <p class="action-description">See detailed analytics</p>
                     </button>
                     
                     <button class="action-card" id="compareBtn">
-                        <div class="action-icon">👥</div>
+                        <div class="action-icon">ðŸ‘¥</div>
                         <h3 class="action-title">Compare</h3>
                         <p class="action-description">Compare with other athletes</p>
                     </button>
@@ -401,13 +419,13 @@
             <div class="milestones-section">
                 <div class="section-header">
                     <h2 class="section-title">Recent Milestones</h2>
-                    <a href="/milestones.html" class="view-all">View All →</a>
+                    <a href="/milestones.html" class="view-all">View All â†’</a>
                 </div>
                 
                 <div class="milestones-grid" id="milestonesGrid">
                     <!-- Milestones will be loaded here -->
                     <div class="milestone-empty">
-                        <div class="empty-icon">🏆</div>
+                        <div class="empty-icon">ðŸ†</div>
                         <h3 class="empty-title">No milestones yet</h3>
                         <p class="empty-description">Keep training to unlock achievements!</p>
                     </div>
@@ -421,7 +439,7 @@
         <div class="container">
             <div class="footer-bottom">
                 <p class="footer-copyright">
-                    © 2024 World Dead Hang Championship. All rights reserved.
+                    Â© 2024 World Dead Hang Championship. All rights reserved.
                 </p>
                 <div class="footer-links-bottom">
                     <a href="/privacy.html">Privacy Policy</a>
@@ -619,15 +637,15 @@
             const rankText = document.getElementById('rankTrendText');
             
             if (rankTrend > 0) {
-                rankIcon.textContent = '↑';
+                rankIcon.textContent = 'â†‘';
                 rankIcon.style.color = 'var(--success)';
                 rankText.textContent = `+${rankTrend} spots`;
             } else if (rankTrend < 0) {
-                rankIcon.textContent = '↓';
+                rankIcon.textContent = 'â†“';
                 rankIcon.style.color = 'var(--error)';
                 rankText.textContent = `${rankTrend} spots`;
             } else {
-                rankIcon.textContent = '→';
+                rankIcon.textContent = 'â†’';
                 rankIcon.style.color = 'var(--gray-500)';
                 rankText.textContent = 'No change';
             }
@@ -638,15 +656,15 @@
             const hangText = document.getElementById('hangTrendText');
             
             if (hangTrend > 0) {
-                hangIcon.textContent = '↑';
+                hangIcon.textContent = 'â†‘';
                 hangIcon.style.color = 'var(--success)';
                 hangText.textContent = `+${hangTrend}s`;
             } else if (hangTrend < 0) {
-                hangIcon.textContent = '↓';
+                hangIcon.textContent = 'â†“';
                 hangIcon.style.color = 'var(--error)';
                 hangText.textContent = `${hangTrend}s`;
             } else {
-                hangIcon.textContent = '→';
+                hangIcon.textContent = 'â†’';
                 hangIcon.style.color = 'var(--gray-500)';
                 hangText.textContent = 'No change';
             }
@@ -657,15 +675,15 @@
             const prText = document.getElementById('prTrendText');
             
             if (prTrend > 0) {
-                prIcon.textContent = '↑';
+                prIcon.textContent = 'â†‘';
                 prIcon.style.color = 'var(--success)';
                 prText.textContent = `+${prTrend}`;
             } else if (prTrend < 0) {
-                prIcon.textContent = '↓';
+                prIcon.textContent = 'â†“';
                 prIcon.style.color = 'var(--error)';
                 prText.textContent = `${prTrend}`;
             } else {
-                prIcon.textContent = '→';
+                prIcon.textContent = 'â†’';
                 prIcon.style.color = 'var(--gray-500)';
                 prText.textContent = 'No change';
             }
@@ -678,7 +696,7 @@
             if (!activities || activities.length === 0) {
                 container.innerHTML = `
                     <div class="activity-empty">
-                        <div class="empty-icon">📊</div>
+                        <div class="empty-icon">ðŸ“Š</div>
                         <h3 class="empty-title">No activity yet</h3>
                         <p class="empty-description">Start by logging your first PR or training session!</p>
                         <button class="btn btn-primary" id="startActivityBtn">
@@ -719,7 +737,7 @@
             if (!milestones || milestones.length === 0) {
                 container.innerHTML = `
                     <div class="milestone-empty">
-                        <div class="empty-icon">🏆</div>
+                        <div class="empty-icon">ðŸ†</div>
                         <h3 class="empty-title">No milestones yet</h3>
                         <p class="empty-description">Keep training to unlock achievements!</p>
                     </div>
@@ -730,7 +748,7 @@
             container.innerHTML = milestones.map(milestone => `
                 <div class="milestone-card ${milestone.achieved ? 'achieved' : 'locked'}">
                     <div class="milestone-icon">
-                        ${milestone.achieved ? '🏆' : '🔒'}
+                        ${milestone.achieved ? 'ðŸ†' : 'ðŸ”’'}
                     </div>
                     <div class="milestone-content">
                         <h4 class="milestone-title">${milestone.title}</h4>
@@ -854,14 +872,14 @@
         
         function getActivityIcon(type) {
             const icons = {
-                'pr': '🏆',
-                'training': '💪',
-                'milestone': '🎯',
-                'rank': '📈',
-                'social': '👥',
-                'system': '🔔'
+                'pr': 'ðŸ†',
+                'training': 'ðŸ’ª',
+                'milestone': 'ðŸŽ¯',
+                'rank': 'ðŸ“ˆ',
+                'social': 'ðŸ‘¥',
+                'system': 'ðŸ””'
             };
-            return icons[type] || '📊';
+            return icons[type] || 'ðŸ“Š';
         }
         
         function formatTime(timestamp) {
@@ -894,7 +912,7 @@
             const toast = document.createElement('div');
             toast.className = 'error-toast';
             toast.innerHTML = `
-                <span class="toast-icon">❌</span>
+                <span class="toast-icon">âŒ</span>
                 <span class="toast-message">${message}</span>
             `;
             

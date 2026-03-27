@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WDHC Athlete Portal - World Dead Hang Championship</title>
-    <link rel="icon" type="image/png" href="../media/logo_final_transparent.jpg" sizes="any">
-    <link rel="apple-touch-icon" href="../media/logo_final_transparent.jpg">
+    <link rel="icon" type="image/png" href="/media/logo_final_transparent.jpg" sizes="any">
+    <link rel="apple-touch-icon" href="/media/logo_final_transparent.jpg">
     
     <!-- Open Graph meta tags -->
     <meta property="og:title" content="WDHC Athlete Portal">
     <meta property="og:description" content="Track your grip strength progress, compete on leaderboards, and join the global dead hang community">
-    <meta property="og:image" content="../media/logo_final_transparent.jpg">
+    <meta property="og:image" content="/media/logo_final_transparent.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
@@ -24,14 +24,17 @@
     <link rel="stylesheet" href="css/styles.css">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../media/logo_final_transparent.jpg">
+    <link rel="icon" type="image/x-icon" href="/media/logo_final_transparent.jpg">
+    
+    <!-- Simple API for testing -->
+    <script src="js/api-simple.js"></script>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
-                <img src="../media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
                 <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
             </a>
             
@@ -134,7 +137,7 @@
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon">ðŸ“Š</div>
                     <h3 class="feature-title">PR Tracking</h3>
                     <p class="feature-description">
                         Log and track every personal record with video verification. 
@@ -143,7 +146,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🏆</div>
+                    <div class="feature-icon">ðŸ†</div>
                     <h3 class="feature-title">Live Leaderboards</h3>
                     <p class="feature-description">
                         Compete on global, country, and age-group leaderboards. 
@@ -152,7 +155,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">📈</div>
+                    <div class="feature-icon">ðŸ“ˆ</div>
                     <h3 class="feature-title">Progress Analytics</h3>
                     <p class="feature-description">
                         Advanced charts and insights showing your improvement rate, 
@@ -161,7 +164,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">💪</div>
+                    <div class="feature-icon">ðŸ’ª</div>
                     <h3 class="feature-title">Training Logs</h3>
                     <p class="feature-description">
                         Log workouts, track volume, and monitor fatigue. 
@@ -170,7 +173,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">👥</div>
+                    <div class="feature-icon">ðŸ‘¥</div>
                     <h3 class="feature-title">Athlete Community</h3>
                     <p class="feature-description">
                         Connect with other grip athletes, share tips, 
@@ -179,7 +182,7 @@
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
+                    <div class="feature-icon">ðŸ””</div>
                     <h3 class="feature-title">Smart Reminders</h3>
                     <p class="feature-description">
                         Get personalized training reminders and weekly progress reports 
@@ -241,15 +244,15 @@
                 
                 <div class="cta-features">
                     <div class="cta-feature">
-                        <span class="checkmark">✓</span>
+                        <span class="checkmark">âœ“</span>
                         <span>No credit card required</span>
                     </div>
                     <div class="cta-feature">
-                        <span class="checkmark">✓</span>
+                        <span class="checkmark">âœ“</span>
                         <span>Free forever plan available</span>
                     </div>
                     <div class="cta-feature">
-                        <span class="checkmark">✓</span>
+                        <span class="checkmark">âœ“</span>
                         <span>Cancel anytime</span>
                     </div>
                 </div>
@@ -263,7 +266,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <div class="footer-logo">
-                        <img src="../media/logo_final_transparent.jpg" alt="WDHC Logo" class="footer-logo-img">
+                        <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="footer-logo-img">
                         <span class="footer-logo-text">WDHC Athlete Portal</span>
                     </div>
                     <p class="footer-description">
@@ -309,7 +312,7 @@
             
             <div class="footer-bottom">
                 <p class="footer-copyright">
-                    © 2024 World Dead Hang Championship. All rights reserved.
+                    Â© 2024 World Dead Hang Championship. All rights reserved.
                 </p>
                 <div class="footer-links-bottom">
                     <a href="/privacy.html">Privacy Policy</a>
@@ -325,8 +328,32 @@
     <script src="js/auth.js"></script>
     
     <script>
-        // Initialize landing page
+        // Check authentication on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // If user is already authenticated, redirect to dashboard
+            if (typeof WDHC_API !== 'undefined' && WDHC_API.isAuthenticated()) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            // Check for magic link token in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionToken = urlParams.get('session');
+            if (sessionToken) {
+                // Verify the magic link token
+                WDHC_API.verifyMagicLink(sessionToken).then(result => {
+                    if (result.success) {
+                        window.location.href = 'dashboard.html';
+                    }
+                });
+                return;
+            }
+            
+            // Continue with normal page initialization
+            initializeLandingPage();
+        });
+        
+        function initializeLandingPage() {
             // Load leaderboard preview
             loadLeaderboardPreview();
             
@@ -370,11 +397,11 @@
         
         function loadLeaderboardPreview() {
             const leaderboardData = [
-                { rank: 1, name: 'Alex Chen', country: '🇺🇸 USA', time: '5:22', prs: 24 },
-                { rank: 2, name: 'Maria Rodriguez', country: '🇪🇸 Spain', time: '5:18', prs: 19 },
-                { rank: 3, name: 'Kenji Tanaka', country: '🇯🇵 Japan', time: '5:15', prs: 31 },
-                { rank: 4, name: 'Sarah Johnson', country: '🇬🇧 UK', time: '5:08', prs: 16 },
-                { rank: 5, name: 'Lars Schmidt', country: '🇩🇪 Germany', time: '5:05', prs: 22 }
+                { rank: 1, name: 'Alex Chen', country: 'ðŸ‡ºðŸ‡¸ USA', time: '5:22', prs: 24 },
+                { rank: 2, name: 'Maria Rodriguez', country: 'ðŸ‡ªðŸ‡¸ Spain', time: '5:18', prs: 19 },
+                { rank: 3, name: 'Kenji Tanaka', country: 'ðŸ‡¯ðŸ‡µ Japan', time: '5:15', prs: 31 },
+                { rank: 4, name: 'Sarah Johnson', country: 'ðŸ‡¬ðŸ‡§ UK', time: '5:08', prs: 16 },
+                { rank: 5, name: 'Lars Schmidt', country: 'ðŸ‡©ðŸ‡ª Germany', time: '5:05', prs: 22 }
             ];
             
             const container = document.getElementById('leaderboard-preview');
@@ -384,7 +411,7 @@
                 <div class="table-row ${athlete.rank <= 3 ? 'podium' : ''}">
                     <div class="table-cell rank-cell">
                         <span class="rank-number">${athlete.rank}</span>
-                        ${athlete.rank === 1 ? '🥇' : athlete.rank === 2 ? '🥈' : athlete.rank === 3 ? '🥉' : ''}
+                        ${athlete.rank === 1 ? 'ðŸ¥‡' : athlete.rank === 2 ? 'ðŸ¥ˆ' : athlete.rank === 3 ? 'ðŸ¥‰' : ''}
                     </div>
                     <div class="table-cell athlete-cell">
                         <div class="athlete-name">${athlete.name}</div>
