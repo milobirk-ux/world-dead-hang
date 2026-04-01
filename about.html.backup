@@ -1,0 +1,3073 @@
+﻿﻿﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | World Dead Hang Championship</title>
+    <link rel="icon" type="image/png" href="media/logo_final_transparent.png">
+    <!-- Open Graph meta tags for social media sharing -->
+    <meta property="og:title" content="About | World Dead Hang Championship">
+    <meta property="og:description" content="Learn about the World Dead Hang Championship - global grip strength competition">
+    <meta property="og:image" content="media/logo_final_transparent.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://worlddeadhang.com/about">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="media/logo_final_transparent.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
+        
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --surface-hover: #111;
+            
+            --gold: #D4AF37;
+            --gold-dim: #8a702a;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            
+            --silver: #E0E0E0;
+            --silver-dim: #888;
+            --silver-glow: rgba(224, 224, 224, 0.15);
+            
+            --bronze: #cd7f32;
+            --accent-red: #cc0000;
+            --accent-red-glow: rgba(204, 0, 0, 0.4);
+            
+            --text: #ffffff;
+            --text-dim: #888;
+            --border: #222;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            background-image: linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Moving Banner */
+        .marquee-container { padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            margin: 0;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 50s linear infinite;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(180deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .marquee-content span {
+            margin: 0 20px;
+            font-weight: 600;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* Navigation */
+        nav { padding: 5px 30px; /* Further reduced from 10px to make header even shorter */
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo { 
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-logo img {
+            height: 50px; /* Increased from 40px */
+            width: auto;
+            filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
+        }
+        
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 1.0rem; /* Increased from 0.9rem */
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+
+        /* Hero Section */
+        header { padding: 60px 20px 40px;
+            position: relative;
+            text-align: center;
+        }
+
+        .status-pill {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px var(--accent-red-glow);
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin: 0 auto 20px;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 5px 25px rgba(0,0,0,0.8);
+        }
+
+        .subtitle {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            flex-grow: 1;
+        }
+
+        /* Layout Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .controls h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            line-height: 1;
+            margin: 0;
+            background: linear-gradient(180deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .division-tabs {
+            display: flex;
+            gap: 5px;
+            background: #111;
+            padding: 4px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .division-tabs button {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 4px;
+            text-align: center; /* Center text inside button */
+            flex-grow: 1; /* Allow buttons to grow */
+        }
+        
+        .division-tabs button:hover {
+            color: #fff;
+        }
+
+        .division-tabs button.active {
+            color: #000;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .sort-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .sort-toggle {
+            cursor: pointer;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--silver);
+            transition: color 0.2s;
+        }
+        
+        .sort-toggle:hover { color: var(--gold); }
+
+        /* Search Bar */
+        .search-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px var(--gold-glow);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-dim);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            pointer-events: none;
+        }
+        
+        .clear-search-btn {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        
+        .clear-search-btn:hover {
+            color: var(--text);
+        }
+        
+        .search-count {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 900px) {
+            /* Search bar now visible on mobile */
+            .search-row {
+                margin-top: 15px;
+                margin-bottom: 15px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .search-count {
+                margin-left: 0;
+                margin-top: 10px;
+                text-align: center;
+            }
+        }
+
+        /* Leaderboard Table */
+        .leaderboard {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .lb-header {
+            display: grid;
+            grid-template-columns: 80px 120px 300px 1.5fr 1fr 140px 120px;
+            gap: 16px;
+            padding: 12px 24px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            background: #080808;
+            letter-spacing: 1px;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .lb-row {
+            display: grid;
+            grid-template-columns: 80px 120px 300px 1.5fr 1fr 140px 120px;
+            gap: 16px;
+            padding: 12px 24px;
+            /* border-bottom is now on the wrapper */
+            align-items: center;
+            transition: all 0.2s ease;
+            min-height: 60px;
+            position: relative;
+        }
+
+        .lb-row:hover { 
+            background: var(--surface-hover); 
+            border-left: 3px solid var(--gold);
+            padding-left: 22px;
+        }
+        
+        .lb-row:last-child { border-bottom: none; }
+
+        /* Tier Badges */
+        .tier-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            width: 110px; /* Slightly smaller width */
+        }
+        .tier-freak { background: #9900ff; color: #fff; box-shadow: 0 0 10px rgba(153, 0, 255, 0.4); } 
+        .tier-legend { background: var(--gold); color: #000; box-shadow: 0 0 10px var(--gold-glow); } 
+        .tier-elite { background: #E0E0E0; color: #000; } 
+        .tier-pro { background: #cc0000; color: #fff; } 
+        .tier-contender { border: 1px solid #666; color: #ccc; } 
+        .tier-challenger { 
+            border: 1px solid #1E8449; 
+            color: #1E8449; 
+            width: 110px; /* Same width as other tier badges */
+            letter-spacing: 0.5px; /* Same spacing as other badges */
+        }
+
+        /* Pagination Buttons */
+        .pagination-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--surface-hover);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        } 
+
+        .rank { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            color: #333; 
+            line-height: 1;
+        }
+        .rank-1 { 
+            color: var(--gold); 
+            text-shadow: 0 0 15px var(--gold-glow); 
+        }
+
+        .name-cell {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden; /* Added to contain children */
+        }
+
+        .name-wrapper {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 2px;
+            flex-wrap: nowrap;
+        }
+
+        .name { 
+            font-family: 'Oswald', sans-serif; 
+            font-weight: 500; 
+            font-size: 1.8rem; 
+            letter-spacing: -0.2px; 
+            color: #fff;
+            position: relative;
+            cursor: help;
+            line-height: 1;
+            margin-bottom: 5px;
+            
+            /* Flexible text handling */
+            white-space: normal;
+            overflow: visible;
+            min-width: 0; /* Important for flexbox */
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+        
+        .location {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: none;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+        
+        .flag { font-size: 1rem; filter: grayscale(0.3); }
+
+        .gender-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 6px;
+            margin-top: 4px;
+            line-height: 1;
+        }
+
+        .pr-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            min-width: auto;
+            border-radius: 0;
+            background: transparent;
+            border: none;
+            color: var(--silver);
+            line-height: 1.1;
+            flex-shrink: 0; /* Prevent badge from shrinking */
+            margin: 0;
+        }
+        .pr-badge .pr-val {
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+        }
+
+
+        .time { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 2rem; 
+            color: var(--gold); 
+            font-weight: 700; 
+            letter-spacing: 0.3px; 
+            text-align: center;
+        }
+        
+        /* Hide mobile-time on desktop, show desktop-time */
+        .mobile-time {
+            display: none;
+        }
+        .desktop-time {
+            display: block;
+        }
+        
+        .video-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 0.75rem;
+            background: transparent;
+            border: 1px solid #333;
+            padding: 8px 16px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            font-weight: 700; 
+            letter-spacing: 1px;
+            font-family: 'Roboto Mono', monospace;
+            transition: all 0.2s;
+        }
+        .video-btn:hover { 
+            background: #fff; 
+            color: #000;
+            border-color: #fff;
+        }
+        
+        @media (max-width: 900px) {
+            .video-btn {
+                font-size: 0.5rem;
+                padding: 1px 3px;
+                min-width: 30px;
+                text-align: center;
+            }
+            
+            /* Slightly faster marquee banner on mobile */
+            .marquee-content {
+                animation-duration: 60s; /* Slightly faster than 75s, but not as fast as desktop (50s) */
+            }
+            
+            /* Make marquee banner sticky below nav on mobile */
+            .marquee-container {
+                position: sticky;
+                top: 60px; /* Height of nav (40px logo + 10px top + 10px bottom padding) */
+                z-index: 90; /* Below nav's z-index: 100 */
+            }
+        }
+
+        /* Smart Video Preview Styles */
+        .video-preview {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            transition: all 0.2s;
+            border: 1px solid #333;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-preview:hover {
+            border-color: var(--gold);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* YouTube Preview */
+        .youtube-preview {
+            width: 120px;
+            height: 68px;
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        /* Platform Previews (Drive, Reddit, Instagram, TikTok, Generic) */
+        .drive-preview, .reddit-preview, .instagram-preview, 
+        .tiktok-preview, .generic-preview {
+            width: 120px;
+            height: 40px;
+            padding: 8px 12px;
+            gap: 8px;
+        }
+        
+        .platform-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .platform-text {
+            font-size: 0.7rem;
+            color: var(--silver);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .platform-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 0.5rem;
+            color: var(--gold);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Platform-specific colors */
+        .drive-preview:hover { border-color: #4285F4; }
+        .reddit-preview:hover { border-color: #FF4500; }
+        .instagram-preview:hover { border-color: #E4405F; }
+        .tiktok-preview:hover { border-color: #000000; }
+        .generic-preview:hover { border-color: var(--gold); }
+        
+        /* Desktop-only: Title on two lines - World Dead Hang / CHAMPIONSHIP */
+        @media (min-width: 901px) {
+            h1 .dead-hang-text {
+                color: var(--text) !important;
+            }
+            h1 {
+                white-space: nowrap;
+            }
+            h1 span:first-child, h1 .dead-hang-text {
+                display: inline;
+                white-space: nowrap;
+            }
+            
+            /* Desktop-only: Larger header elements to fill space better */
+            .nav-logo {
+                font-size: 2.2rem !important; /* Increased from 1.8rem */
+            }
+            .nav-logo img {
+                height: 50px !important; /* Reduced from 65px for smaller nav header */
+                width: auto;
+                margin-top: -3px !important; /* Moved up slightly to avoid touching banner */
+            }
+            
+            /* Desktop-only: Smaller header padding */
+            header {
+                padding: 20px 20px 15px !important; /* Further reduced from 30px 20px 20px */
+            }
+            h1 {
+                font-size: 7rem !important; /* Restored to original size */
+                margin: 0 auto 20px !important; /* Restored original margin */
+            }
+            .subtitle {
+                font-size: 1rem !important; /* Restored to original size */
+            }
+            .nav-links a {
+                font-size: 1.1rem !important; /* Reduced from 1.2rem for smaller nav header */
+                margin-left: 30px !important; /* Slightly less spacing */
+            }
+            
+            /* Desktop-only: Wider sidebar for tier classifications table */
+            .content-grid {
+                grid-template-columns: 1fr 360px !important; /* Increased from 320px */
+                gap: 40px;
+            }
+            
+            /* Desktop-only: Hide tier classification in details panel (keep only next to athlete name) */
+            .details-panel .tier-in-details {
+                display: none !important;
+            }
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 900px) {
+            /* Reduce container padding to give more space for leaderboard */
+            .container {
+                padding: 0 10px 80px !important; /* Reduced from 0 20px */
+            }
+            
+            .video-preview {
+                width: 60px;
+                height: 30px;
+            }
+            
+            .youtube-preview {
+                width: 60px;
+                height: 45px;
+                margin: 0 auto;
+            }
+            
+            .youtube-preview .play-button {
+                width: 20px;
+                height: 20px;
+                font-size: 8px;
+            }
+            
+            .youtube-preview .platform-badge {
+                display: none;
+            }
+            
+            .drive-preview, .reddit-preview, .instagram-preview, 
+            .tiktok-preview, .generic-preview {
+                width: 40px;
+                height: 30px;
+                padding: 4px;
+                gap: 0;
+                justify-content: center;
+                margin: 0 auto;
+            }
+            
+            .platform-icon {
+                font-size: 1rem;
+                margin: 0;
+            }
+            
+            .platform-text {
+                display: none;
+            }
+            
+            .platform-badge {
+                display: none;
+            }
+            
+            .play-button {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+        }
+
+        .verified-badge {
+            display: inline-block;
+            color: var(--gold);
+            font-size: 0.9rem;
+            line-height: 1;
+            font-weight: 900;
+            cursor: help;
+            flex-shrink: 0; /* Prevent badge from shrinking */
+            margin: 0;
+        }
+
+        /* Dropdown Details */
+        .lb-row-wrapper {
+            border-bottom: 1px solid var(--border);
+        }
+        .lb-row-wrapper:last-child {
+            border-bottom: none;
+        }
+
+        .details-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            background: #0c0c0c;
+            padding: 0 25px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            border-left: 3px solid transparent;
+        }
+        .lb-row-wrapper:hover .details-panel {
+            max-height: 200px;
+            padding: 20px 25px;
+            border-left: 3px solid var(--gold-dim);
+        }
+        
+        /* Click-based details visibility (for mobile) */
+        .lb-row-wrapper.details-visible .details-panel {
+            max-height: 200px;
+            padding: 20px 25px;
+            border-left: 3px solid var(--gold-dim);
+        }
+        .details-panel strong {
+            color: var(--gold);
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        .details-panel p {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            max-width: 60ch;
+        }
+
+
+        /* Sidebar - Top 10 Card */
+        .sidebar-column {
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+        .sidebar-column::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-column::-webkit-scrollbar-thumb {
+            background-color: var(--border);
+            border-radius: 4px;
+        }
+
+        .sidebar-card {
+            background: #080808;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(90deg, #111 0%, #080808 100%);
+        }
+
+        .sidebar-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            color: var(--gold);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        
+        .sidebar-subtitle {
+            font-size: 0.75rem;
+            color: #555;
+            text-transform: uppercase;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .mini-list { padding: 0 10px; }
+
+        .mini-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 10px;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 1.0rem;
+            transition: background 0.2s;
+        }
+        
+        .mini-row:last-child { border-bottom: none; }
+        .mini-row:hover { background: #111; }
+
+        .mini-rank {
+            font-family: 'Oswald', sans-serif;
+            color: #444;
+            font-weight: 700;
+            width: 30px;
+            font-size: 1.2rem;
+        }
+        .mini-rank.top-3 { color: #fff; }
+
+        .mini-name {
+            flex-grow: 1;
+            color: #ccc;
+            font-weight: 600;
+        }
+        
+        .mini-time {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 500;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+        }
+
+        /* CTA Section & Footer */
+        .cta-section {
+            margin-top: 60px;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+        }
+
+        .cta-text h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem; 
+            line-height: 1.3;
+            text-transform: uppercase; 
+            margin-bottom: 10px;
+            color: #fff;
+            line-height: 1;
+        }
+        @media (max-width: 900px) {
+            .cta-text h3 {
+                font-size: 1.5rem !important; /* Adjust font size for mobile */
+                line-height: 1.2 !important; /* Adjust line height for better spacing */
+            }
+        }
+        .cta-text p {
+            color: var(--text-dim);
+            max-width: 500px;
+            font-size: 1.1rem;
+            font-weight: 600; /* Make subtext bold for better readability */
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+            color: #000;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 15px 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 2px;
+            box-shadow: 0 0 20px var(--gold-glow);
+            border: 1px solid var(--gold);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px var(--gold-glow);
+            filter: brightness(1.1);
+        }
+
+        /* Video Submissions Section */
+        .video-submissions-section {
+            margin-top: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .video-submissions-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .video-submissions-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-submission-item {
+            flex: 0 1 300px;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .video-submission-item {
+            flex: 0 1 300px;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-submission-item video {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 4px;
+            object-fit: contain; /* Show entire video without cropping */
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Vertical video - optimized for portrait aspect ratio */
+        .video-submission-item.vertical-video {
+            width: 100%;
+            max-width: 300px;
+            height: 400px; /* Tall enough for vertical videos */
+        }
+
+        .video-submission-item.vertical-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Show entire video without cropping */
+            object-position: top; /* Show more of the top area for hand struggle */
+        }
+
+        .video-submission-caption {
+            margin-top: 10px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-style: italic;
+
+        /* Video placeholder for Google Drive links */
+        .video-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border-color: var(--accent-red);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .video-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .video-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .video-size {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+        }
+
+        @media (max-width: 900px) {
+            .video-submissions-title {
+                font-size: 1.5rem;
+            }
+            
+            .video-submissions-grid {
+                gap: 20px;
+            }
+            
+            .video-submission-item.vertical-video {
+                width: 100%;
+                max-width: 300px; /* Same as desktop */
+                height: 400px; /* Tall enough for vertical videos */
+            }
+            
+            .video-submission-item.vertical-video video {
+                width: 100%;
+                height: 100%;
+                object-fit: contain; /* Show entire video without cropping on mobile too */
+                object-position: top; /* Show more of the top area for hand struggle */
+            }
+        }
+
+        /* Content Tabs */
+        .content-tabs {
+            display: block; /* Always visible for standalone pages */
+            margin-top: 40px;
+            padding: 40px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .content-tabs::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+        }
+
+        .content-tabs.active {
+            display: block;
+        }
+
+        .content-tabs h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content-tabs h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 25px 0 15px;
+            text-transform: uppercase;
+        }
+
+        .content-tabs p {
+            color: #ccc;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .content-tabs ul {
+            color: #ccc;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .content-tabs li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .content-tabs strong {
+            color: #fff;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 25px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .benefit-card h4 {
+            color: var(--gold);
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .about-highlight {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        @media (max-width: 900px) {
+            .content-tabs {
+                padding: 30px 20px;
+            }
+            
+            .content-tabs h2 {
+                font-size: 2rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            background: #050505;
+        }
+
+        .footer-logo {
+            max-width: 150px;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo:hover {
+            opacity: 0.8;
+        }
+
+        /* History Tooltip */
+        .tooltip {
+            visibility: hidden;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            color: #eee;
+            text-align: left;
+            border-radius: 4px;
+            padding: 15px;
+            position: absolute;
+            z-index: 100;
+            bottom: 100%;
+            left: 0;
+            width: 240px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            transform: translateY(10px);
+            pointer-events: none;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .name:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .history-item {
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 4px;
+            color: #888;
+        }
+        .history-item span.h-time { color: var(--gold); font-weight: 700; }
+
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .sidebar-card { position: static; margin-top: 40px; }
+            
+            /* Center the status pill on mobile */
+            .status-pill {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                width: fit-content;
+            }
+            
+            h1 {
+                font-size: 3.5rem;
+                font-weight: 700;
+                text-align: center;
+                width: 100%;
+                display: block;
+                margin-bottom: 15px;
+                padding-bottom: 0;
+                line-height: 1.2;
+            }
+            /* Ensure title breaks correctly on mobile */
+            h1 span {
+                display: block;
+                line-height: 1;
+                margin-bottom: 1px;
+                white-space: nowrap; /* Prevent text from breaking */
+            }
+            /* Remove extra margin from the last line */
+            h1 span:last-child {
+                margin-bottom: 0;
+            }
+            /* Hide the <br> tag on mobile since we're using display: block on spans */
+            h1 br {
+                display: none;
+            }
+            .controls-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            
+            /* MOBILE-OPTIMIZED LEADERBOARD WITH EXPANDABLE DETAILS */
+            .leaderboard {
+                margin: 0 8px;
+            }
+            
+            /* Optimized 4-column layout for mobile (Rank, Name, Time, Watch) */
+            .lb-header, .lb-row {
+                grid-template-columns: 30px 1fr 50px 70px !important;
+                gap: 8px !important;
+                padding: 8px 10px !important;
+            }
+            
+            /* Center Time and Watch columns under their headers */
+            .lb-row > *:nth-child(3), /* Time column */
+            .lb-row > *:nth-child(4) { /* Watch column */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .lb-header > *:nth-child(3), /* Time header */
+            .lb-header > *:nth-child(4) { /* Watch header */
+                text-align: center !important;
+            }
+            
+            .lb-header {
+                font-size: 0.7rem !important;
+                padding: 8px 10px !important;
+            }
+            
+            .lb-row {
+                font-size: 0.85rem !important;
+                min-height: 45px !important;
+                border-bottom: 1px solid var(--border) !important;
+            }
+            
+            .name-wrapper {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                gap: 2px;
+                flex-wrap: wrap; /* Allow wrapping of name and badges */
+            }
+            .name {
+                font-size: 1.0rem !important;
+                line-height: 1.2 !important;
+                white-space: normal !important;
+                word-break: normal !important;
+                overflow-wrap: normal !important;
+                word-wrap: normal !important;
+                hyphens: none !important;
+                font-weight: 600 !important;
+                margin-bottom: 0px !important; /* Reduce margin */
+            }
+            .pr-badge {
+                padding: 2px 4px !important; /* Smaller padding */
+                min-width: 40px !important;
+                line-height: 1;
+            }
+            .pr-badge .pr-val {
+                font-size: 0.8rem !important; /* Smaller text */
+            }
+            
+            .gender-label {
+                font-size: 0.7rem !important;
+                padding: 2px 6px !important;
+                margin-left: 6px !important;
+            }
+            
+            /* Mobile generates its own 4-column HTML, so no need to hide columns */
+            
+            /* Make tier badge much smaller on mobile (for main content) */
+            .tier-badge {
+                font-size: 0.55rem !important;
+                padding: 1px 4px !important;
+                min-width: 35px !important;
+                max-width: 35px !important;
+                text-align: center !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+            
+            /* Make sidebar tier badges larger with full text on mobile */
+            .sidebar-card .tier-badge {
+                font-size: 0.85rem !important;
+                padding: 3px 8px !important;
+                min-width: 80px !important;
+                max-width: 80px !important;
+                overflow: visible !important;
+                text-overflow: clip !important;
+                white-space: nowrap !important;
+            }
+            
+            /* Special wider badges for longer tier names (CONTENDER, CHALLENGER) */
+            .sidebar-card .tier-contender,
+            .sidebar-card .tier-challenger {
+                min-width: 100px !important;
+                max-width: 100px !important;
+            }
+            
+            /* Make dropdown tier badges larger with full text on mobile */
+            .details-panel .tier-badge {
+                font-size: 0.85rem !important;
+                padding: 3px 8px !important;
+                min-width: 80px !important;
+                max-width: 80px !important;
+                overflow: visible !important;
+                text-overflow: clip !important;
+                white-space: nowrap !important;
+            }
+            
+            /* Special wider badges for longer tier names in dropdown */
+            .details-panel .tier-contender,
+            .details-panel .tier-challenger {
+                min-width: 100px !important;
+                max-width: 100px !important;
+            }
+            
+            /* Make dead hang time much larger with more space */
+            .mobile-time {
+                display: block !important;
+                font-size: 1.4rem !important;
+                color: var(--gold) !important;
+                font-weight: 800 !important;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+                font-family: 'Oswald', sans-serif !important;
+                letter-spacing: 0.5px !important;
+                line-height: 1.2 !important;
+            }
+            
+            .desktop-time {
+                display: none !important;
+            }
+            
+            /* Mobile rank styling - smaller */
+            .rank {
+                font-size: 1.0rem !important;
+                font-weight: 700 !important;
+                line-height: 1 !important;
+            }
+            
+
+            
+            .cta-section { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 30px; 
+            }
+            
+            .cta-section::before { 
+                width: 100%; 
+                height: 4px; 
+                bottom: auto; 
+            }
+            
+            .details-panel {
+                padding: 0 15px !important; /* Smaller horizontal padding for mobile */
+                font-size: 0.8rem !important; /* Smaller base font size for mobile */
+            }
+            .lb-row-wrapper:hover .details-panel {
+                padding: 10px 15px !important; /* Smaller padding when expanded */
+            }
+            
+            /* Click-based details visibility for mobile */
+            .lb-row-wrapper.details-visible .details-panel {
+                max-height: 200px !important;
+                padding: 10px 15px !important;
+                border-left: 3px solid var(--gold-dim) !important;
+            }
+            .details-panel strong {
+                font-size: 1.2rem !important; /* Smaller strong text for mobile */
+                margin-right: 10px !important;
+            }
+            .details-panel p {
+                font-size: 0.7rem !important; /* Smaller paragraph text for mobile */
+            }
+            .details-panel > div {
+                gap: 8px !important; /* Smaller gap for grid items */
+            }
+        }
+        
+        @media (max-width: 600px) {
+            /* Remove conflicting mobile styles - use only the 900px media query */
+        }
+    </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-91GCCEERG0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-91GCCEERG0');
+    </script>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo"><img src="media/logo_final_transparent.png" alt="World Dead Hang Championship Logo"></div>
+        <div class="nav-links">
+            <a href="index.html">Leaderboard</a>
+            <a href="rules.html">Rulebook</a>
+            <a href="submit.html">Submit</a>
+            <a href="benefits.html">Benefits</a>
+            <a href="about.html" class="active">About</a>
+            <a href="athlete-portal/index.html">Athlete Portal</a>
+        </div>
+    </nav>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span>🌍 The world's first sanctioned dead hang championship — officially open</span>
+            <span>⏱️ No minimum time. Every hang is official.</span>
+            <span>💪 Grip strength predicts lifespan & dead hang measures it. What's your Grip Age?</span>
+            <span>⚡ 30 seconds puts you in the top half of the global population. Submit yours and start your journey!</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="status-pill" style="margin-bottom: 20px;">OFFICIAL 2026 SEASON LIVE</div>
+        <h1>
+            <span style="color: var(--gold);">World </span><span class="dead-hang-text" style="color: var(--text);">Dead Hang</span><br>
+            <span style="color: var(--gold);">CHAMPIONSHIP</span>
+        </h1>
+        <div class="subtitle">THE ULTIMATE TEST OF GRIP ENDURANCE AND GRIT</div>
+    </header>
+      
+      
+
+
+
+    <div class="container">
+        <!-- About Us Tab Content -->
+        <div id="about-tab" class="content-tabs">
+            <h2>About World Dead Hang Championship</h2>
+            
+            <p>The <strong>World Dead Hang Championship (WDHC)</strong> was founded on March 1st, 2026 with a simple mission: to create the world's first sanctioned platform for dead hang performance and competition.</p>
+            
+            <h3>Our Vision</h3>
+            <p>We believe that grip strength and hanging endurance are fundamental markers of physical capability and mental resilience. WDHC exists to:</p>
+            
+            <ul>
+                <li><strong>Standardize</strong> dead hang performance measurement worldwide</li>
+                <li><strong>Celebrate</strong> the simple yet profound challenge of hanging from a bar</li>
+                <li><strong>Build community</strong> around functional strength and mental fortitude</li>
+                <li><strong>Document</strong> human capability through verified performance data</li>
+                <li><strong>Inspire</strong> people to develop grip strength and shoulder health</li>
+            </ul>
+            
+            <h3>The Competition</h3>
+            <p>WDHC follows strict verification standards to ensure fair competition:</p>
+            
+            <ul>
+                <li><strong>Video verification</strong> required for all submissions</li>
+                <li><strong>Standardized timing</strong> from full hang to release</li>
+                <li><strong>Multiple divisions</strong> (Open Men, Open Women, Age Groups)</li>
+                <li><strong>Transparent ranking</strong> on our public leaderboard</li>
+                <li><strong>Gold verification</strong> for elite performers</li>
+            </ul>
+            
+            <h3>Why Dead Hangs?</h3>
+            <p>Dead hangs represent the purest test of grip endurance. Unlike weighted exercises that can be "cheated" with momentum or technique, a dead hang is binary: you're either hanging or you're not. This simplicity makes it the perfect equalizer and the ultimate test of raw, sustainable grip strength.</p>
+            
+            <div class="about-highlight">
+                <p><strong>Founder's Note:</strong> "The dead hang doesn't care about your gym membership, your equipment budget, or your genetics. It only asks one question: Can you hold on?"</p>
+            </div>
+            
+            <h3>Join the Movement</h3>
+            <p>Whether you're a seasoned athlete or a complete beginner, WDHC welcomes you. Record your hang, submit your video, and claim your spot on the global leaderboard. Your time becomes part of the documented history of human grip strength.</p>
+            
+            <p><strong>Ready to hang?</strong> <a href="submit.html" style="color: var(--gold); text-decoration: underline;">Submit your performance</a> and join athletes worldwide pushing the limits of human endurance.</p>
+        </div>
+
+        <div class="cta-section">
+            <div class="cta-text">
+                <h3>If your life was on the line, <br>Could you hang on?</h3>
+                <p>Set up your camera, hang until you drop, and claim your official ranking on the world's first sanctioned dead hang leaderboard.</p>
+            </div>
+            <a href="submit.html" class="cta-btn">Submit Your Hang</a>
+        </div>
+
+        <!-- Video Submissions Section -->
+        <div class="video-submissions-section">
+            <h2 class="video-submissions-title">Video Submissions</h2>
+            <div class="video-submissions-grid">
+                <!-- Current Featured Video - Last 20 Seconds Loop -->
+                <div class="video-submission-item vertical-video">
+                    <video controls autoplay muted playsinline loop>
+                        <source src="media/milo_20s_struggle.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                    <div class="video-submission-caption">Milo - Last 20 seconds (looping)</div>
+                </div>
+                
+                <!-- Video Submission 2: Athlete 1 - Markie -->
+                <div class="video-submission-item vertical-video">
+                    <video controls autoplay muted playsinline loop>
+                        <source src="media/markie_20s.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                    <div class="video-submission-caption">Markie - Last 20 seconds (looping)</div>
+                </div>
+                
+                <!-- Video Submission 3: Athlete 2 - Meg -->
+                <div class="video-submission-item vertical-video">
+                    <video controls autoplay muted playsinline loop>
+                        <source src="media/meg_20s_small.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                    <div class="video-submission-caption">Meg - Last 20 seconds (looping)</div>
+                </div>
+                
+                <script>
+                    // Ensure video starts at last 20 seconds and loops ONLY last 20 seconds
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const video = document.getElementById('featuredVideo');
+                        let startTime = 0;
+                        let endTime = 0;
+                        
+                        // Wait for video metadata to load so we know the duration
+                        video.addEventListener('loadedmetadata', function() {
+                            const totalDuration = video.duration;
+                            
+                            if (totalDuration > 20) {
+                                // Calculate start time for last 20 seconds
+                                startTime = totalDuration - 20;
+                                endTime = totalDuration;
+                                
+                                // Set video to start at last 20 seconds
+                                video.currentTime = startTime;
+                                
+                                console.log('Video configured: Looping last 20 seconds (', startTime.toFixed(1), '-', endTime.toFixed(1), ') of', totalDuration.toFixed(1), 'second video');
+                            } else {
+                                console.log('Video too short for 20-second loop');
+                            }
+                            
+                            // Ensure autoplay works
+                            video.play().catch(function(error) {
+                                console.log('Autoplay prevented:', error);
+                            });
+                        });
+                        
+                        // Custom loop for last 20 seconds only
+                        video.addEventListener('timeupdate', function() {
+                            if (startTime > 0 && endTime > 0) {
+                                // If video reaches the end OR goes beyond our 20-second window
+                                if (video.currentTime >= endTime || video.currentTime < startTime) {
+                                    video.currentTime = startTime; // Jump back to last 20 seconds
+                                }
+                            }
+                        });
+                        
+                        // If metadata already loaded (cached video)
+                        if (video.readyState >= 1) {
+                            video.dispatchEvent(new Event('loadedmetadata'));
+                        }
+                    });
+                </script>
+                
+                <!-- Placeholder for Future Videos -->
+                <!-- More videos will appear here as submissions come in -->
+            </div>
+        </div>
+
+        <!-- Descriptive text about the last 20 seconds struggle -->
+        <div class="struggle-description" style="
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95));
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            font-family: 'Roboto Mono', monospace;
+            color: #fff;
+        ">
+            <p style="
+                font-size: 1.1rem;
+                line-height: 1.6;
+                margin-bottom: 20px;
+                color: #ddd;
+            ">
+                The final 20 seconds is pure grit. This is where raw willpower takes over as muscles scream to let go. Champions find a way to hold on through pure determination.
+            </p>
+        </div>
+
+    </div>
+
+    
+      
+      <footer style="
+          padding: 40px 20px 60px;
+          text-align: center;
+          background: #0a0a0a;
+          border-top: 1px solid #222;
+          margin-top: 20px; /* Reduced from auto to bring it closer to CTA */
+      ">
+          <!-- Logo Only (Smaller) -->
+          <div style="
+              max-width: 1200px;
+              margin: 0 auto 40px;
+          ">
+              <img src="media/logo_final_transparent.png" 
+                   alt="WDHC Logo" 
+                   style="
+                       width: 100%;
+                       max-width: 150px; /* Smaller footer logo */
+                       height: auto;
+                       object-fit: contain;
+                       display: block;
+                       margin: 0 auto;
+                       opacity: 0.6;
+                   ">
+          </div>
+          
+          <!-- Footer links and copyright -->
+          <div style="
+              color: #444; 
+              font-family: 'Roboto Mono', monospace; 
+              font-size: 0.8rem;
+              margin-top: 30px;
+              padding-top: 30px;
+              border-top: 1px solid #333;
+          ">
+              <div style="margin-bottom: 15px;">
+                  <a href="index.html" style="color: #888; text-decoration: none; margin: 0 15px;">Home</a>
+                  <a href="leaderboard-full.html" style="color: #888; text-decoration: none; margin: 0 15px;">Full Leaderboard</a>
+                  <a href="submit.html" style="color: #888; text-decoration: none; margin: 0 15px;">Submit</a>
+                  <a href="rules.html" style="color: #888; text-decoration: none; margin: 0 15px;">Rules</a>
+              </div>
+              
+              <!-- Second line: Instagram logo + Email -->
+              <div style="margin-bottom: 15px;">
+                  <a href="https://www.instagram.com/worlddeadhang?igsh=MXI0dHR3Y2R1dXAwNQ==" target="_blank" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0;">
+                      <!-- Instagram SVG Logo -->
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="#888"/>
+                      </svg>
+                  </a>
+                  <span style="color: #888; margin: 0 15px;">|</span>
+                  <a href="mailto:support@worlddeadhang.com" style="color: #888; text-decoration: none; margin: 0 15px;">
+                      support@worlddeadhang.com
+                  </a>
+              </div>
+              <div>© 2026 World Dead Hang Championship. All rights reserved.</div>
+          </div>
+      </footer>
+      
+      <script>
+      // Seek to last 21 seconds when video loads
+      document.addEventListener('DOMContentLoaded', function() {
+          var video = document.getElementById('fullVideo');
+          if (video) {
+              video.addEventListener('loadedmetadata', function() {
+                  // Get video duration and seek to last 21 seconds
+                  var duration = video.duration;
+                  if (duration > 21) {
+                      // Seek to 21 seconds before end to ensure we see the drop
+                      video.currentTime = duration - 21;
+                  }
+                  // Start playing from that point
+                  video.play().catch(function(e) {
+                      console.log('Autoplay failed:', e.message);
+                  });
+              });
+              
+              // Loop the last 21 seconds (to see the full drop)
+              video.addEventListener('timeupdate', function() {
+                  var duration = video.duration;
+                  if (duration > 21) {
+                      // When video reaches the actual end, go back to last 21 seconds
+                      if (video.currentTime >= duration - 0.1) {
+                          video.currentTime = duration - 21;
+                      }
+                  }
+              });
+          }
+      });
+      </script>
+
+
+
+
+<script>
+    // Data
+    const athletes = [
+    {
+        "name": "Frank S",
+        "category": "Open Men",
+        "location": "Detriot, MI / USA / DETRIOT, MI / USA",
+        "occupation": "Parent",
+        "bodyweight": 160,
+        "dob": "2000-03-06",
+        "country": "🇺🇸",
+        "currentPR": "6:02",
+        "lastAttempt": "2026-03-03",
+        "history": [
+            {
+                "date": "2026-03-03",
+                "time": "6:02"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://www.google.com/search?q=apple+tv+shows&sca_esv=04b991333a83f57d&biw=3440&bih=1317&sxsrf=ANbL-n6ZlOQC8LWXniSttjtOKwb90iyI-w%3A1773029359104&ei=70euabKKBsucptQP2OWzsQk&oq=apple&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWFwcGxlKgIIATIWEC4YgAQYsQMY0QMYQxiDARjHARiKBTIOEAAYgAQYkQIYsQMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyExAuGIAEGLEDGNEDGEMYxwEYigUyFBAuGIAEGLEDGNEDGIMBGMcBGIoFSLY8UKMPWNwVcAR4AJABAJgBlgGgAc4FqgEDMS41uAEDyAEA-AEBmAILoAK9RcICChAAGLADGNYEGEfCAgQQIxgnwgIKECMYgAQYJxiKBcICDRAjGIAEGCcYyQIYigXCAgsQLhiABBiRAhiKBcICERAuGIAEGLEDGNEDGIMBGMcBwgILEAAYgAQYsQMYgwHCAg4QLhiABBixAxjRAxjHAcICCxAAGIAEGJECGIoFwgIlEC4YgAQYsQMY0QMYQxiDARjHARiKBRiXBRjcBBjeBBjgBNgBAZgDAIgGAZAGCLoGBggBEAEYFJIHBzQuNS45LTKgB9ZPsgcDMC41uAeKBcIHBTAuNy40yAcigAgA&sclient=gws-wiz-serp",
+        "prCount": 1
+    },
+    {
+        "name": "Milo Birk",
+        "category": "Open Men",
+        "location": "Detroit, MI / USA / DETROIT, MI / USA",
+        "occupation": "Athlete",
+        "bodyweight": 160,
+        "dob": "1990-10-29",
+        "country": "🇺🇸",
+        "currentPR": "4:26",
+        "lastAttempt": "2026-03-21",
+        "history": [
+            {
+                "date": "2026-03-07 6:16:38",
+                "time": "4:09"
+            },
+            {
+                "date": "2026-03-09",
+                "time": "4:10"
+            },
+            {
+                "date": "2026-03-20",
+                "time": "4:26"
+            },
+            {
+                "date": "2026-03-21",
+                "time": "1:02"
+            }
+        ],
+        "isVerified": true,
+        "video": "https://www.reddit.com/r/Advice/comments/1huk5e3/what_sources_you_guys_watch_for_movies_can_u_guys/",
+        "prCount": 4
+    },
+    {
+        "name": "Random R",
+        "category": "Open Men",
+        "location": "Detroit, MI / USA / DETROIT, MI / USA",
+        "occupation": "Contractor",
+        "bodyweight": 200,
+        "dob": "1990-10-29",
+        "country": "🇺🇸",
+        "currentPR": "3:42",
+        "lastAttempt": "2026-03-08 3:07:47",
+        "history": [
+            {
+                "date": "2026-03-08 3:07:47",
+                "time": "3:42"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://aistudio.google.com/api-keys?project=gen-lang-client-0688610786",
+        "prCount": 1
+    },
+    {
+        "name": "Leonard Stevens",
+        "category": "Masters Male",
+        "location": "Detroit, MI / USA",
+        "occupation": "Doctor",
+        "bodyweight": 140,
+        "dob": "1972-03-10",
+        "country": "🇺🇸",
+        "currentPR": "3:12",
+        "lastAttempt": "2026-03-13",
+        "history": [
+            {
+                "date": "2026-03-13",
+                "time": "3:12"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://app.spectora.com/inspection/544427e3-e565-4ac4-9e65-4b51f8738350/editf",
+        "prCount": 1
+    },
+    {
+        "name": "Bryant Garcia",
+        "category": "Open Men",
+        "location": "Detroit, MI / USA",
+        "occupation": "Athlete",
+        "bodyweight": 150,
+        "dob": "1990-10-29",
+        "country": "🇺🇸",
+        "currentPR": "3:01",
+        "lastAttempt": "2026-03-10",
+        "history": [
+            {
+                "date": "2026-03-10",
+                "time": "3:01"
+            }
+        ],
+        "isVerified": true,
+        "video": "https://tally.so/forms/RGzOe4/edit",
+        "prCount": 1
+    },
+    {
+        "name": "Testa Longername",
+        "category": "Open Men",
+        "location": "Detroit, MI / USA / DETROIT, MI / USA",
+        "occupation": "Test Proffessional",
+        "bodyweight": 120,
+        "dob": "1990-10-29",
+        "country": "🇺🇸",
+        "currentPR": "2:35",
+        "lastAttempt": "2026-03-09",
+        "history": [
+            {
+                "date": "2026-03-08 6:31:02",
+                "time": "2:20"
+            },
+            {
+                "date": "2026-03-09",
+                "time": "2:35"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://www.youtube.com/",
+        "prCount": 2
+    },
+    {
+        "name": "Megan Mullins",
+        "category": "Open Women",
+        "location": "Mount Pleasant, MI / USA",
+        "occupation": "Bank teller",
+        "bodyweight": 125,
+        "dob": "1998-12-09",
+        "country": "🇺🇸",
+        "currentPR": "1:30",
+        "lastAttempt": "2026-03-14",
+        "history": [
+            {
+                "date": "2026-03-14",
+                "time": "1:30"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://drive.google.com/file/d/13WbYyva3Yl44kUeMZNiv7Y6fJHOvR98E/view?usp=drivesdk",
+        "prCount": 1
+    },
+    {
+        "name": "Zak Mullins",
+        "category": "Open Men",
+        "location": "Mount Pleasant, MI / USA",
+        "occupation": "Retail",
+        "bodyweight": 195,
+        "dob": "1996-05-10",
+        "country": "🇺🇸",
+        "currentPR": "1:20",
+        "lastAttempt": "2026-03-13",
+        "history": [
+            {
+                "date": "2026-03-13",
+                "time": "1:20"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://drive.google.com/file/d/1r3eeMYAcN6amJ2ZNBEvvMHlNqbNXYbo6/view?usp=drivesdk",
+        "prCount": 1
+    },
+    {
+        "name": "Markie Mullins",
+        "category": "Open Women",
+        "location": "Detroit, MI / USA / DETROIT, MI / USA",
+        "occupation": "Athlete",
+        "bodyweight": 170,
+        "dob": "1992-07-17",
+        "country": "🇺🇸",
+        "currentPR": "1:16",
+        "lastAttempt": "2026-03-07 4:46:31",
+        "history": [
+            {
+                "date": "2026-03-07 4:46:31",
+                "time": "1:16"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://webhook.site/#!/view/efa2a342-0c51-4b94-a9f1-e9ea586f996a/d44730c2-bf62-40b9-97a3-e9ff278f561e/1",
+        "prCount": 1
+    },
+    {
+        "name": "Venus M",
+        "category": "Open Women",
+        "location": "Detroit, MI / USA / DETROIT, MI / USA",
+        "occupation": "Astrologer",
+        "bodyweight": 170,
+        "dob": "1990-10-29",
+        "country": "🇺🇸",
+        "currentPR": "1:08",
+        "lastAttempt": "2026-03-07 7:11:58",
+        "history": [
+            {
+                "date": "2026-03-07 7:11:58",
+                "time": "1:08"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "prCount": 1
+    },
+    {
+        "name": "Joshua Taylor",
+        "category": "Masters Female",
+        "location": "Detroit, MI / USA",
+        "occupation": "Community Outreach",
+        "bodyweight": 180,
+        "dob": "1967-10-12",
+        "country": "🇺🇸",
+        "currentPR": "0:50",
+        "lastAttempt": "2026-03-11",
+        "history": [
+            {
+                "date": "2026-03-11",
+                "time": "0:50"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://www.mulerouter.ai/app/api-keys",
+        "prCount": 1
+    },
+    {
+        "name": "Otis B",
+        "category": "Open Men",
+        "location": "Detroit, MI / USA / DETROIT, MI / USA",
+        "occupation": "Athlete",
+        "bodyweight": 180,
+        "dob": "1990-10-29",
+        "country": "🇺🇸",
+        "currentPR": "0:42",
+        "lastAttempt": "2026-03-07 6:29:51",
+        "history": [
+            {
+                "date": "2026-03-07 6:29:51",
+                "time": "0:42"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://support.spectora.com/en/articles/2013085-what-s-included-in-a-home-inspection-infographic",
+        "prCount": 1
+    },
+    {
+        "name": "Pepper Chonie",
+        "category": "Open Men",
+        "location": "Detroit, MI / USA / DETROIT, MI / USA",
+        "occupation": "Security",
+        "bodyweight": 150,
+        "dob": "1990-10-29",
+        "country": "🇺🇸",
+        "currentPR": "0:30",
+        "lastAttempt": "2026-03-08 18:40:02",
+        "history": [
+            {
+                "date": "2026-03-08 18:40:02",
+                "time": "0:30"
+            }
+        ],
+        "isVerified": false,
+        "video": "https://www.youtube.com/",
+        "prCount": 1
+    }
+];
+
+    let currentCategory = 'All';
+    let currentSort = 'recent';
+    // No pagination on full leaderboard page - show all athletes
+    const itemsPerPage = 1000; // Large number to show all 
+
+    function getTierInfo(timeStr) {
+        const seconds = parseTime(timeStr);
+        if (seconds >= 360) return { label: 'Freak', class: 'tier-freak' }; // 6:00+
+        if (seconds >= 240) return { label: 'Legend', class: 'tier-legend' }; // 4:00+
+        if (seconds >= 180) return { label: 'Elite', class: 'tier-elite' }; // 3:00+
+        if (seconds >= 120) return { label: 'Pro', class: 'tier-pro' }; // 2:00+
+        if (seconds >= 60) return { label: 'Contender', class: 'tier-contender' }; // 1:00+
+        return { label: 'Challenger', class: 'tier-challenger' };
+    }
+
+    function calculateGripAge(athlete) {
+        // DOB is not in the athletes object yet, need to add it to the sync script.
+        // For now, let's assume a placeholder logic.
+        // This function will be fully implemented once DOB is available.
+        const dob = athlete.history[0].date; // Using first attempt date as a stand-in for now
+        const bodyweight = athlete.bodyweight;
+        const category = athlete.category;
+        const currentPR = athlete.currentPR;
+
+        if (!dob || !bodyweight || !category) {
+            return null; // Not enough data
+        }
+
+        // Step 0: Calculate Chronological Age (Using a fixed value for now)
+        // In a real scenario, this would be: new Date().getFullYear() - new Date(dob).getFullYear();
+        let chronologicalAge = 35; // Placeholder
+        const birthDate = new Date(dob);
+        if (!isNaN(birthDate.getTime())) {
+            let age = new Date().getFullYear() - birthDate.getFullYear();
+            const m = new Date().getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && new Date().getDate() < birthDate.getDate())) {
+                age--;
+            }
+            chronologicalAge = age > 15 ? age : 35; // Use calculated age if reasonable
+        }
+
+
+        const isFemale = category.toLowerCase().includes('women') || category.toLowerCase().includes('female');
+        const actualTime = parseTime(currentPR);
+        const actualWeight = parseFloat(bodyweight);
+
+        if (isNaN(actualWeight) || actualWeight <= 0) return null;
+
+        // Step 1: Base Expected Time
+        let baseExpectedTime;
+        if (chronologicalAge <= 29) baseExpectedTime = isFemale ? 80 : 105;
+        else if (chronologicalAge <= 39) baseExpectedTime = isFemale ? 65 : 85;
+        else if (chronologicalAge <= 49) baseExpectedTime = isFemale ? 50 : 65;
+        else if (chronologicalAge <= 59) baseExpectedTime = isFemale ? 38 : 50;
+        else if (chronologicalAge <= 69) baseExpectedTime = isFemale ? 28 : 38;
+        else baseExpectedTime = isFemale ? 20 : 28;
+
+        // Step 2: Bodyweight Adjustment
+
+        const refWeight = isFemale ? 135 : 175;
+        const adjustedExpectedTime = (baseExpectedTime * (refWeight / actualWeight) * 0.7) + (baseExpectedTime * 0.3);
+
+        // Step 3: Calculate Performance Ratio
+        if (adjustedExpectedTime <= 0) return null;
+        const performanceRatio = actualTime / adjustedExpectedTime;
+
+        // Step 4: Convert to Grip Age
+        let gripAgeRaw = chronologicalAge - (Math.log(performanceRatio) * 19);
+
+        // Step 5: Apply Caps
+        let gripAge = Math.max(16, gripAgeRaw);
+        gripAge = Math.min(85, gripAge);
+
+        const roundedGripAge = Math.round(gripAge);
+
+        return {
+            age: roundedGripAge,
+            chronologicalAge: chronologicalAge,
+            isYounger: roundedGripAge < chronologicalAge,
+            baseline: Math.round(adjustedExpectedTime)
+        };
+    }
+
+    // Smart Video Preview System
+    function getVideoPreview(videoUrl) {
+        if (!videoUrl) {
+            return `<a href="#" class="video-btn" style="opacity: 0.5; font-size: 0.8rem; padding: 4px 8px;">N/A</a>`;
+        }
+        
+        const url = videoUrl.toLowerCase();
+        
+        // YouTube
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            let videoId = '';
+            if (url.includes('youtube.com/watch?v=')) {
+                videoId = url.split('v=')[1]?.split('&')[0] || '';
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
+            }
+            
+            if (videoId) {
+                return `
+                    <a href="${videoUrl}" target="_blank" class="video-preview youtube-preview" title="Watch on YouTube">
+                        <img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" 
+                             alt="YouTube video preview" 
+                             class="video-thumbnail">
+                        <div class="play-button">▶</div>
+                        <div class="platform-badge">YouTube</div>
+                    </a>
+                `;
+            }
+        }
+        
+        // Google Drive
+        if (url.includes('drive.google.com')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview drive-preview" title="Watch on Google Drive">
+                    <div class="platform-icon">📁</div>
+                    <div class="platform-text">Watch on Drive</div>
+                    <div class="platform-badge">Drive</div>
+                </a>
+            `;
+        }
+        
+        // Reddit
+        if (url.includes('reddit.com') || url.includes('redd.it')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview reddit-preview" title="Watch on Reddit">
+                    <div class="platform-icon">👽</div>
+                    <div class="platform-text">Watch on Reddit</div>
+                    <div class="platform-badge">Reddit</div>
+                </a>
+            `;
+        }
+        
+        // Instagram
+        if (url.includes('instagram.com') || url.includes('instagr.am')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview instagram-preview" title="Watch on Instagram">
+                    <div class="platform-icon">📸</div>
+                    <div class="platform-text">Watch on Instagram</div>
+                    <div class="platform-badge">Instagram</div>
+                </a>
+            `;
+        }
+        
+        // TikTok
+        if (url.includes('tiktok.com')) {
+            return `
+                <a href="${videoUrl}" target="_blank" class="video-preview tiktok-preview" title="Watch on TikTok">
+                    <div class="platform-icon">🎵</div>
+                    <div class="platform-text">Watch on TikTok</div>
+                    <div class="platform-badge">TikTok</div>
+                </a>
+            `;
+        }
+        
+        // Generic video link
+        return `
+            <a href="${videoUrl}" target="_blank" class="video-preview generic-preview" title="Watch Video">
+                <div class="platform-icon">▶</div>
+                <div class="platform-text">Watch Video</div>
+                <div class="platform-badge">Video</div>
+            </a>
+        `;
+    }
+
+    function renderLeaderboard() {
+        const list = document.getElementById('leaderboard-body');
+        list.innerHTML = '';
+
+        // Filter
+        let filteredData = (currentCategory === 'All') ? athletes : athletes.filter(a => a.category === currentCategory);
+
+        // Pre-calculate True Rank based on Longest Time (always)
+        filteredData.sort((a, b) => {
+            const timeA = parseTime(a.currentPR);
+            const timeB = parseTime(b.currentPR);
+            return timeB - timeA;
+        });
+        filteredData.forEach((a, index) => {
+            a.trueRank = index + 1;
+        });
+
+        // Now sort based on user selection
+        if (currentSort === 'time') {
+            // Already sorted by time above
+        } else if (currentSort === 'recent') {
+            // Sort by recent (newest first) - DEFAULT
+            filteredData.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        } else if (currentSort === 'age') {
+            // Sort by age (youngest first)
+            filteredData.sort((a, b) => {
+                const ageA = calculateAge(a.dob);
+                const ageB = calculateAge(b.dob);
+                return ageA - ageB;
+            });
+        } else if (currentSort === 'prs') {
+            // Sort by PR count (highest first)
+            filteredData.sort((a, b) => (b.prCount || 0) - (a.prCount || 0));
+        }
+
+        // Create header dynamically
+        const header = document.createElement('div');
+        header.className = 'lb-header';
+        const isMobile = window.innerWidth <= 900;
+        
+        if (isMobile) {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div>Name</div>
+                <div>Time</div>
+                <div>Watch</div>
+            `;
+        } else {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div style="text-align: left; padding-left: 10px;">Tier</div>
+                <div>Athlete</div>
+                <div style="text-align: center;">Background</div>
+                <div style="text-align: center;">Location</div>
+                <div style="text-align: center;">Time</div>
+                <div style="text-align: center;">Watch</div>
+            `;
+        }
+        list.appendChild(header);
+
+        if (filteredData.length === 0) {
+            const noRecordsDiv = document.createElement('div');
+            noRecordsDiv.style = "padding:40px; text-align:center; color:#555;";
+            noRecordsDiv.innerText = "No records in this division yet.";
+            list.appendChild(noRecordsDiv);
+            return;
+        }
+
+        filteredData.forEach((athlete) => {
+            const rank = athlete.trueRank;
+            const rankClass = rank === 1 ? 'rank-1' : '';
+            const tier = getTierInfo(athlete.currentPR);
+            const flag = getCountryFlag(athlete.location);
+            const gripAge = calculateGripAge(athlete);
+            const displayLocation = athlete.location.split('/')[0].trim();
+            const isFemale = athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female');
+            
+            // Create wrapper for the row and its details
+            const wrapper = document.createElement('div');
+            wrapper.className = 'lb-row-wrapper';
+
+            // Create the main row
+            const row = document.createElement('div');
+            row.className = 'lb-row';
+            // Check if mobile
+            const isMobile = window.innerWidth <= 900;
+            
+            if (isMobile) {
+                // MOBILE: 4 columns (Rank, Name, Time, Watch)
+                row.innerHTML = `
+                    <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 4px;">
+                                ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✓</span>` : ''}
+                                <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                            </div>
+                        </div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
+                        <div style="font-size: 0.6rem; color: #666; margin-top: 2px; display: flex; align-items: center; gap: 4px;">
+                            <span>${displayLocation}</span>
+                            <span class="flag">${flag}</span>
+                        </div>
+                    </div>
+                    <div class="time mobile-time">${athlete.currentPR}</div>
+                    <div style="text-align: center;">${getVideoPreview(athlete.video)}</div>
+                `;
+            } else {
+                // DESKTOP: 7 columns
+                row.innerHTML = `
+                    <div class="rank ${rankClass}">${rank < 10 ? '0'+rank : rank}</div>
+                    <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 4px;">
+                                ${athlete.isVerified ? `<span class="verified-badge" title="Pro-Level Verification">✓</span>` : ''}
+                                <div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>
+                            </div>
+                        </div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
+                    </div>
+                    <div style="color: #bbb; font-size: 0.9rem;">${athlete.occupation}</div>
+                    <div style="color: #bbb; font-size: 0.9rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <span>${displayLocation}</span>
+                        <span class="flag">${flag}</span>
+                    </div>
+                    <div class="time desktop-time" style="justify-self: center; padding-left: 8px;">${athlete.currentPR}</div>
+                    <div style="text-align: center;">${getVideoPreview(athlete.video)}</div>
+                `;
+            }
+            
+            // Create the details panel
+            const detailsPanel = document.createElement('div');
+            detailsPanel.className = 'details-panel';
+            const labelStyle = 'font-size: 0.7rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;';
+            const valStyle = 'font-size: 0.9rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
+            
+            // Calculate age
+            const age = calculateAge(athlete.dob);
+            
+            if (gripAge !== null) {
+                if (gripAge.isYounger) {
+                    detailsPanel.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}">${gripAge.age}</span></div>
+                            <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                            <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                            <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                            <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    detailsPanel.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}; font-size: 0.9rem;">Baseline Established</span></div>
+                            <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                            <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                            <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                            <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                detailsPanel.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div><span style="${labelStyle}">Age:</span> <span style="${valStyle}">${age} years</span></div>
+                            <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                            </div>
+                        </div>
+                `;
+            }
+
+            // Append row and details to the wrapper, then wrapper to the list
+            wrapper.appendChild(row);
+            wrapper.appendChild(detailsPanel);
+            list.appendChild(wrapper);
+            
+            // All rows get pointer cursor for consistency
+            row.style.cursor = 'pointer';
+        });
+        
+        renderSidebar();
+    }
+    
+    function getChronologicalAge(dob) {
+        if (!dob) return null;
+        const birthDate = new Date(dob);
+        if (isNaN(birthDate.getTime())) return null;
+        let age = new Date().getFullYear() - birthDate.getFullYear();
+        const m = new Date().getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && new Date().getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+
+    
+    function renderSidebar() {
+        const sidebar = document.getElementById('top-10-list');
+        sidebar.innerHTML = '';
+        
+        // Always show top 10 across ALL athletes (not filtered by category)
+        // This automatically updates as new times are added to the athletes array
+        let topData = [...athletes].sort((a, b) => {
+            const timeA = parseTime(a.currentPR);
+            const timeB = parseTime(b.currentPR);
+            return timeB - timeA;
+        }).slice(0, 10);
+        
+        if (topData.length === 0) {
+            sidebar.innerHTML = '<div style="padding: 20px; color:#555; font-size:0.8rem;">No records yet.</div>';
+            return;
+        }
+        
+        topData.forEach((athlete, index) => {
+            const rank = index + 1;
+            const rankClass = rank <= 3 ? 'top-3' : '';
+            
+            const row = document.createElement('div');
+            row.className = 'mini-row';
+            row.innerHTML = `
+                <div class="mini-rank ${rankClass}">${rank}</div>
+                <div class="mini-name">${athlete.name}</div>
+                <div class="mini-time">${athlete.currentPR}</div>
+            `;
+            sidebar.appendChild(row);
+        });
+    }
+
+    function parseTime(timeStr) {
+        const parts = String(timeStr).split(/[:.]/);
+        const minutes = parseInt(parts[0], 10) || 0;
+        const seconds = parseInt(parts[1], 10) || 0;
+        return minutes * 60 + seconds;
+    }
+    
+    function parseLocation(locationStr) {
+        // Expected format: "Detroit, MI / USA" or "City, State / Country"
+        const parts = locationStr.split('/');
+        const cityState = parts[0] ? parts[0].trim() : '';
+        const country = parts[1] ? parts[1].trim() : 'Unknown';
+        
+        const cityStateParts = cityState.split(',');
+        const city = cityStateParts[0] ? cityStateParts[0].trim() : 'Unknown';
+        const state = cityStateParts[1] ? cityStateParts[1].trim() : '';
+        
+        return { city, state, country };
+    }
+    
+    function getCountryFlag(countryStr) {
+        const upper = countryStr.toUpperCase();
+        if (upper.includes('USA') || upper.includes('US') || upper.includes('UNITED STATES')) return '🇺🇸';
+        if (upper.includes('UK') || upper.includes('UNITED KINGDOM')) return '🇬🇧';
+        if (upper.includes('CANADA') || upper.includes('CA')) return '🇨🇦';
+        if (upper.includes('MEXICO') || upper.includes('MX')) return '🇲🇽';
+        if (upper.includes('GERMANY') || upper.includes('DE')) return '🇩🇪';
+        if (upper.includes('FRANCE') || upper.includes('FR')) return '🇫🇷';
+        if (upper.includes('AUSTRALIA') || upper.includes('AU')) return '🇦🇺';
+        if (upper.includes('JAPAN') || upper.includes('JP')) return '🇯🇵';
+        return '🌍';
+    }
+
+    function switchCategory(cat) {
+        const buttons = document.querySelectorAll('.division-tabs button');
+        buttons.forEach(btn => {
+            // Extract the category from the onclick attribute for a robust comparison
+            const onclickAttr = btn.getAttribute('onclick');
+            const btnCategoryMatch = onclickAttr ? onclickAttr.match(/switchCategory\('([^']+)'\)/) : null;
+            
+            if (btnCategoryMatch && btnCategoryMatch[1]) {
+                const btnCategory = btnCategoryMatch[1];
+                if (btnCategory === cat) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+        });
+        
+        currentCategory = cat;
+        document.getElementById('current-cat-display').innerText = cat.toUpperCase();
+        window.renderLeaderboard(); // Use the overridden version
+    }
+    
+    // Weight class calculation
+    function getWeightClass(weight, category) {
+        const isMale = category.includes('Men') || category.includes('Male');
+        const isFemale = category.includes('Women') || category.includes('Female');
+        
+        if (isMale) {
+            if (weight < 160) return 'Lightweight';
+            if (weight <= 224) return 'Middleweight';
+            return 'Heavyweight';
+        } else if (isFemale) {
+            if (weight < 130) return 'Lightweight';
+            if (weight <= 179) return 'Middleweight';
+            return 'Heavyweight';
+        }
+        return 'Open'; // Fallback
+    }
+    
+    // Age calculation
+    function calculateAge(dob) {
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+    
+    function toggleSort(type) {
+        currentSort = type;
+        
+        // Remove active from all sort buttons
+        document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+        
+        // Add active to clicked button
+        const btnId = `btn-sort-${type}`;
+        const btn = document.getElementById(btnId);
+        if (btn) btn.classList.add('active');
+        
+        window.renderLeaderboard(); // Use the overridden version
+    }
+
+    window.renderLeaderboard(); // Use the overridden version
+    
+    // Re-render on window resize
+    window.addEventListener('resize', function() {
+        window.renderLeaderboard(); // Use the overridden version
+    });
+    
+    // Mobile dropdown click handling (event delegation)
+    document.addEventListener('click', function(e) {
+        // Check if we're on mobile
+        const isMobile = window.innerWidth <= 900;
+        if (!isMobile) {
+            return; // Only handle on mobile
+        }
+        
+        // Find the clicked row
+        const row = e.target.closest('.lb-row');
+        if (!row) {
+            return; // Not clicking on a row
+        }
+        
+        // Don't trigger if clicking on a video link
+        if (e.target.closest('.video-preview')) {
+            return;
+        }
+        
+        // Find the wrapper
+        const wrapper = row.closest('.lb-row-wrapper');
+        if (!wrapper) {
+            return;
+        }
+        
+        // Close all other open details
+        document.querySelectorAll('.lb-row-wrapper.details-visible').forEach(otherWrapper => {
+            if (otherWrapper !== wrapper) {
+                otherWrapper.classList.remove('details-visible');
+            }
+        });
+        
+        // Toggle this wrapper
+        wrapper.classList.toggle('details-visible');
+        
+        // Prevent default to avoid any issues
+        e.preventDefault();
+        e.stopPropagation();
+    });
+    
+    // Search functionality
+    let allAthletes = []; // Will store all athletes for searching
+    let currentSearchTerm = '';
+    let isSearching = false;
+    let searchFilteredAthletes = [];
+    
+    // Initialize search after data is loaded
+    function initializeSearch() {
+        allAthletes = [...athletes]; // Copy all athletes
+        
+        const searchInput = document.getElementById('athlete-search');
+        const clearBtn = document.getElementById('clear-search');
+        const searchCount = document.getElementById('search-count');
+        
+        if (!searchInput) return;
+        
+        // Add event listeners
+        searchInput.addEventListener('input', function(e) {
+            currentSearchTerm = e.target.value.trim().toLowerCase();
+            
+            // Show/hide clear button
+            if (currentSearchTerm) {
+                clearBtn.style.display = 'flex';
+                isSearching = true;
+            } else {
+                clearBtn.style.display = 'none';
+                isSearching = false;
+            }
+            
+            // Apply search filter
+            filterAthletesBySearch();
+        });
+        
+        // Clear search button
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            currentSearchTerm = '';
+            clearBtn.style.display = 'none';
+            isSearching = false;
+            filterAthletesBySearch();
+            searchInput.focus();
+        });
+        
+        // Clear search on Escape key
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                currentSearchTerm = '';
+                clearBtn.style.display = 'none';
+                isSearching = false;
+                filterAthletesBySearch();
+            }
+        });
+    }
+    
+    // Filter athletes based on search term
+    function filterAthletesBySearch() {
+        if (!currentSearchTerm) {
+            // No search term, show all athletes
+            isSearching = false;
+            searchFilteredAthletes = [];
+            document.getElementById('search-count').style.display = 'none';
+            renderLeaderboard();
+            return;
+        }
+        
+        // Filter athletes by name (case-insensitive)
+        searchFilteredAthletes = allAthletes.filter(athlete => {
+            const name = athlete.name.toLowerCase();
+            return name.includes(currentSearchTerm);
+        });
+        
+        // Update search count display
+        const searchCount = document.getElementById('search-count');
+        searchCount.style.display = 'block';
+        searchCount.textContent = `${searchFilteredAthletes.length} athlete${searchFilteredAthletes.length !== 1 ? 's' : ''} found`;
+        
+        // Render filtered results
+        renderLeaderboard();
+    }
+    
+    // Override the existing renderLeaderboard to incorporate search
+    const originalRenderLeaderboard = window.renderLeaderboard;
+    window.renderLeaderboard = function() {
+        let dataToRender;
+        
+        if (isSearching && currentSearchTerm) {
+            // We're searching, use search-filtered data
+            dataToRender = searchFilteredAthletes;
+        } else {
+            // Not searching, use normal category filter
+            dataToRender = (currentCategory === 'All') ? athletes : athletes.filter(a => a.category === currentCategory);
+        }
+        
+        // Apply sorting
+        // Pre-calculate True Rank based on Longest Time (always)
+        dataToRender.sort((a, b) => {
+            const timeA = parseTime(a.currentPR);
+            const timeB = parseTime(b.currentPR);
+            return timeB - timeA;
+        });
+        dataToRender.forEach((a, index) => {
+            a.trueRank = index + 1;
+        });
+
+        // Now sort based on user selection
+        if (currentSort === 'time') {
+            // Already sorted by time above
+        } else if (currentSort === 'recent') {
+            // Sort by recent (newest first) - DEFAULT
+            dataToRender.sort((a, b) => new Date(b.lastAttempt) - new Date(a.lastAttempt));
+        } else if (currentSort === 'age') {
+            // Sort by age (youngest first)
+            dataToRender.sort((a, b) => {
+                const ageA = calculateAge(a.dob);
+                const ageB = calculateAge(b.dob);
+                return ageA - ageB;
+            });
+        } else if (currentSort === 'prs') {
+            // Sort by PR count (highest first)
+            dataToRender.sort((a, b) => (b.prCount || 0) - (a.prCount || 0));
+        }
+        
+        // Call the original rendering logic with our filtered data
+        renderLeaderboardWithData(dataToRender);
+    };
+    
+    // Helper function to render with specific data
+    function renderLeaderboardWithData(data) {
+        const list = document.getElementById('leaderboard-body');
+        list.innerHTML = '';
+
+        // Create header dynamically
+        const header = document.createElement('div');
+        header.className = 'lb-header';
+        const isMobile = window.innerWidth <= 900;
+        
+        if (isMobile) {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div>Name</div>
+                <div>Time</div>
+                <div>Watch</div>
+            `;
+        } else {
+            header.innerHTML = `
+                <div>Rank</div>
+                <div style="text-align: left; padding-left: 10px;">Tier</div>
+                <div>Athlete</div>
+                <div style="text-align: center;">Background</div>
+                <div style="text-align: center;">Location</div>
+                <div style="text-align: center;">Time</div>
+                <div style="text-align: center;">Watch</div>
+            `;
+        }
+        list.appendChild(header);
+
+        // Render each athlete
+        data.forEach((athlete, index) => {
+            // Use the original rendering logic from the original function
+            // (This is a simplified version - in practice we'd extract the rendering logic)
+            const time = parseTime(athlete.currentPR);
+            const tier = getTierInfo(athlete.currentPR);
+            const location = parseLocation(athlete.location);
+            const countryFlag = getCountryFlag(athlete.location);
+            const gripAge = calculateGripAge(athlete);
+            const videoPreview = getVideoPreview(athlete.video);
+            
+            // Create row wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'lb-row-wrapper';
+            
+            // Create row
+            const row = document.createElement('div');
+            row.className = 'lb-row';
+            
+            // Create details panel
+            const detailsPanel = document.createElement('div');
+            detailsPanel.className = 'details-panel';
+            
+            // Mobile layout
+            if (window.innerWidth <= 900) {
+                // Parse display location (just city/state, not full location)
+                const displayLocation = athlete.location ? athlete.location.split('/')[0].trim() : '';
+                const isFemale = athlete.category && (athlete.category.toLowerCase().includes('women') || athlete.category.toLowerCase().includes('female'));
+                
+                row.innerHTML = `
+                    <div class="rank">${athlete.trueRank < 10 ? '0' + athlete.trueRank : athlete.trueRank}</div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name" style="flex-shrink: 1;">${athlete.name}</div>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 4px;">
+                                ${athlete.isVerified ? '<span class="verified-badge" title="Pro-Level Verification">✓</span>' : ''}
+                                ${athlete.prCount ? `<div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>` : ''}
+                            </div>
+                        </div>
+                        <div class="gender-label">${isFemale ? 'Female' : 'Male'}</div>
+                        <div style="font-size: 0.6rem; color: #666; margin-top: 2px; display: flex; align-items: center; gap: 4px;">
+                            <span>${displayLocation}</span>
+                            <span class="flag">${countryFlag}</span>
+                        </div>
+                    </div>
+                    <div class="time mobile-time">${athlete.currentPR}</div>
+                    <div style="text-align: center;">${videoPreview}</div>
+                `;
+                
+                // Details panel for mobile
+                const labelStyle = 'font-size: 0.8rem; color: #888; font-family: \'Roboto Mono\', monospace; text-transform: uppercase;';
+                const valStyle = 'font-size: 0.9rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
+                
+                if (gripAge !== null) {
+                    if (gripAge.isYounger) {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}">${gripAge.age}</span></div>
+                                <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}; font-size: 0.9rem;">Baseline Established</span></div>
+                                <div><span style="${labelStyle}">Chronological Age:</span> <span style="${valStyle}">${gripAge.chronologicalAge}</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    detailsPanel.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div><span style="${labelStyle}">Age:</span> <span style="${valStyle}">${age} years</span></div>
+                            <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Make row clickable on mobile to toggle details
+                row.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on a video button
+                    if (e.target.closest('.video-btn') || e.target.closest('.video-preview')) {
+                        return;
+                    }
+                    
+                    // Close any other open details
+                    document.querySelectorAll('.lb-row-wrapper.details-visible').forEach(otherWrapper => {
+                        if (otherWrapper !== wrapper) {
+                            otherWrapper.classList.remove('details-visible');
+                        }
+                    });
+                    
+                    // Toggle this wrapper
+                    wrapper.classList.toggle('details-visible');
+                    
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+                
+            } else {
+                // Desktop layout
+                row.innerHTML = `
+                    <div class="rank">${athlete.trueRank}</div>
+                    <div><span class="tier-badge ${tier.class}">${tier.label}</span></div>
+                    <div class="name-cell">
+                        <div class="name-wrapper">
+                            <div class="name">${athlete.name}</div>
+                            ${athlete.isVerified ? '<span class="verified-badge">✓</span>' : ''}
+                        </div>
+                        <div class="location" style="font-size: 0.9rem; color: #888; font-weight: 500; text-transform: none;">
+                            ${location.city}, ${location.state} ${countryFlag}
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9rem; color: #ccc;">${athlete.occupation || 'Athlete'}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : ''}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.9rem; color: #ccc;">${location.city}, ${location.state}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${location.country}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="desktop-time">${athlete.currentPR}</div>
+                        ${athlete.prCount ? `<div class="pr-badge"><span class="pr-val">⚡ ${athlete.prCount}</span></div>` : ''}
+                    </div>
+                    <div style="text-align: center;">${videoPreview}</div>
+                `;
+                
+                // Set details panel content for desktop (same as mobile but with different styling if needed)
+                const labelStyle = 'font-size: 0.7rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;';
+                const valStyle = 'font-size: 0.9rem; color: #fff; font-family: \'Roboto Mono\', monospace;';
+                
+                if (gripAge !== null) {
+                    if (gripAge.isYounger) {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}">${gripAge.age}</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        detailsPanel.innerHTML = `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                                <div><span style="${labelStyle}">Grip Age:</span> <span style="${valStyle}; font-size: 0.9rem;">Baseline Established</span></div>
+                                <div><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                                <div><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight} lbs</span></div>
+                                <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                    <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    detailsPanel.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: baseline;">
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Division:</span> <span style="${valStyle}">${athlete.category}</span></div>
+                            <div style="grid-column: span 2;"><span style="${labelStyle}">Bodyweight:</span> <span style="${valStyle}">${athlete.bodyweight ? athlete.bodyweight + ' lbs' : 'Unknown'}</span></div>
+                            <div><span style="${labelStyle}">Age:</span> <span style="${valStyle}">${age} years</span></div>
+                            <div class="tier-in-details" style="grid-column: span 2; text-align: center; margin-top: 8px;">
+                                <span style="${labelStyle}">Tier:</span> <span class="tier-badge ${tier.class}" style="margin-left: 8px;">${tier.label}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Append row and details to the wrapper, then wrapper to the list
+            wrapper.appendChild(row);
+            wrapper.appendChild(detailsPanel); // Always append details panel for hover functionality
+            list.appendChild(wrapper);
+        });
+        
+        // Also update the sidebar
+        renderSidebar();
+    }
+    
+    // Initialize search when DOM is ready
+    document.addEventListener('DOMContentLoaded', initializeSearch);
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const marqueeContent = document.querySelector('.marquee-content');
+        if (marqueeContent) {
+            const content = marqueeContent.innerHTML;
+            marqueeContent.innerHTML += content;
+        }
+    });
+</script>
+
+
+
+      
+</body>
+</html>
+
+

@@ -1,0 +1,18 @@
+{
+  "athleteName": "Test Athlete Otis",
+  "email": "otis@hermes.ai",
+  "cityState": "Test City, TC",
+  "country": "United States",
+  "dob": "1990-01-01",
+  "gender": "Male",
+  "weight": 175,
+  "height": 70,
+  "gripTraining": "Advanced",
+  "attemptDate": "2026-03-31",
+  "hangTime": "0:45",
+  "videoUrl": "https://youtube.com/watch?v=test123",
+  "hearAbout": "Instagram",
+  "notes": "Test submission from Otis to verify leaderboard integration",
+  "consent": true,
+  "timestamp": "2026-03-31T00:59:25.612074"
+}

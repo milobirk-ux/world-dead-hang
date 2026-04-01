@@ -13,21 +13,30 @@
     <link rel="stylesheet" href="css/styles.css">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/media/logo_final_transparent.jpg">
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
     
     <!-- Simple API for testing -->
     <script src="js/api-simple.js"></script>
+    <script src="js/auth.js"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-91GCCEERG0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-91GCCEERG0');
+    </script>
 </head>
 <body class="auth-page">
     <!-- Navigation -->
     <nav class="navbar auth-navbar">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">
-                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+            <a href="/" class="nav-logo">
+                <img src="../assets/new_wdhc_logo.jpg" alt="WDHC Logo" class="logo-img">
                 <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
             </a>
             
-            <a href="index.html" class="nav-link">Back to Home</a>
+            <a href="/" class="nav-link">Back to Home</a>
         </div>
     </nav>
 
@@ -147,8 +156,8 @@
                                 required
                             >
                             <label for="registerTerms" class="form-check-label">
-                                I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> 
-                                and <a href="/privacy.html" target="_blank">Privacy Policy</a>
+                                I agree to the <a href="../terms.html" target="_blank">Terms of Service</a> 
+                                and <a href="../privacy.html" target="_blank">Privacy Policy</a>
                             </label>
                         </div>
                         <div class="form-error" id="registerTermsError"></div>
@@ -272,9 +281,9 @@
                 Â© 2024 World Dead Hang Championship. All rights reserved.
             </p>
             <div class="footer-links">
-                <a href="/privacy.html">Privacy</a>
-                <a href="/terms.html">Terms</a>
-                <a href="/contact.html">Contact</a>
+                <a href="../privacy.html">Privacy</a>
+                <a href="../terms.html">Terms</a>
+                <a href="../submit.html">Contact</a>
             </div>
         </div>
     </footer>

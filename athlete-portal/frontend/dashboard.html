@@ -17,42 +17,44 @@
     <link rel="stylesheet" href="css/dashboard.css">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/media/logo_final_transparent.jpg">
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
     
-    <!-- Simple API for testing -->
+    <!-- Simple API for testing (mock) -->
     <script src="js/api-simple.js"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-91GCCEERG0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-91GCCEERG0');
+    </script>
 </head>
 <body class="dashboard-page">
     <!-- Authentication check -->
     <script>
-        // Check authentication on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // If user is not authenticated, redirect to auth page
-            if (typeof WDHC_API === 'undefined' || !WDHC_API.isAuthenticated()) {
-                window.location.href = 'auth.html';
-                return;
+        (function() {
+            if (typeof WDHC_API !== 'undefined' && WDHC_API.isAuthenticated()) {
+                console.log('User authenticated, will load dashboard...');
             }
-            
-            // User is authenticated, continue loading dashboard
-            console.log('User authenticated, loading dashboard...');
-        });
+        })();
     </script>
     
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">
-                <img src="/media/logo_final_transparent.jpg" alt="WDHC Logo" class="logo-img">
+            <a href="/" class="nav-logo">
+                <img src="../assets/new_wdhc_logo.jpg" alt="WDHC Logo" class="logo-img">
                 <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
             </a>
             
             <div class="nav-menu">
                 <a href="dashboard.html" class="nav-link active">Dashboard</a>
-                <a href="#leaderboard" class="nav-link">Leaderboard</a>
-                <a href="#features" class="nav-link">Training</a>
-                <a href="dashboard.html" class="nav-link">Profile</a>
+                <a href="../index.html" class="nav-link">Leaderboard</a>
+                <a href="training.html" class="nav-link">Training</a>
+                <a href="profile.html" class="nav-link">Profile</a>
                 <div class="nav-user">
-                    <img src="/media/logo_final_transparent.jpg" alt="User" class="user-avatar" id="userAvatar">
+                    <img src="../assets/new_wdhc_logo.jpg" alt="User" class="user-avatar" id="userAvatar">
                     <span class="user-name" id="userName">Loading...</span>
                     <div class="user-dropdown">
                         <a href="dashboard.html" class="dropdown-item">Profile</a>
@@ -75,7 +77,7 @@
         <aside class="dashboard-sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-user">
-                    <img src="assets/default-avatar.jpg" alt="User" class="sidebar-avatar" id="sidebarAvatar">
+                    <img src="../assets/new_wdhc_logo.jpg" alt="User" class="sidebar-avatar" id="sidebarAvatar">
                     <div class="sidebar-user-info">
                         <h3 class="sidebar-user-name" id="sidebarUserName">Loading...</h3>
                         <p class="sidebar-user-rank" id="sidebarUserRank">Rank: #--</p>
@@ -84,30 +86,30 @@
             </div>
             
             <nav class="sidebar-nav">
-                <a href="/dashboard.html" class="sidebar-link active">
-                    <span class="sidebar-icon">ðŸ“Š</span>
+                <a href="dashboard.html" class="sidebar-link active">
+                    <span class="sidebar-icon">📊</span>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
-                <a href="/prs.html" class="sidebar-link">
-                    <span class="sidebar-icon">ðŸ†</span>
+                <a href="prs.html" class="sidebar-link">
+                    <span class="sidebar-icon">🏆</span>
                     <span class="sidebar-text">PRs</span>
                     <span class="sidebar-badge" id="prCountBadge">0</span>
                 </a>
-                <a href="/training.html" class="sidebar-link">
-                    <span class="sidebar-icon">ðŸ’ª</span>
+                <a href="training.html" class="sidebar-link">
+                    <span class="sidebar-icon">💪</span>
                     <span class="sidebar-text">Training</span>
                     <span class="sidebar-badge" id="trainingCountBadge">0</span>
                 </a>
-                <a href="/leaderboard.html" class="sidebar-link">
-                    <span class="sidebar-icon">ðŸ“ˆ</span>
+                <a href="../index.html" class="sidebar-link">
+                    <span class="sidebar-icon">📈</span>
                     <span class="sidebar-text">Leaderboard</span>
                 </a>
-                <a href="/profile.html" class="sidebar-link">
-                    <span class="sidebar-icon">ðŸ‘¤</span>
+                <a href="profile.html" class="sidebar-link">
+                    <span class="sidebar-icon">👤</span>
                     <span class="sidebar-text">Profile</span>
                 </a>
-                <a href="/settings.html" class="sidebar-link">
-                    <span class="sidebar-icon">âš™ï¸</span>
+                <a href="settings.html" class="sidebar-link">
+                    <span class="sidebar-icon">⚙️</span>
                     <span class="sidebar-text">Settings</span>
                 </a>
             </nav>
@@ -442,25 +444,20 @@
                     Â© 2024 World Dead Hang Championship. All rights reserved.
                 </p>
                 <div class="footer-links-bottom">
-                    <a href="/privacy.html">Privacy Policy</a>
-                    <a href="/terms.html">Terms of Service</a>
-                    <a href="/help.html">Help Center</a>
+                <a href="../privacy.html">Privacy Policy</a>
+                <a href="../terms.html">Terms of Service</a>
+                <a href="../rules.html">Help Center</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="js/auth.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/dashboard.js"></script>
-    
+    <!-- Inline dashboard initialization (uses WDHC_API from api-simple.js) -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Check authentication
-            const sessionToken = localStorage.getItem('wdhc_session');
-            if (!sessionToken) {
-                window.location.href = '/auth.html';
+            if (!WDHC_API || !WDHC_API.isAuthenticated()) {
+                window.location.href = 'auth.html';
                 return;
             }
             
@@ -486,7 +483,6 @@
                     this.classList.toggle('active');
                 });
                 
-                // Close dropdown when clicking outside
                 document.addEventListener('click', function() {
                     userElement.classList.remove('active');
                 });
@@ -497,74 +493,89 @@
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    localStorage.removeItem('wdhc_session');
-                    window.location.href = '/auth.html';
+                    WDHC_API.logout();
                 });
             }
             
             // Quick action buttons
             document.getElementById('addPRBtn')?.addEventListener('click', () => {
-                window.location.href = '/prs.html?action=add';
+                window.location.href = 'prs.html?action=add';
             });
             
             document.getElementById('quickLogBtn')?.addEventListener('click', () => {
-                window.location.href = '/training.html?action=add';
+                window.location.href = 'training.html?action=add';
             });
             
             document.getElementById('viewLeaderboardBtn')?.addEventListener('click', () => {
-                window.location.href = '/leaderboard.html';
+                window.location.href = 'leaderboard.html';
             });
             
             document.getElementById('startActivityBtn')?.addEventListener('click', () => {
-                window.location.href = '/prs.html?action=add';
+                window.location.href = 'prs.html?action=add';
             });
             
             document.getElementById('logPRBtn')?.addEventListener('click', () => {
-                window.location.href = '/prs.html?action=add';
+                window.location.href = 'prs.html?action=add';
             });
             
             document.getElementById('logTrainingBtn')?.addEventListener('click', () => {
-                window.location.href = '/training.html?action=add';
+                window.location.href = 'training.html?action=add';
             });
             
             document.getElementById('viewProgressBtn')?.addEventListener('click', () => {
-                window.location.href = '/analytics.html';
+                window.location.href = 'analytics.html';
             });
             
             document.getElementById('compareBtn')?.addEventListener('click', () => {
-                window.location.href = '/compare.html';
-            });
-            
-            // Chart period changes
-            document.getElementById('prChartPeriod')?.addEventListener('change', function() {
-                updatePRChart(this.value);
-            });
-            
-            document.getElementById('trainingChartPeriod')?.addEventListener('change', function() {
-                updateTrainingChart(this.value);
+                window.location.href = 'compare.html';
             });
         });
         
         async function initializeDashboard() {
             try {
-                // Load athlete data
-                const athleteData = await getAthleteData();
-                updateAthleteInfo(athleteData);
+                const email = localStorage.getItem('wdhc_athlete_email') || 'test@example.com';
+                const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                 
-                // Load stats
-                const statsData = await getAthleteStats();
-                updateStats(statsData);
+                // Get mock data from WDHC_API if available
+                const mockAthlete = getMockAthlete(email);
                 
-                // Load recent activity
-                const activityData = await getRecentActivity();
-                updateActivity(activityData);
+                const athleteInfo = {
+                    name: mockAthlete ? mockAthlete.name : name,
+                    rank: mockAthlete && mockAthlete.stats ? mockAthlete.stats.rank : '--',
+                    bestHangTime: mockAthlete && mockAthlete.stats ? mockAthlete.stats.bestTime : '0:00',
+                    gripAge: 0,
+                    totalPRs: mockAthlete && mockAthlete.prs ? mockAthlete.prs.length : 0,
+                    trainingSessions: mockAthlete && mockAthlete.trainingLogs ? mockAthlete.trainingLogs.length : 0,
+                    profileImage: '../assets/new_wdhc_logo.jpg',
+                    trends: { rank: 0, hangTime: 0, prs: 0 }
+                };
                 
-                // Load milestones
-                const milestonesData = await getMilestones();
-                updateMilestones(milestonesData);
+                updateAthleteInfo(athleteInfo);
+                updateStats(athleteInfo);
                 
-                // Initialize charts
-                initializeCharts();
+                const activities = [];
+                if (mockAthlete && mockAthlete.prs && mockAthlete.prs.length > 0) {
+                    mockAthlete.prs.forEach(pr => {
+                        activities.push({
+                            type: 'pr',
+                            title: 'Personal Record',
+                            description: `Hang time: ${pr.time}`,
+                            timestamp: new Date(pr.date).toISOString(),
+                            details: pr.verified ? 'Verified' : 'Pending'
+                        });
+                    });
+                }
+                updateActivity(activities);
+                updateMilestones([]);
+                
+                // Initialize charts with slight delay
+                setTimeout(() => {
+                    try {
+                        initializeCharts();
+                    } catch(e) {
+                        console.warn('Chart init error:', e);
+                    }
+                }, 100);
                 
             } catch (error) {
                 console.error('Dashboard initialization error:', error);
@@ -930,107 +941,15 @@
             }, 5000);
         }
         
-        // Mock API functions (would be replaced with real API calls)
-        async function getAthleteData() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve({
-                        name: 'John Smith',
-                        rank: 42,
-                        bestHangTime: '2:45',
-                        gripAge: 8,
-                        profileImage: 'assets/default-avatar.jpg'
-                    });
-                }, 500);
-            });
-        }
-        
-        async function getAthleteStats() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve({
-                        totalPRs: 12,
-                        trainingSessions: 24,
-                        trends: {
-                            rank: 3,
-                            hangTime: 5,
-                            prs: 2
-                        }
-                    });
-                }, 500);
-            });
-        }
-        
-        async function getRecentActivity() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve([
-                        {
-                            type: 'pr',
-                            title: 'New Personal Record!',
-                            description: 'You achieved a new best hang time of 2:45',
-                            timestamp: new Date(Date.now() - 3600000).toISOString(),
-                            details: '+5 seconds from previous PR',
-                            action: {
-                                text: 'View',
-                                url: '/prs/123'
-                            }
-                        },
-                        {
-                            type: 'training',
-                            title: 'Training Session Logged',
-                            description: 'Completed a grip endurance workout',
-                            timestamp: new Date(Date.now() - 86400000).toISOString(),
-                            details: '4 sets of max hangs'
-                        },
-                        {
-                            type: 'rank',
-                            title: 'Rank Improved',
-                            description: 'You moved up 3 spots on the global leaderboard',
-                            timestamp: new Date(Date.now() - 172800000).toISOString(),
-                            details: 'Now ranked #42 globally'
-                        }
-                    ]);
-                }, 500);
-            });
-        }
-        
-        async function getMilestones() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve([
-                        {
-                            title: 'First PR',
-                            description: 'Submitted your first dead hang PR',
-                            achieved: true,
-                            achievedAt: new Date(Date.now() - 2592000000).toISOString()
-                        },
-                        {
-                            title: '5 PRs',
-                            description: 'Achieved 5 personal records',
-                            achieved: true,
-                            achievedAt: new Date(Date.now() - 1728000000).toISOString()
-                        },
-                        {
-                            title: '1-Minute Hang',
-                            description: 'Hang for 60 seconds or more',
-                            achieved: false,
-                            progress: 75
-                        },
-                        {
-                            title: 'Consistent Training',
-                            description: 'Maintain 80%+ consistency for 4 weeks',
-                            achieved: false,
-                            progress: 60
-                        }
-                    ]);
-                }, 500);
-            });
+        // Helper: get mock athlete data by email from api-simple.js
+        function getMockAthlete(email) {
+            // Access MOCK_ATHLETE_DATA from global scope if available
+            if (typeof MOCK_ATHLETE_DATA !== 'undefined' && MOCK_ATHLETE_DATA[email]) {
+                return MOCK_ATHLETE_DATA[email];
+            }
+            return null;
         }
     </script>
     
-    <!-- Dashboard JavaScript -->
-    <script src="js/api.js"></script>
-    <script src="js/dashboard.js"></script>
 </body>
 </html>

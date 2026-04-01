@@ -19,7 +19,7 @@
  * Author: Otis (OpenClaw Assistant)
  * 
  * Version History:
- * v2.7 (2026-03-27): Duplicate created for edits
+ * v2.9 (2026-03-27): Enhanced grip age section with interesting fact and calculation explanation.
  * v2.3 (2026-03-26): Simplified grip age calculation - height removed, grip training matches form exactly
  * v2.2 (2026-03-26): Enhanced grip age calculation with height + grip training experience, minimum age 18
  * v2.1 (2026-03-26): Added tier badges matching website design
@@ -145,6 +145,10 @@ function sendWelcomeEmail(email, name, time, dob, gender, weight, height, gripTr
     // Calculate grip age - NOW INCLUDES GRIP TRAINING EXPERIENCE (HEIGHT REMOVED)
     const gripAgeData = calculateGripAge(dobDate, weight, gender, time, gripTraining);
     const gripAgeDesc = getGripAgeDescription(gripAgeData);
+
+    // Enhanced grip age section with interesting fact
+    const gripAgeDetails = \
+    \
     
     // Determine tier
     let currentTier = "";

@@ -56,21 +56,45 @@ function isAuthenticated() {
 }
 
 /**
- * Simple mock authentication - checks if email exists in mock data
+ * Simple mock authentication - accepts ANY email for testing
  */
 async function simpleAuth(email) {
     return new Promise((resolve) => {
         setTimeout(() => {
-            if (MOCK_ATHLETE_DATA[email]) {
-                // Create mock session token
-                const sessionToken = `mock-session-${Date.now()}-${email}`;
-                localStorage.setItem('wdhc_session', sessionToken);
-                localStorage.setItem('wdhc_athlete_email', email);
-                resolve({ success: true, message: 'Authentication successful' });
-            } else {
-                resolve({ success: false, message: 'Email not found in system' });
+            // Create mock session token
+            const sessionToken = `mock-${email}`;
+            localStorage.setItem('wdhc_session', sessionToken);
+            localStorage.setItem('wdhc_athlete_email', email);
+            
+            // If email is in mock data, use it; otherwise register a new mock user
+            if (!MOCK_ATHLETE_DATA[email]) {
+                MOCK_ATHLETE_DATA[email] = {
+                    id: `athlete-${Date.now()}`,
+                    name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                    email: email,
+                    profile: {
+                        dateOfBirth: '1990-01-01',
+                        gender: 'male',
+                        bodyweight: 180,
+                        location: 'Unknown',
+                        occupation: 'Athlete',
+                        division: 'Open Men'
+                    },
+                    stats: {
+                        bestTime: '0:00',
+                        totalAttempts: 0,
+                        averageTime: '0:00',
+                        gripAge: '0 years 0 months 0 days',
+                        rank: '--',
+                        percentile: 0
+                    },
+                    prs: [],
+                    trainingLogs: []
+                };
             }
-        }, 1000); // Simulate network delay
+            
+            resolve({ success: true, message: 'Authentication successful' });
+        }, 500); // Simulate network delay
     });
 }
 

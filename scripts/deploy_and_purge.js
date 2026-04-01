@@ -1,8 +1,8 @@
 const { execSync } = require('child_process');
 
 // Fill these in from the Cloudflare Dashboard
-const ZONE_ID = 'ENTER_YOUR_ZONE_ID_HERE';
-const API_TOKEN = 'ENTER_YOUR_API_TOKEN_HERE';
+const ZONE_ID = '1d84062683e67d1f2723f0be045bbbb9';
+const API_TOKEN='cfut_F7HDwrOFoj7w9vQEApSSyFSfIZhgaZLOIgoIlc5j47f3ec33';
 
 async function deployAndPurge() {
   try {

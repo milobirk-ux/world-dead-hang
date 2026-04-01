@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Benefits | World Dead Hang Championship</title>
-    <link rel="icon" type="image/png" href="media/logo_final_transparent.png">
+    <link rel="icon" type="image/jpeg" href="media/logo_final_transparent.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
         
@@ -104,12 +104,14 @@
         .nav-links a {
             color: var(--text-dim);
             text-decoration: none;
-            margin-left: 30px;
-            font-size: 1.0rem; /* Increased from 0.9rem */
+            margin-left: 40px;
+            font-size: 1.2rem; /* Increased from 1.0rem */
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 1px;
             transition: color 0.2s;
+            padding: 8px 12px;
+            border-radius: 4px;
         }
         .nav-links a:hover { color: var(--gold); }
 
@@ -1559,18 +1561,26 @@
             /* Remove conflicting mobile styles - use only the 900px media query */
         }
     </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-91GCCEERG0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-91GCCEERG0');
+    </script>
 </head>
 <body>
 
     <nav>
-        <div class="nav-logo"><img src="media/logo_final_transparent.png" alt="World Dead Hang Championship Logo"></div>
+        <div class="nav-logo"><img src="media/logo_final_transparent.jpg" alt="World Dead Hang Championship Logo"></div>
         <div class="nav-links">
             <a href="index.html">Leaderboard</a>
             <a href="rules.html">Rulebook</a>
             <a href="submit.html">Submit</a>
             <a href="benefits.html" class="active">Benefits</a>
             <a href="about.html">About</a>
-            <a href="athlete-portal/index.html">Athlete Portal</a>
+            <a href="athlete-portal/frontend/index.html">Athlete Portal</a>
         </div>
     </nav>
 
@@ -1854,7 +1864,7 @@
               max-width: 1200px;
               margin: 0 auto 40px;
           ">
-              <img src="media/logo_final_transparent.png" 
+              <img src="media/logo_final_transparent.jpg" 
                    alt="WDHC Logo" 
                    style="
                        width: 100%;

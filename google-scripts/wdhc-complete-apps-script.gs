@@ -137,8 +137,8 @@ function ensureColumnsExist(sheet, headers) {
     'City/State', 'Country', 'Date of Birth', 'Gender', 'Bodyweight lbs',
     'Height (inches)', 'Grip Training Experience', 'Attempt Date',
     'Official Time', 'Video Proof URL', 'Additional Notes',
-    'How did you hear about us?', 'Consent', 'Emailed', 'Is PR',
-    'Previous Best', 'PR Badge'
+    'How did you hear about us?', 'Consent', 'Approved', 'Is PR',
+    'Previous Best', 'Verified'
   ];
   
   let lastCol = headers.length;
@@ -178,10 +178,10 @@ function mapFormDataToRow(data, headers) {
     'Additional Notes': data.notes || '',
     'How did you hear about us?': data.hearAbout,
     'Consent': data.consent ? 'Yes' : 'No',
-    'Emailed': 'No', // Will be updated by email automation
+    'Approved': 'No', // Will be updated by email automation
     'Is PR': '', // Will be calculated by email automation
     'Previous Best': '', // Will be calculated by email automation
-    'PR Badge': '' // Will be calculated by email automation
+    'Verified': '' // Will be calculated by email automation
   };
   
   // Fill row array based on header positions
@@ -286,10 +286,10 @@ function sendWelcomeEmailOnNewRow(e) {
   const weightColIndex = headers.findIndex(h => h === 'Bodyweight lbs');
   const heightColIndex = headers.findIndex(h => h === 'Height (inches)');
   const gripTrainingColIndex = headers.findIndex(h => h === 'Grip Training Experience');
-  const emailedColIndex = headers.findIndex(h => h === 'Emailed');
+  const emailedColIndex = headers.findIndex(h => h === 'Approved');
   const prColIndex = headers.findIndex(h => h === 'Is PR');
   const previousBestColIndex = headers.findIndex(h => h === 'Previous Best');
-  const prBadgeColIndex = headers.findIndex(h => h === 'PR Badge');
+  const prBadgeColIndex = headers.findIndex(h => h === 'Verified');
   
   if (emailColIndex === -1 || nameColIndex === -1) {
     console.error('❌ Required columns not found');

@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Hang | WDHC</title>
+    <link rel="icon" type="image/png" href="media/logo_final_transparent.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
+        
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --surface-hover: #111;
+            --gold: #D4AF37;
+            --gold-dim: #8a702a;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --text: #ffffff;
+            --text-dim: #888;
+            --border: #222;
+            --success: #28a745;
+            --error: #dc3545;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: var(--gold);  /* Changed from gradient to solid gold */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #fff;  /* Changed from var(--gold) to white */
+            font-size: 1.1rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Specific styling for select dropdowns */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 45px;
+            cursor: pointer;
+        }
+
+        select option {
+            background-color: var(--surface);
+            color: var(--text);
+            padding: 10px;
+        }
+
+        select option[value=""] {
+            color: var(--text-dim);
+        }
+
+        /* Style for dropdown when it's open */
+        select:focus option:checked {
+            background-color: var(--gold);
+            color: var(--bg);
+        }
+
+        select:focus option:hover {
+            background-color: var(--gold-dim);
+            color: var(--text);
+        }
+
+        /* Hover effect for select */
+        select:hover {
+            border-color: var(--gold-dim);
+            background-color: rgba(255,255,255,0.08);
+        }
+
+        /* Make sure selected option is visible */
+        select:invalid {
+            color: var(--text-dim);
+        }
+
+        select:valid {
+            color: var(--text);
+        }
+
+        /* Style for date inputs - keep native calendar functionality */
+        input[type="date"] {
+            /* Keep the native calendar picker functional */
+            padding-right: 15px;
+        }
+
+        /* Style the calendar picker indicator to match theme */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(2);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            background-color: rgba(212, 175, 55, 0.2);
+        }
+
+        /* For Firefox */
+        input[type="date"]::-moz-calendar-picker-indicator {
+            filter: invert(1) brightness(2);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        /* Placeholder styling for empty inputs */
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
+        /* Style for number inputs with unit */
+        .input-with-unit {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-with-unit input {
+            padding-right: 50px;
+        }
+
+        .input-with-unit .unit {
+            position: absolute;
+            right: 15px;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+            color: #000;
+            border: none;
+            padding: 18px 30px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Rules Section */
+        .rules-section {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid var(--gold);
+        }
+
+        .rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.95em;
+            color: #e0e0e0;
+        }
+
+        .rule-item strong {
+            color: #fff;
+        }
+
+        /* Improved Input Styles */
+        .input-with-unit {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .input-with-unit input {
+            flex: 1;
+            padding-right: 50px;
+        }
+
+        .input-with-unit .unit {
+            position: absolute;
+            right: 15px;
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        /* Time Input Styles */
+        .time-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .time-input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .time-input-group input {
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+        }
+
+        .time-label {
+            font-size: 0.8em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .time-separator {
+            font-size: 1.5em;
+            color: var(--gold);
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .success {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .spinner {
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .rules-section {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .rules-section h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .rules-section ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rules-section li {
+            margin-bottom: 8px;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo"><img src="media/logo_final_transparent.jpg" alt="World Dead Hang Championship Logo"></div>
+        <div class="nav-links">
+            <a href="index.html">Leaderboard</a>
+            <a href="rules.html">Rulebook</a>
+            <a href="submit.html" class="active">Submit</a>
+            <a href="benefits.html">Benefits</a>
+            <a href="about.html">About</a>
+            <a href="athlete-portal/index.html">Athlete Portal</a>
+        </div>
+    </nav>
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span>🏆 The world's first sanctioned dead hang championship ✅ officially open</span>
+            <span>⏱️ No minimum time. Every hang is official.</span>
+            <span>💪 Grip strength predicts lifespan & dead hang measures it. What's your Grip Age?</span>
+            <span>🚀 30 seconds puts you in the top half of the global population. Submit yours and start your journey!</span>
+        </div>
+
+
+
+
+    <div class="container">
+        <div class="header">
+            <h1>SUBMIT YOUR HANG</h1>
+            <p>Enter the World Dead Hang Championship leaderboard</p>
+        </div>
+
+        <div id="message" class="message"></div>
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Submitting your hang...</p>
+        </div>
+
+        <form id="submissionForm">
+            <!-- Athlete Name -->
+            <div class="form-group">
+                <label for="athleteName" class="required">Athlete Name</label>
+                <input type="text" id="athleteName" name="athleteName" required 
+                       placeholder="Enter your full name">
+            </div>
+
+            <!-- Email Address -->
+            <div class="form-group">
+                <label for="email" class="required">Email Address</label>
+                <input type="email" id="email" name="email" required 
+                       placeholder="you@example.com">
+                <span class="help-text">We'll send your confirmation and results here</span>
+            </div>
+
+            <!-- City, State / Province -->
+            <div class="form-group">
+                <label for="cityState" class="required">City, State / Province</label>
+                <input type="text" id="cityState" name="cityState" required 
+                       placeholder="e.g., Detroit, Michigan">
+                <span class="help-text">Your city and state/province</span>
+            </div>
+
+            <!-- Country -->
+            <div class="form-group">
+                <label for="country" class="required">Country</label>
+                <select id="country" name="country" required>
+                    <option value="">Select country</option>
+                    <option value="United States">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span class="help-text">Select your country</span>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-group">
+                <label for="dob" class="required">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required 
+                       max="2010-12-31" min="1920-01-01">
+                <span class="help-text">Used for age calculation and grip age analysis (must be 16+)</span>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <label for="gender" class="required">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="">Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+                <span class="help-text">Used for accurate grip age calculation</span>
+            </div>
+
+            <!-- Bodyweight -->
+            <div class="form-group">
+                <label for="weight" class="required">Bodyweight (lbs)</label>
+                <div class="input-with-unit">
+                    <input type="number" id="weight" name="weight" required 
+                           min="50" max="500" step="0.1"
+                           placeholder="175">
+                    <span class="unit">lbs</span>
+                </div>
+                <span class="help-text">Your current bodyweight in pounds</span>
+            </div>
+
+            <!-- Height (NEW FIELD) -->
+            <div class="form-group">
+                <label for="height">Height (inches)</label>
+                <div class="input-with-unit">
+                    <input type="number" id="height" name="height" 
+                           min="48" max="96" step="1"
+                           placeholder="70">
+                    <span class="unit">in</span>
+                </div>
+                <span class="help-text">Optional - used for more accurate grip age calculation</span>
+            </div>
+
+            <!-- Grip Training Experience (NEW FIELD) -->
+            <div class="form-group">
+                <label for="gripTraining">Grip Training Experience</label>
+                <select id="gripTraining" name="gripTraining">
+                    <option value="">Select experience level</option>
+                    <option value="None">None - First time training grip</option>
+                    <option value="Beginner">Beginner - Less than 6 months</option>
+                    <option value="Intermediate">Intermediate - 6 months to 2 years</option>
+                    <option value="Advanced">Advanced - 2+ years</option>
+                </select>
+                <span class="help-text">Optional - Helps personalize your grip age calculation</span>
+            </div>
+
+            <!-- Date of Attempt -->
+            <div class="form-group">
+                <label for="attemptDate" class="required">Date of Attempt</label>
+                <input type="date" id="attemptDate" name="attemptDate" required 
+                       max="2026-03-23" min="2020-01-01">
+                <span class="help-text">When did you perform your dead hang attempt?</span>
+            </div>
+
+            <!-- Official Hang Time -->
+            <div class="form-group">
+                <label for="hangTime" class="required">Official Hang Time</label>
+                <div class="time-input-container">
+                    <div class="time-input-group">
+                        <input type="number" id="minutes" name="minutes" 
+                               min="0" max="30" step="1" placeholder="4"
+                               oninput="updateCombinedTime()">
+                        <span class="time-label">minutes</span>
+                    </div>
+                    <span class="time-separator">:</span>
+                    <div class="time-input-group">
+                        <input type="number" id="seconds" name="seconds" 
+                               min="0" max="59" step="1" placeholder="26"
+                               oninput="updateCombinedTime()">
+                        <span class="time-label">seconds</span>
+                    </div>
+                    <input type="hidden" id="hangTime" name="hangTime" required>
+                </div>
+                <span class="help-text">Enter minutes and seconds separately (e.g., 4:26 for 4 minutes 26 seconds)</span>
+            </div>
+
+            <!-- Video Proof URL -->
+            <div class="form-group">
+                <label for="videoUrl" class="required">Video Proof URL</label>
+                <input type="url" id="videoUrl" name="videoUrl" required 
+                       placeholder="https://youtube.com/watch?v=...">
+                <span class="help-text">Link to YouTube, Google Drive, Reddit, Instagram, or TikTok</span>
+            </div>
+
+            <!-- Additional Notes -->
+            <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" name="notes" rows="3" 
+                          placeholder="Any special circumstances, equipment used, or comments"></textarea>
+            </div>
+
+            <!-- How did you hear about us? -->
+            <div class="form-group">
+                <label for="hearAbout" class="required">How did you hear about us?</label>
+                <select id="hearAbout" name="hearAbout" required>
+                    <option value="">Select option</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Youtube">YouTube</option>
+                    <option value="Facebook / Reddit">Facebook / Reddit</option>
+                    <option value="Google Search">Google Search</option>
+                    <option value="Word of Mouth / Gym">Word of Mouth / Gym</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span class="help-text">Let us know how you discovered the World Dead Hang Championship</span>
+            </div>
+
+            <!-- reCAPTCHA -->
+            <div class="form-group">
+                <div id="recaptcha-container"></div>
+                <span class="help-text">Please verify you're not a robot</span>
+            </div>
+
+            <!-- Consent Checkbox -->
+            <div class="form-group">
+                <div style="display: flex; align-items: flex-start; gap: 10px; margin: 20px 0;">
+                    <input type="checkbox" id="consent" name="consent" required style="margin-top: 3px;">
+                    <label for="consent" style="font-size: 0.95rem; color: var(--text); line-height: 1.4;">
+                        I confirm my attempt follows official WDHC rules: standard 1.25" bare steel bar (unverified submissions may use 1"-1.25"), no straps, gloves, or grip aids (liquid chalk and standard block powder are permitted), and continuous unedited video from start to finish. I also confirm I have read and agree to the 
+                        <a href="terms.html" style="color: var(--gold); text-decoration: underline;">WDHC Terms & Conditions</a> and 
+                        <a href="privacy.html" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>.
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                SUBMIT HANG
+            </button>
+        </form>
+
+        <div class="rules-section" style="margin-top: 40px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- Standard Submission -->
+                <div class="rules-column" style="background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(50, 50, 50, 0.8) 100%); border-radius: 12px; padding: 25px; border: 2px solid var(--silver);">
+                    <h3 style="color: var(--silver); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="check-circle" style="width: 24px; height: 24px; color: var(--silver);"></i>
+                        Standard Submission
+                    </h3>
+                    <p style="color: #ccc; margin-bottom: 20px; font-size: 0.95rem;">
+                        <strong>Required for all entries</strong><br>
+                        This is the baseline for all entries on the leaderboard. Your video must be unedited and meet all the core requirements of the official rulebook.
+                    </p>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #ddd;">
+                            <i data-lucide="check" style="width: 16px; height: 16px; color: var(--silver); position: absolute; left: 0; top: 2px;"></i>
+                            Uninterrupted, continuous video from start to finish.
+                        </li>
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #ddd;">
+                            <i data-lucide="check" style="width: 16px; height: 16px; color: var(--silver); position: absolute; left: 0; top: 2px;"></i>
+                            A clear view of a timer must be present throughout the entire hang.
+                        </li>
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #ddd;">
+                            <i data-lucide="check" style="width: 16px; height: 16px; color: var(--silver); position: absolute; left: 0; top: 2px;"></i>
+                            Full body must be in the frame at the start and end of the hang.
+                        </li>
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #ddd;">
+                            <i data-lucide="check" style="width: 16px; height: 16px; color: var(--silver); position: absolute; left: 0; top: 2px;"></i>
+                            No gloves, straps, hooks, or grip aids of any kind are permitted. Regular and liquid chalk are allowed.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Verified Submission -->
+                <div class="rules-column" style="background: linear-gradient(135deg, rgba(40, 30, 20, 0.8) 0%, rgba(60, 50, 40, 0.8) 100%); border-radius: 12px; padding: 25px; border: 2px solid var(--gold);">
+                    <h3 style="color: var(--gold); margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                            <i data-lucide="badge-check" style="width: 24px; height: 24px; color: var(--gold);"></i>
+                            Verified Submission
+                        </div>
+                        <div style="font-size: 0.9em; color: var(--gold-dim); margin-left: 34px;">
+                            (For '✓' Badge)
+                        </div>
+                    </h3>
+                    <p style="color: #ddd; margin-bottom: 20px; font-size: 0.95rem;">
+                        For athletes seeking the highest level of validation, the Verified Submission tier provides a path to earn the ✓ badge on the leaderboard. <strong>All Standard rules apply</strong>, plus the following must be demonstrated in a single unedited video:
+                    </p>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #eee;">
+                            <i data-lucide="ruler" style="width: 16px; height: 16px; color: var(--gold); position: absolute; left: 0; top: 2px;"></i>
+                            <strong>Bar Measurement:</strong> Provide a close-up of the bar with a tape measure showing 1.25" (32mm) diameter, or state bar brand and model in submission notes for independent verification.
+                        </li>
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #eee;">
+                            <i data-lucide="search" style="width: 16px; height: 16px; color: var(--gold); position: absolute; left: 0; top: 2px;"></i>
+                            <strong>Bar Surface Check:</strong> Before the hang, provide a clear close-up of the entire bar surface confirming it is free of tape, grooves, or residue.
+                        </li>
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #eee;">
+                            <i data-lucide="hand" style="width: 16px; height: 16px; color: var(--gold); position: absolute; left: 0; top: 2px;"></i>
+                            <strong>Grip View:</strong> Brief close-up of hand position on bar before the hang begins, showing double overhand grip with no prohibited aids.
+                        </li>
+                        <li style="margin-bottom: 12px; padding-left: 24px; position: relative; color: #eee;">
+                            <i data-lucide="cloud-rain" style="width: 16px; height: 16px; color: var(--gold); position: absolute; left: 0; top: 2px;"></i>
+                            <strong>Chalk Application:</strong> Show on-camera application of chalk before the attempt. No reapplication once the hang begins.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <p style="color: var(--gold); font-weight: 600; text-align: center; font-size: 1.1rem; margin-top: 20px;">
+                Submissions are reviewed within 24-48 hours. You'll receive a confirmation email with your grip age analysis.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Time input functionality
+        function updateCombinedTime() {
+            const minutes = document.getElementById('minutes').value || '0';
+            const seconds = document.getElementById('seconds').value || '0';
+            const hangTimeInput = document.getElementById('hangTime');
+            
+            // Format as MM:SS
+            const formattedTime = `${minutes}:${seconds.padStart(2, '0')}`;
+            hangTimeInput.value = formattedTime;
+            
+            // Validate seconds (0-59)
+            const secNum = parseInt(seconds);
+            if (secNum > 59) {
+                document.getElementById('seconds').value = '59';
+                updateCombinedTime();
+            }
+        }
+
+        // Form submission handler
+        document.getElementById('submissionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const message = document.getElementById('message');
+            
+            // Basic validation
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Show loading, hide message
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            message.style.display = 'none';
+            
+            // Collect form data
+            const formData = {
+                athleteName: document.getElementById('athleteName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                cityState: document.getElementById('cityState').value.trim(),
+                country: document.getElementById('country').value,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                weight: parseFloat(document.getElementById('weight').value),
+                height: document.getElementById('height').value ? parseInt(document.getElementById('height').value) : null,
+                gripTraining: document.getElementById('gripTraining').value || null,
+                attemptDate: document.getElementById('attemptDate').value,
+                hangTime: `${document.getElementById('minutes').value}:${document.getElementById('seconds').value.padStart(2, '0')}`,
+                videoUrl: document.getElementById('videoUrl').value.trim(),
+                hearAbout: document.getElementById('hearAbout').value,
+                notes: document.getElementById('notes').value.trim(),
+                consent: document.getElementById('consent').checked,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                // Google Apps Script Web App URL (you'll update this after deployment)
+                const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwYOUR_DEPLOYMENT_ID/exec';
+                
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('✅ Submission successful! Check your email for confirmation and grip age analysis.', 'success');
+                    
+                    // Reset form
+                    document.getElementById('submissionForm').reset();
+                    
+                    // Show submission ID
+                    if (result.submissionId) {
+                        setTimeout(() => {
+                            showMessage(`Submission ID: ${result.submissionId} (Keep this for reference)`, 'success');
+                        }, 3000);
+                    }
+                } else {
+                    showMessage(`❌ Error: ${result.error || 'Submission failed'}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Network error: ${error.message}`, 'error');
+                console.error('Submission error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+        
+        function validateForm() {
+            const requiredFields = [
+                'athleteName', 'email', 'cityState', 'country', 'dob', 'gender', 'weight', 
+                'attemptDate', 'hangTime', 'videoUrl', 'hearAbout', 'consent'
+            ];
+            
+            let isValid = true;
+            let firstInvalidField = null;
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = field;
+                    field.style.borderColor = 'var(--error)';
+                } else {
+                    field.style.borderColor = '';
+                }
+            });
+            
+            // Validate email format
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && !emailRegex.test(email)) {
+                isValid = false;
+                showMessage('❌ Please enter a valid email address', 'error');
+                document.getElementById('email').style.borderColor = 'var(--error)';
+            }
+            
+            // Validate hang time format
+            const minutes = document.getElementById('minutes').value;
+            const seconds = document.getElementById('seconds').value;
+            
+            if (!minutes || !seconds) {
+                isValid = false;
+                showMessage('❌ Please enter both minutes and seconds', 'error');
+                document.getElementById('minutes').style.borderColor = 'var(--error)';
+                document.getElementById('seconds').style.borderColor = 'var(--error)';
+            } else if (parseInt(seconds) > 59) {
+                isValid = false;
+                showMessage('❌ Seconds must be 0-59', 'error');
+                document.getElementById('seconds').style.borderColor = 'var(--error)';
+            }
+            
+            // Focus first invalid field
+            if (firstInvalidField) {
+                firstInvalidField.focus();
+                showMessage('❌ Please fill in all required fields', 'error');
+            }
+            
+            return isValid;
+        }
+        
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            
+            // Scroll to message
+            message.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Format validation for hang time
+        document.getElementById('hangTime').addEventListener('blur', function(e) {
+            const time = e.target.value.trim();
+            if (!time) return;
+            
+            // Accept formats: MM:SS, M:SS, M.SS, M.S
+            const validFormat = /^(\d+):([0-5]?\d)$|^(\d+)\.(\d{1,2})$/;
+            
+            if (!validFormat.test(time)) {
+                showMessage('Please use format MM:SS (4:26) or M.SS (4.26)', 'error');
+                e.target.focus();
+            }
+        });
+        
+        // Auto-calculate age from DOB
+        document.getElementById('dob').addEventListener('change', function(e) {
+            const dob = new Date(e.target.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            
+            if (age > 0) {
+                const helpText = this.nextElementSibling;
+                helpText.textContent = `Age: ${age} years (used for grip age calculation)`;
+            }
+        });
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
+
+
+
+

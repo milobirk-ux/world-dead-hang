@@ -1,0 +1,513 @@
+     1|<!DOCTYPE html>
+     2|<html lang="en">
+     3|<head>
+     4|    <meta charset="UTF-8">
+     5|    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6|    <title>Submit Your Hang | WDHC</title>
+     7|    <link rel="icon" type="image/png" href="media/logo_final_transparent.jpg">
+     8|    <style>
+     9|        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap');
+    10|        
+    11|        :root {
+    12|            --bg: #050505;
+    13|            --surface: #0a0a0a;
+    14|            --surface-hover: #111;
+    15|            --gold: #D4AF37;
+    16|            --gold-dim: #8a702a;
+    17|            --gold-glow: rgba(212, 175, 55, 0.25);
+    18|            --text: #ffffff;
+    19|            --text-dim: #888;
+    20|            --border: #222;
+    21|            --success: #28a745;
+    22|            --error: #dc3545;
+    23|        }
+    24|
+    25|        * { box-sizing: border-box; margin: 0; padding: 0; }
+    26|
+    27|        body {
+    28|            background-color: var(--bg);
+    29|            color: var(--text);
+    30|            font-family: 'Rajdhani', sans-serif;
+    31|            min-height: 100vh;
+    32|            line-height: 1.6;
+    33|            padding: 20px;
+    34|        }
+    35|
+    36|        .container {
+    37|            max-width: 800px;
+    38|            margin: 40px auto;
+    39|            padding: 40px;
+    40|            background: var(--surface);
+    41|            border-radius: 16px;
+    42|            border: 1px solid var(--border);
+    43|            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    44|        }
+    45|
+    46|        .header {
+    47|            text-align: center;
+    48|            margin-bottom: 50px;
+    49|            padding-bottom: 25px;
+    50|            border-bottom: 2px solid var(--border);
+    51|        }
+    52|
+    53|        .header h1 {
+    54|            font-family: 'Oswald', sans-serif;
+    55|            font-size: 3.5rem;
+    56|            margin-bottom: 15px;
+    57|            color: var(--gold);  /* Changed from gradient to solid gold */
+    58|            text-transform: uppercase;
+    59|            letter-spacing: 1px;
+    60|        }
+    61|
+    62|        .header p {
+    63|            color: var(--text-dim);
+    64|            font-size: 1.2rem;
+    65|        }
+    66|
+    67|        .form-group {
+    68|            margin-bottom: 25px;
+    69|        }
+    70|
+    71|        label {
+    72|            display: block;
+    73|            margin-bottom: 8px;
+    74|            font-weight: 600;
+    75|            color: #fff;  /* Changed from var(--gold) to white */
+    76|            font-size: 1.1rem;
+    77|        }
+    78|
+    79|        .required::after {
+    80|            content: " *";
+    81|            color: var(--error);
+    82|        }
+    83|
+    84|        input, select, textarea {
+    85|            width: 100%;
+    86|            padding: 12px 15px;
+    87|            background: rgba(255,255,255,0.05);
+    88|            border: 1px solid var(--border);
+    89|            border-radius: 6px;
+    90|            color: var(--text);
+    91|            font-family: 'Rajdhani', sans-serif;
+    92|            font-size: 1rem;
+    93|            transition: all 0.3s ease;
+    94|        }
+    95|
+    96|        /* Specific styling for select dropdowns */
+    97|        select {
+    98|            appearance: none;
+    99|            -webkit-appearance: none;
+   100|            -moz-appearance: none;
+   101|            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+   102|            background-repeat: no-repeat;
+   103|            background-position: right 15px center;
+   104|            background-size: 16px;
+   105|            padding-right: 45px;
+   106|            cursor: pointer;
+   107|        }
+   108|
+   109|        select option {
+   110|            background-color: var(--surface);
+   111|            color: var(--text);
+   112|            padding: 10px;
+   113|        }
+   114|
+   115|        select option[value=""] {
+   116|            color: var(--text-dim);
+   117|        }
+   118|
+   119|        /* Style for dropdown when it's open */
+   120|        select:focus option:checked {
+   121|            background-color: var(--gold);
+   122|            color: var(--bg);
+   123|        }
+   124|
+   125|        select:focus option:hover {
+   126|            background-color: var(--gold-dim);
+   127|            color: var(--text);
+   128|        }
+   129|
+   130|        /* Hover effect for select */
+   131|        select:hover {
+   132|            border-color: var(--gold-dim);
+   133|            background-color: rgba(255,255,255,0.08);
+   134|        }
+   135|
+   136|        /* Make sure selected option is visible */
+   137|        select:invalid {
+   138|            color: var(--text-dim);
+   139|        }
+   140|
+   141|        select:valid {
+   142|            color: var(--text);
+   143|        }
+   144|
+   145|        /* Style for date inputs - keep native calendar functionality */
+   146|        input[type="date"] {
+   147|            /* Keep the native calendar picker functional */
+   148|            padding-right: 15px;
+   149|        }
+   150|
+   151|        /* Style the calendar picker indicator to match theme */
+   152|        input[type="date"]::-webkit-calendar-picker-indicator {
+   153|            filter: invert(1) brightness(2);
+   154|            cursor: pointer;
+   155|            padding: 5px;
+   156|            border-radius: 3px;
+   157|            transition: background-color 0.3s ease;
+   158|        }
+   159|
+   160|        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+   161|            background-color: rgba(212, 175, 55, 0.2);
+   162|        }
+   163|
+   164|        /* For Firefox */
+   165|        input[type="date"]::-moz-calendar-picker-indicator {
+   166|            filter: invert(1) brightness(2);
+   167|            cursor: pointer;
+   168|            padding: 5px;
+   169|            border-radius: 3px;
+   170|        }
+   171|
+   172|        /* Placeholder styling for empty inputs */
+   173|        input::placeholder,
+   174|        textarea::placeholder {
+   175|            color: var(--text-dim);
+   176|            opacity: 0.7;
+   177|        }
+   178|
+   179|        /* Style for number inputs with unit */
+   180|        .input-with-unit {
+   181|            position: relative;
+   182|            display: flex;
+   183|            align-items: center;
+   184|        }
+   185|
+   186|        .input-with-unit input {
+   187|            padding-right: 50px;
+   188|        }
+   189|
+   190|        .input-with-unit .unit {
+   191|            position: absolute;
+   192|            right: 15px;
+   193|            color: var(--text-dim);
+   194|            font-weight: 600;
+   195|        }
+   196|
+   197|        input:focus, select:focus, textarea:focus {
+   198|            outline: none;
+   199|            border-color: var(--gold);
+   200|            box-shadow: 0 0 0 3px var(--gold-glow);
+   201|        }
+   202|
+   203|        .help-text {
+   204|            display: block;
+   205|            margin-top: 5px;
+   206|            font-size: 0.9rem;
+   207|            color: var(--text-dim);
+   208|            font-style: italic;
+   209|        }
+   210|
+   211|        .submit-btn {
+   212|            background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+   213|            color: #000;
+   214|            border: none;
+   215|            padding: 18px 30px;
+   216|            font-size: 1.3rem;
+   217|            font-weight: 800;
+   218|            border-radius: 10px;
+   219|            cursor: pointer;
+   220|            width: 100%;
+   221|            font-family: 'Oswald', sans-serif;
+   222|            text-transform: uppercase;
+   223|            letter-spacing: 2px;
+   224|            transition: all 0.3s ease;
+   225|            margin-top: 30px;
+   226|            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+   227|        }
+   228|
+   229|        .submit-btn:hover {
+   230|            transform: translateY(-2px);
+   231|            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+   232|        }
+   233|
+   234|        .submit-btn:disabled {
+   235|            opacity: 0.6;
+   236|            cursor: not-allowed;
+   237|            transform: none;
+   238|        }
+   239|
+   240|        /* Rules Section */
+   241|        .rules-section {
+   242|            background: rgba(10, 10, 10, 0.8);
+   243|            border: 1px solid var(--border);
+   244|            border-radius: 10px;
+   245|            padding: 20px;
+   246|            margin: 25px 0;
+   247|            border-left: 4px solid var(--gold);
+   248|        }
+   249|
+   250|        .rules-list {
+   251|            display: flex;
+   252|            flex-direction: column;
+   253|            gap: 10px;
+   254|        }
+   255|
+   256|        .rule-item {
+   257|            display: flex;
+   258|            align-items: flex-start;
+   259|            font-size: 0.95em;
+   260|            color: #e0e0e0;
+   261|        }
+   262|
+   263|        .rule-item strong {
+   264|            color: #fff;
+   265|        }
+   266|
+   267|        /* Improved Input Styles */
+   268|        .input-with-unit {
+   269|            display: flex;
+   270|            align-items: center;
+   271|            position: relative;
+   272|        }
+   273|
+   274|        .input-with-unit input {
+   275|            flex: 1;
+   276|            padding-right: 50px;
+   277|        }
+   278|
+   279|        .input-with-unit .unit {
+   280|            position: absolute;
+   281|            right: 15px;
+   282|            color: #aaa;
+   283|            font-size: 0.9em;
+   284|        }
+   285|
+   286|        /* Time Input Styles */
+   287|        .time-input-container {
+   288|            display: flex;
+   289|            align-items: center;
+   290|            gap: 10px;
+   291|        }
+   292|
+   293|        .time-input-group {
+   294|            display: flex;
+   295|            flex-direction: column;
+   296|            align-items: center;
+   297|            flex: 1;
+   298|        }
+   299|
+   300|        .time-input-group input {
+   301|            width: 100%;
+   302|            text-align: center;
+   303|            padding: 12px;
+   304|        }
+   305|
+   306|        .time-label {
+   307|            font-size: 0.8em;
+   308|            color: #aaa;
+   309|            margin-top: 5px;
+   310|        }
+   311|
+   312|        .time-separator {
+   313|            font-size: 1.5em;
+   314|            color: var(--gold);
+   315|            font-weight: bold;
+   316|            margin: 0 5px;
+   317|        }
+   318|
+   319|        .message {
+   320|            padding: 15px;
+   321|            border-radius: 6px;
+   322|            margin: 20px 0;
+   323|            display: none;
+   324|        }
+   325|
+   326|        .success {
+   327|            background: rgba(40, 167, 69, 0.1);
+   328|            border: 1px solid var(--success);
+   329|            color: var(--success);
+   330|        }
+   331|
+   332|        .error {
+   333|            background: rgba(220, 53, 69, 0.1);
+   334|            border: 1px solid var(--error);
+   335|            color: var(--error);
+   336|        }
+   337|
+   338|        .loading {
+   339|            text-align: center;
+   340|            padding: 20px;
+   341|            display: none;
+   342|        }
+   343|
+   344|        .spinner {
+   345|            border: 3px solid rgba(212, 175, 55, 0.3);
+   346|            border-top: 3px solid var(--gold);
+   347|            border-radius: 50%;
+   348|            width: 40px;
+   349|            height: 40px;
+   350|            animation: spin 1s linear infinite;
+   351|            margin: 0 auto 15px;
+   352|        }
+   353|
+   354|        @keyframes spin {
+   355|            0% { transform: rotate(0deg); }
+   356|            100% { transform: rotate(360deg); }
+   357|        }
+   358|
+   359|        .rules-section {
+   360|            background: rgba(212, 175, 55, 0.05);
+   361|            border: 1px solid var(--border);
+   362|            border-radius: 8px;
+   363|            padding: 20px;
+   364|            margin-top: 40px;
+   365|        }
+   366|
+   367|        .rules-section h3 {
+   368|            color: var(--gold);
+   369|            margin-bottom: 15px;
+   370|            font-family: 'Oswald', sans-serif;
+   371|        }
+   372|
+   373|        .rules-section ul {
+   374|            padding-left: 20px;
+   375|            margin-bottom: 15px;
+   376|        }
+   377|
+   378|        .rules-section li {
+   379|            margin-bottom: 8px;
+   380|            color: var(--text-dim);
+   381|        }
+   382|
+   383|        @media (max-width: 768px) {
+   384|            .container {
+   385|                padding: 20px;
+   386|            }
+   387|            
+   388|            .header h1 {
+   389|                font-size: 2.5rem;
+   390|            }
+   391|        }
+   392|    </style>
+   393|</head>
+   394|<body>
+
+    <nav>
+        <div class="nav-logo"><img src="media/new_wdhc_logo.jpg" alt="World Dead Hang Championship Logo"></div>
+        <div class="nav-links">
+            <a href="index.html">Leaderboard</a>
+            <a href="rules.html">Rulebook</a>
+            <a href="submit.html">Submit</a>
+            <a href="benefits.html">Benefits</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
+   395|    <div class="container">
+   396|        <div class="header">
+   397|            <h1>SUBMIT YOUR HANG</h1>
+   398|            <p>Enter the World Dead Hang Championship leaderboard</p>
+   399|        </div>
+   400|
+   401|        <div id="message" class="message"></div>
+   402|        <div id="loading" class="loading">
+   403|            <div class="spinner"></div>
+   404|            <p>Submitting your hang...</p>
+   405|        </div>
+   406|
+   407|        <form id="submissionForm">
+   408|            <!-- Athlete Name -->
+   409|            <div class="form-group">
+   410|                <label for="athleteName" class="required">Athlete Name</label>
+   411|                <input type="text" id="athleteName" name="athleteName" required 
+   412|                       placeholder="Enter your full name">
+   413|            </div>
+   414|
+   415|            <!-- Email Address -->
+   416|            <div class="form-group">
+   417|                <label for="email" class="required">Email Address</label>
+   418|                <input type="email" id="email" name="email" required 
+   419|                       placeholder="you@example.com">
+   420|                <span class="help-text">We'll send your confirmation and results here</span>
+   421|            </div>
+   422|
+   423|            <!-- City, State / Province -->
+   424|            <div class="form-group">
+   425|                <label for="cityState" class="required">City, State / Province</label>
+   426|                <input type="text" id="cityState" name="cityState" required 
+   427|                       placeholder="e.g., Detroit, Michigan">
+   428|                <span class="help-text">Your city and state/province</span>
+   429|            </div>
+   430|
+   431|            <!-- Country -->
+   432|            <div class="form-group">
+   433|                <label for="country" class="required">Country</label>
+   434|                <select id="country" name="country" required>
+   435|                    <option value="">Select country</option>
+   436|                    <option value="United States">United States</option>
+   437|                    <option value="Canada">Canada</option>
+   438|                    <option value="United Kingdom">United Kingdom</option>
+   439|                    <option value="Australia">Australia</option>
+   440|                    <option value="Germany">Germany</option>
+   441|                    <option value="France">France</option>
+   442|                    <option value="Japan">Japan</option>
+   443|                    <option value="Other">Other</option>
+   444|                </select>
+   445|                <span class="help-text">Select your country</span>
+   446|            </div>
+   447|
+   448|            <!-- Date of Birth -->
+   449|            <div class="form-group">
+   450|                <label for="dob" class="required">Date of Birth</label>
+   451|                <input type="date" id="dob" name="dob" required 
+   452|                       max="2010-12-31" min="1920-01-01">
+   453|                <span class="help-text">Used for age calculation and grip age analysis (must be 16+)</span>
+   454|            </div>
+   455|
+   456|            <!-- Gender -->
+   457|            <div class="form-group">
+   458|                <label for="gender" class="required">Gender</label>
+   459|                <select id="gender" name="gender" required>
+   460|                    <option value="">Select gender</option>
+   461|                    <option value="Male">Male</option>
+   462|                    <option value="Female">Female</option>
+   463|                    <option value="Prefer not to say">Prefer not to say</option>
+   464|                </select>
+   465|                <span class="help-text">Used for accurate grip age calculation</span>
+   466|            </div>
+   467|
+   468|            <!-- Bodyweight -->
+   469|            <div class="form-group">
+   470|                <label for="weight" class="required">Bodyweight (lbs)</label>
+   471|                <div class="input-with-unit">
+   472|                    <input type="number" id="weight" name="weight" required 
+   473|                           min="50" max="500" step="0.1"
+   474|                           placeholder="175">
+   475|                    <span class="unit">lbs</span>
+   476|                </div>
+   477|                <span class="help-text">Your current bodyweight in pounds</span>
+   478|            </div>
+   479|
+   480|            <!-- Height (NEW FIELD) -->
+   481|            <div class="form-group">
+   482|                <label for="height">Height (inches)</label>
+   483|                <div class="input-with-unit">
+   484|                    <input type="number" id="height" name="height" 
+   485|                           min="48" max="96" step="1"
+   486|                           placeholder="70">
+   487|                    <span class="unit">in</span>
+   488|                </div>
+   489|                <span class="help-text">Optional - used for more accurate grip age calculation</span>
+   490|            </div>
+   491|
+   492|            <!-- Grip Training Experience (NEW FIELD) -->
+   493|            <div class="form-group">
+   494|                <label for="gripTraining">Grip Training Experience</label>
+   495|                <select id="gripTraining" name="gripTraining">
+   496|                    <option value="">Select experience level</option>
+   497|                    <option value="None">None - First time training grip</option>
+   498|                    <option value="Beginner">Beginner - Less than 6 months</option>
+   499|                    <option value="Intermediate">Intermediate - 6 months to 2 years</option>
+   500|                    <option value="Advanced">Advanced - 2+ years</option>
+   501|

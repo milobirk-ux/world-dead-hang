@@ -19,7 +19,7 @@ async function syncLeaderboard() {
 
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: 'Custom Form Submissions!A:Z',
+            range: 'Custom Form Submissions!A:ZZ',
         });
 
         let rows = response.data.values;
@@ -37,8 +37,8 @@ async function syncLeaderboard() {
         const locationIndex = headers.indexOf('City/State'); // 4
         const dateIndex = headers.indexOf('Attempt Date'); // 11
         const backgroundIndex = headers.indexOf('Grip Training Experience'); // 10
-        const verifiedIndex = headers.indexOf('PR Badge'); // 20
-        const approvedIndex = headers.indexOf('Emailed'); // 17 (using Emailed as approval flag)
+        const verifiedIndex = headers.indexOf('Verified'); // changed from PR Badge
+        const approvedIndex = headers.indexOf('Approved'); // changed from Emailed
 
         // 2. Process rows into athlete data
         console.log("Processing submissions...");
@@ -70,7 +70,7 @@ async function syncLeaderboard() {
                     prCount: 0,
                     lastAttempt: "1970-01-01",
                     video: "#",
-                    verified: verifiedIndex !== -1 && row[verifiedIndex] && row[verifiedIndex].includes('🏆'),
+                    verified: verifiedIndex !== -1 && row[verifiedIndex] === 'Yes',
                     history: []
                 };
             }
