@@ -123,7 +123,7 @@ function buildEmail(n, totalSec, formattedTime) {
   const badge=tierBadge(t.tier);
   const thresholds={Challenger:0,Contender:60,Expert:120,Elite:180,Legend:240,Freak:360};
   const range=(t.nextSec-(thresholds[t.tier]||0))||60;
-  const pct=Math.min(100,Math.max(0,Math.round(((totalSec-(thresholds[tier]||0))/range)*100)));
+  const pct=Math.min(100,Math.max(0,Math.round(((totalSec-(thresholds[t.tier]||0))/range)*100)));
   const gap=t.nextSec-totalSec;
   const ga=gripAge(n.dob,n.weight,n.gender,totalSec,n.height,n.gripTraining);
   const bar=t.next?`<div style="margin:25px 0;padding:20px;background:#f8f9fa;border-radius:8px;"><p style="margin:0 0 10px 0;color:#666;font-size:12px;text-align:center;text-transform:uppercase;letter-spacing:1px;">Next: ${t.next} Tier</p><div style="background:#e9ecef;border-radius:4px;height:8px;overflow:hidden;"><div style="background:${t.color};width:${pct}%;height:100%;"></div></div><p style="margin:8px 0 0 0;color:#888;font-size:12px;text-align:center;">${formatTime(gap)} to go</p></div>`:'';
@@ -194,13 +194,29 @@ async function getAccessToken() {
   return (await r.json()).access_token;
 }
 
-// === WORKER ===
-addEventListener('fetch', (request, env, ctx) => {
-  _env = env;
-  if (request.method==='OPTIONS') { return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}}); }
-  if (request.method!=='POST') { return new Response(JSON.stringify({error:'Method not allowed'}),{status:405,headers:{'Content-Type':'application/json','Access-Control-Allow-Origin':'*'}}); }
-  return handleRequest(request);
-});
+// === WORKER (ES Module format) ===
+export default {
+  async fetch(request, env, ctx) {
+    _env = env;
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      });
+    }
+    if (request.method !== 'POST') {
+      return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+        status: 405,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+      });
+    }
+    return handleRequest(request);
+  }
+};
 
 async function handleRequest(request) {
   try {

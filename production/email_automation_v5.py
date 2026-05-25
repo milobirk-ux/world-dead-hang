@@ -276,7 +276,7 @@
    276|    # Gap to next tier
    277|    gap = next_sec - total_sec if next_sec else 0
    278|    
-   279|    # Grip age
+   279|    # GripAge™
    280|    grip_data = calculate_grip_age(dob, weight, gender, total_sec, height)
    281|    grip_display = f"{grip_data['age']}" if not grip_data['isYouth'] else "18"
    282|    
@@ -420,7 +420,7 @@
    420|    # Gap to next tier
    421|    gap = next_sec - total_sec if next_sec else 0
    422|    
-   423|    # Grip age
+   423|    # GripAge™
    424|    grip_data = calculate_grip_age(dob, weight, gender, total_sec, height)
    425|    grip_display = f"{grip_data['age']}" if not grip_data['isYouth'] else "18"
    426|    
