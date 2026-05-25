@@ -1,0 +1,14 @@
+#!/bin/bash
+# Pre-commit hook: Backup Google Sheets ONLY if athlete-related files changed
+cd /home/milobirk/world-dead-hang-repo
+
+# Check if any athlete/sheet related files are in this commit
+CHANGED=$(git diff --cached --name-only | grep -E "(submit\.js|normalize\.js|email_automation|index\.html| Athletes|sheet_backup)")
+
+if [ -n "$CHANGED" ]; then
+    echo "📊 Sheet-related files changed, running backup..."
+    nohup python3 infrastructure/scripts/sheet_backup.py > /tmp/wdhc-backup.log 2>&1 &
+    echo "  Backup running in background (log: /tmp/wdhc-backup.log)"
+else
+    echo "✓ No sheet-related changes, skipping backup"
+fi

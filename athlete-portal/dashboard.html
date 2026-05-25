@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - WDHC Athlete Portal</title>
+    <link rel="icon" type="image/jpeg" href="https://worlddeadhang.com/media/new_wdhc_logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/api.js"></script>
+    <style>
+        :root { --gold: #D4AF37; }
+        .stat-value { color: var(--gold) !important; font-family: 'Oswald', sans-serif !important; }
+    </style>
+</head>
+<body class="dashboard-page dark-theme">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <img src="https://worlddeadhang.com/media/new_wdhc_logo.jpg" alt="Logo" style="height:40px; border-radius:4px;">
+                <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-user">
+                    <span class="user-name" id="userName">Loading...</span>
+                    <a href="#" class="logout" style="margin-left:20px; color:var(--gray-500); font-size:0.8rem;">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-user">
+                    <div class="sidebar-user-info">
+                        <h3 class="sidebar-user-name" id="sidebarUserName">Loading...</h3>
+                        <p class="sidebar-user-rank" id="sidebarUserRank">Rank: #--</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link active">
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+                <a href="https://worlddeadhang.com/index.html" class="sidebar-link">
+                    <span class="sidebar-text">Leaderboard</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="sidebar-stats">
+                    <div class="sidebar-stat">
+                        <span class="sidebar-stat-label">GripAge™</span>
+                        <span class="sidebar-stat-value" id="sidebarGripAge">--</span>
+                    </div>
+                    <div class="sidebar-stat">
+                        <span class="sidebar-stat-label">Best Hang</span>
+                        <span class="sidebar-stat-value" id="sidebarBestHang">--</span>
+                    </div>
+                </div>
+                <a href="https://worlddeadhang.com/submit.html" class="btn btn-primary btn-block" style="text-decoration:none; text-align:center; color:#000;">
+                    + Add New PR
+                </a>
+            </div>
+        </aside>
+
+        <div class="dashboard-content">
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h1 class="welcome-title" id="welcomeTitle">Welcome back!</h1>
+                    <p class="welcome-subtitle">Your personal performance overview</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 class="stat-title">CURRENT RANK</h3>
+                        <p class="stat-value" id="currentRank">#--</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 class="stat-title">BEST HANG</h3>
+                        <p class="stat-value" id="bestHang">0:00</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 class="stat-title">GRIP AGE</h3>
+                        <p class="stat-value" id="gripAge">--</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 class="stat-title">TOTAL SUBMISSIONS</h3>
+                        <p class="stat-value" id="totalPRs">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top:40px; padding:30px; background:var(--secondary-light); border-radius:8px; border:1px solid var(--gray-800); text-align:center;">
+                <h3 style="color:var(--gold); font-family:Oswald; margin-bottom:10px;">PRO ACCESS UNLOCKED</h3>
+                <p style="color:var(--gray-500); font-size:0.9rem;">The athlete portal is now live and paired with your official WDHC submissions. More features coming soon.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/dashboard.js"></script>
+    <script>
+        document.querySelector('.logout').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = 'https://worlddeadhang.com';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+6b6207d1a9f28fda8900201f210a702acc252249 commit	refs/heads/master
+e7148b0c9f7658740f5899e90a9bd67b25c0f3bf commit	refs/original/refs/heads/master
+1af91b47ea0e1019375afe2258ab640b62742d93 commit	refs/original/refs/stash
+e8b063ca140eb602b02a5fc826f38dbbd1b7c487 commit	refs/remotes/origin/HEAD
+6447d4b5540e098109e5a0318ae37069dde9b928 commit	refs/remotes/origin/cloudflare/workers-autoconfig
+e8b063ca140eb602b02a5fc826f38dbbd1b7c487 commit	refs/remotes/origin/master
+022cec3bb477eabe639c85a60293027fa023d54a commit	refs/remotes/origin/night-shift-autopilot-20260326
+52544ee0f21fdf6ecc074ebba5ff47783a24d576 commit	refs/stash

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - WDHC Athlete Portal</title>
+    <link rel="icon" type="image/jpeg" href="https://worlddeadhang.com/media/new_wdhc_logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #D4AF37;
+            --secondary: #050505;
+            --text: #ffffff;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --surface: #0a0a0a;
+            --border: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-text { color: #fff; font-size: 1.5rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; text-decoration: none; }
+        .logo-subtext { color: var(--primary); font-size: 0.9rem; margin-left: 5px; }
+
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #222;
+            padding-bottom: 1rem;
+        }
+
+        .auth-tab {
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            transition: 0.2s;
+        }
+
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; color: var(--gray-400); font-size: 0.9rem; text-transform: uppercase; }
+        
+        .form-input {
+            width: 100%;
+            background: #111;
+            border: 1px solid #222;
+            padding: 1rem;
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-input:focus { border-color: var(--primary); outline: none; }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #000;
+            padding: 1rem;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover { background: #b5942e; transform: translateY(-2px); }
+
+        .auth-subtitle { color: var(--gray-500); margin-bottom: 2rem; font-size: 1rem; }
+        
+        .success-message {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .footer { padding: 2rem 0; text-align: center; color: var(--gray-600); font-size: 0.9rem; }
+
+        .spinner {
+            display: inline-block;
+            width: 1.5rem; height: 1.5rem;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top: 3px solid #000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+    
+    <script src="js/api.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></a>
+            <a href="index.html" style="color: var(--gray-400); text-decoration: none; font-size: 0.9rem; text-transform: uppercase;">Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <h2 style="margin-bottom: 0.5rem;">Welcome Back</h2>
+                <p class="auth-subtitle">Enter your email to receive a magic link</p>
+                
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" name="email" id="loginEmail" class="form-input" placeholder="athlete@example.com" required>
+                        <div id="loginEmailError" style="color: #ff4444; font-size: 0.8rem; margin-top: 0.5rem; display: none;"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" id="loginSubmit">
+                        <span class="btn-text">Send Magic Link</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="auth-form" id="registerForm">
+                <h2 style="margin-bottom: 0.5rem;">Join WDHC</h2>
+                <p class="auth-subtitle">Create your athlete profile</p>
+                <form id="registerFormElement">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="name" class="form-input" placeholder="Milo Birk" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" name="email" class="form-input" placeholder="athlete@example.com" required>
+                    </div>
+                    <button type="submit" class="btn-primary" id="registerSubmit">Create Account</button>
+                </form>
+            </div>
+
+            <div class="auth-form" id="magicLinkSent">
+                <div class="success-message">
+                    <h2 style="color: var(--primary); margin-bottom: 1rem;">Check Your Inbox</h2>
+                    <p style="margin-bottom: 1rem;">We've sent a secure login link to <strong id="magicLinkEmail"></strong>.</p>
+                    <p style="font-size: 0.9rem; color: var(--gray-400);">Click the link in the email to log in automatically. Check your spam folder if you don't see it within 60 seconds.</p>
+                </div>
+                <button onclick="location.reload()" class="btn-primary" style="margin-top: 2rem; background: #111; color: #fff; border: 1px solid #222;">Try Another Email</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        © 2026 World Dead Hang Championship
+    </footer>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Division | World Dead Hang Championship</title>
+    <link rel="icon" type="image/jpeg" href="media/logo_final_transparent.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --surface-hover: #111;
+            
+            --gold: #D4AF37;
+            --gold-dim: #8a702a;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #f4e4a6 50%, #D4AF37 100%);
+            
+            --silver: #E0E0E0;
+            --silver-dim: #888;
+            --silver-glow: rgba(224, 224, 224, 0.15);
+            
+            --bronze: #cd7f32;
+            --accent-red: #cc0000;
+            --accent-red-glow: rgba(204, 0, 0, 0.4);
+            
+            --text: #ffffff;
+            --text-dim: #888;
+            --border: #222;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(204, 0, 0, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+
+        .nav-logo span {
+            color: var(--gold);
+        }
+        
+        .nav-logo .dh {
+            color: var(--text);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        /* Hero Section */
+        header {
+            padding: 100px 20px 80px;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Animated gold lines */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+            animation: pulse-gold 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-gold {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .founding-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 35px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-radius: 50px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 0 30px var(--gold-glow),
+                inset 0 0 20px rgba(212, 175, 55, 0.1);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .founding-badge::before,
+        .founding-badge::after {
+            content: '✦';
+            font-size: 0.8rem;
+            animation: star-spin 2s linear infinite;
+        }
+
+        .founding-badge::after {
+            animation-direction: reverse;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { box-shadow: 0 0 30px var(--gold-glow), inset 0 0 20px rgba(212, 175, 55, 0.1); }
+            50% { box-shadow: 0 0 50px var(--gold-glow), inset 0 0 30px rgba(212, 175, 55, 0.2); }
+        }
+
+        @keyframes star-spin {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        h1 {
+            position: relative;
+            font-family: 'Oswald', sans-serif;
+            font-size: 5.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1;
+            margin: 0 auto 20px;
+            letter-spacing: 6px;
+            background: linear-gradient(180deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .hero-tagline {
+            position: relative;
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            max-width: 750px;
+            margin: 35px auto 0;
+            line-height: 1.8;
+        }
+
+        .hero-tagline strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            flex-grow: 1;
+        }
+
+        /* Section Titles */
+        .section-title {
+            position: relative;
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--text);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--gold-gradient);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .section-title span {
+            color: var(--gold);
+        }
+
+        /* Weight Class Table */
+        .threshold-section {
+            margin-bottom: 80px;
+        }
+
+        .threshold-intro {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 750px;
+            margin: 0 auto 45px;
+            line-height: 1.9;
+        }
+
+        .threshold-intro strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .threshold-table-wrapper {
+            background: linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(212, 175, 55, 0.1) inset;
+        }
+
+        .threshold-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .threshold-table thead {
+            background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+        }
+
+        .threshold-table th {
+            padding: 25px 40px;
+            text-align: left;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .threshold-table th:first-child {
+            text-align: left;
+        }
+
+        .threshold-table th:last-child {
+            text-align: right;
+        }
+
+        .threshold-table tbody tr {
+            border-bottom: 1px solid #1a1a1a;
+            transition: all 0.3s;
+        }
+
+        .threshold-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .threshold-table tbody tr:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .threshold-table td {
+            padding: 22px 40px;
+            font-size: 1.15rem;
+        }
+
+        .threshold-table td:first-child {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--silver);
+        }
+
+        .threshold-table td:last-child {
+            text-align: right;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gender-header {
+            background: #0a0a0a !important;
+        }
+
+        .gender-header td {
+            padding: 30px 40px 20px !important;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem !important;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: var(--gold) !important;
+            text-transform: uppercase;
+            border-bottom: 1px solid #2a2a2a !important;
+            background: transparent !important;
+        }
+
+        /* How to Qualify */
+        .qualify-section {
+            margin-bottom: 80px;
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(0,0,0,0) 50%);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+        }
+
+        .qualify-steps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        .qualify-step {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            padding: 25px;
+            background: rgba(10,10,10,0.5);
+            border-radius: 12px;
+            border: 1px solid #1a1a1a;
+            transition: all 0.3s;
+        }
+
+        .qualify-step:hover {
+            border-color: var(--gold-dim);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .step-number {
+            width: 55px;
+            height: 55px;
+            min-width: 55px;
+            background: var(--gold-gradient);
+            color: #000;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .step-content h4 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .step-content p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        /* Benefits Grid */
+        .benefits-section {
+            margin-bottom: 80px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .benefit-card {
+            background: linear-gradient(180deg, #111 0%, #0a0a0a 100%);
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 35px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gold-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .benefit-card:hover {
+            border-color: var(--gold-dim);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .benefit-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .benefit-card h4 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+
+        .benefit-card p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            position: relative;
+            text-align: center;
+            padding: 70px 50px;
+            background: 
+                linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-section h3 {
+            position: relative;
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .cta-section p {
+            position: relative;
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            position: relative;
+            display: inline-block;
+            background: var(--gold-gradient);
+            color: #000;
+            padding: 20px 60px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 
+                0 0 30px var(--gold-glow),
+                0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 0 50px var(--gold-glow),
+                0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--surface);
+            padding: 35px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        footer p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        footer a:hover {
+            text-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            h1 {
+                font-size: 3rem;
+                letter-spacing: 3px;
+            }
+
+            .founding-badge {
+                font-size: 0.85rem;
+                padding: 10px 25px;
+                letter-spacing: 2px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .qualify-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .threshold-table th,
+            .threshold-table td {
+                padding: 18px 25px;
+            }
+
+            .threshold-table td:last-child {
+                font-size: 1.3rem;
+            }
+
+            .cta-section {
+                padding: 50px 30px;
+            }
+
+            .cta-button {
+                padding: 18px 40px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-91GCCEERG0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-91GCCEERG0');
+    </script>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo"><span>W</span><span class="dh">DH</span><span>C</span></div>
+        <div class="nav-links">
+            <a href="index.html">Leaderboard</a>
+            <a href="rules.html">Rulebook</a>
+            <a href="submit.html">Submit</a>
+            <a href="pro.html" class="active">Pro</a>
+            <a href="about.html">About</a>
+            <a href="athlete-portal/frontend/index.html">Athlete Portal</a>
+        </div>
+    </nav>
+
+    <header>
+        <div class="founding-badge">
+            Founding 100 Pros
+        </div>
+        <h1>WDHC <span>Pro</span> Division</h1>
+        <div class="subtitle">The Highest Tier of Grip Endurance Athletes</div>
+        <p class="hero-tagline">
+            Become the world's first <strong>Professional Dead Hang Athlete</strong>. Earn your <strong>WDHC Pro</strong> status by reaching the <strong>Freak tier</strong> and meeting the time threshold for your weight class. No invitation needed — earn your place through performance.
+        </p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Pro Threshold Chart -->
+        <section class="threshold-section">
+            <h2 class="section-title"><span>Pro</span> Qualification Times</h2>
+            <p class="threshold-intro">
+                Reach the <strong>Freak tier</strong> and hit these times to qualify for Pro Division. These are the minimum thresholds — faster times mean higher rankings.
+            </p>
+            
+            <div class="threshold-table-wrapper">
+                <table class="threshold-table">
+                    <thead>
+                        <tr>
+                            <th>Weight Class</th>
+                            <th>Minimum Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="gender-header">
+                            <td colspan="2">Female Division</td>
+                        </tr>
+                        <tr>
+                            <td>Heavyweight</td>
+                            <td>6:00</td>
+                        </tr>
+                        <tr>
+                            <td>Middleweight</td>
+                            <td>7:00</td>
+                        </tr>
+                        <tr>
+                            <td>Lightweight</td>
+                            <td>7:30</td>
+                        </tr>
+                        <tr class="gender-header">
+                            <td colspan="2">Male Division</td>
+                        </tr>
+                        <tr>
+                            <td>Heavyweight</td>
+                            <td>7:00</td>
+                        </tr>
+                        <tr>
+                            <td>Middleweight</td>
+                            <td>7:30</td>
+                        </tr>
+                        <tr>
+                            <td>Lightweight</td>
+                            <td>8:00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- How to Qualify -->
+        <section class="qualify-section">
+            <h2 class="section-title">How to <span>Qualify</span></h2>
+            <div class="qualify-steps">
+                <div class="qualify-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Reach Freak Tier</h4>
+                        <p>Build your way up through Contender → Challenger → Contender Elite → Freak by submitting verified hang times.</p>
+                    </div>
+                </div>
+                <div class="qualify-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Hit Your Threshold</h4>
+                        <p>Once in Freak tier, achieve the minimum time for your weight class on a verified submission.</p>
+                    </div>
+                </div>
+                <div class="qualify-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Automatic Promotion</h4>
+                        <p>Qualifying submissions are automatically flagged. Our team reviews and promotes eligible athletes to Pro.</p>
+                    </div>
+                </div>
+                <div class="qualify-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Compete Among the Elite</h4>
+                        <p>Join the Pro leaderboard and compete for rankings against the best grip athletes in the world.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits -->
+        <section class="benefits-section">
+            <h2 class="section-title"><span>Pro</span> Benefits</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h4>Pro Leaderboard</h4>
+                    <p>Your own exclusive leaderboard. Compete for rankings against other verified Pro athletes.</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>Gold Badge</h4>
+                    <p>Distinctive gold verification badge on all your submissions and profile.</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>Priority Verification</h4>
+                    <p>Expedited review of your submissions — achievements recorded without delay.</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>Championship Events</h4>
+                    <p>Eligibility for exclusive Pro-only competitions and special events.</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>Community Leadership</h4>
+                    <p>Invitations to workshops, mentorship programs, and leadership opportunities.</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>Founding 100</h4>
+                    <p>Be part of history. The first 100 athletes to reach Pro earn founding status and exclusive recognition.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h3>Ready to Compete?</h3>
+            <p>Submit your hang times, climb the ranks, and earn your spot among the elite.</p>
+            <a href="submit.html" class="cta-button">Submit Your Performance</a>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>
+            &copy; 2026 World Dead Hang Championship. All rights reserved.<br>
+            <a href="index.html">Leaderboard</a> | 
+            <a href="rules.html">Rules</a> | 
+            <a href="submit.html">Submit</a> | 
+            <a href="about.html">About</a>
+        </p>
+    </footer>
+
+</body>
+</html>

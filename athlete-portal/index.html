@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDHC Athlete Portal - World Dead Hang Championship</title>
+    <link rel="icon" type="image/jpeg" href="https://worlddeadhang.com/media/new_wdhc_logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #D4AF37;
+            --secondary: #050505;
+            --text: #ffffff;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --surface: #0f0f0f;
+            --border: #1a1a1a;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--secondary) !important;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar {
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-text { color: #fff; font-size: 1.5rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        .logo-subtext { color: var(--primary); font-size: 0.9rem; margin-left: 5px; }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #b5942e;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            padding: 10rem 0 6rem;
+            position: relative;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: -10%; left: 50%;
+            transform: translateX(-50%);
+            width: 60%; height: 60%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-title { font-size: 4rem; line-height: 1; margin-bottom: 1.5rem; }
+        .hero-subtitle { display: block; color: var(--primary); font-size: 1.8rem; margin-top: 0.5rem; }
+        .hero-description { color: var(--gray-400); font-size: 1.2rem; margin-bottom: 2.5rem; max-width: 500px; }
+
+        .signin-form { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .signin-input {
+            background: #111;
+            border: 1px solid #222;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            color: #fff;
+            flex: 1;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+        }
+        .signin-input:focus { border-color: var(--primary); outline: none; }
+
+        .championship-card {
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .success-card {
+            background: #0a0a0a;
+            border: 1px solid var(--primary);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .features-section { padding: 8rem 0; background: #070707; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-title { font-size: 3rem; margin-bottom: 1rem; }
+        .section-subtitle { color: var(--gray-500); font-size: 1.2rem; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .feature-icon-box {
+            width: 60px; height: 60px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .grippage-section { padding: 8rem 0; text-align: center; background: var(--secondary); }
+        .grippage-container { max-width: 800px; margin: 0 auto; padding: 0 2rem; }
+        .grippage-title { font-size: 4rem; margin-bottom: 1.5rem; }
+        .grippage-text { font-size: 1.3rem; color: var(--gray-400); margin-bottom: 3rem; }
+
+        .footer { padding: 4rem 0; border-top: 1px solid var(--border); text-align: center; color: var(--gray-600); }
+
+        @media (max-width: 900px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero-title { font-size: 3rem; }
+            .hero-description { margin: 0 auto 2.5rem; }
+            .signin-form { flex-direction: column; }
+            .hero-image { order: -1; }
+        }
+    </style>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/api.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-91GCCEERG0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-91GCCEERG0');
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo" style="text-decoration: none;">
+                <span class="logo-text">WDHC <span class="logo-subtext">Athlete Portal</span></span>
+            </a>
+            <div class="nav-menu">
+                <a href="#signin" class="btn-primary" style="padding: 0.5rem 1.5rem;">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-glow"></div>
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="hero-gradient">Track Your Grip Strength</span><br>
+                        <span class="hero-subtitle">Compete. Improve. Dominate.</span>
+                    </h1>
+                    <p class="hero-description">
+                        Enter your email to receive a magic link — no password needed.
+                        Track progress, compete on leaderboards, and set new PRs.
+                    </p>
+                    <div class="hero-signin" id="signin-container">
+                        <form class="signin-form" id="portal-form">
+                            <input type="email" id="quick-email" class="signin-input" placeholder="Enter your email" required autocomplete="email">
+                            <button type="submit" class="btn-primary signin-btn" id="submit-btn">Sign In &rarr;</button>
+                        </form>
+                        <p class="signin-note">Password-free. Just a link in your inbox.</p>
+                    </div>
+
+                    <div class="success-card" id="success-msg">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">MAGIC LINK SENT!</h3>
+                        <p style="color: #ccc; margin-bottom: 15px;">Check your inbox for <strong id="sent-email"></strong>. Click the link to access your portal.</p>
+                        <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="location.reload()">Send to another</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="championship-card">
+                        <div class="card-logo-wrap">
+                            <img src="https://worlddeadhang.com/media/new_wdhc_logo.jpg" alt="WDHC Logo" style="width:120px; border-radius:12px; border: 2px solid #D4AF37;">
+                        </div>
+                        <div class="card-body">
+                            <p style="color: #D4AF37; font-family: 'Roboto Mono', monospace; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 2px; text-transform: uppercase;">SEASON 1 | LIVE NOW</p>
+                            <h3 style="margin-bottom: 0.5rem; font-size: 2rem;">World Dead Hang Championship</h3>
+                            <p style="color: var(--gray-500); letter-spacing: 2px;">Global Leaderboard — Open to All</p>
+                            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #222;">
+                                <p style="color: #666; font-size: 0.9rem;">Join the elite tier of athletes tracking longevity and performance.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grippage-section">
+            <div class="grippage-container">
+                <h2 class="grippage-title">What's Your <span style="color: var(--primary);">GripAge™?</span></h2>
+                <p class="grippage-text">
+                    Grip strength is one of the single most powerful predictors of long-term health and functional independence. 
+                    The WDHC Athlete Portal calculates your "GripAge™" based on your performance relative to global data sets.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="#signin-container" class="btn-primary">Calculate Your Age</a>
+                    <a href="/" class="btn-primary" style="background: #111; color: #fff; border: 1px solid #222;">View Leaderboard</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <div class="section-header">
+                <h2 class="section-title">Portal Features</h2>
+                <p class="section-subtitle">Everything you need to master the hang.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i data-lucide="line-chart"></i></div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">PR Tracking</h4>
+                    <p style="color: var(--gray-500);">Visualize your progress with automated PR logs and historical performance data.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i data-lucide="trophy"></i></div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Live Leaderboards</h4>
+                    <p style="color: var(--gray-500);">See exactly where you stand against thousands of athletes worldwide in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i data-lucide="bar-chart-3"></i></div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Progress Analytics</h4>
+                    <p style="color: var(--gray-500);">Deep dive into your training stats and see how you stack up against your age group.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i data-lucide="clipboard-list"></i></div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Training Logs</h4>
+                    <p style="color: var(--gray-500);">Keep a clean record of every session. Consistency is the key to dominating the hang.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i data-lucide="user"></i></div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Athlete Profiles</h4>
+                    <p style="color: var(--gray-500);">A dedicated home for your official WDHC stats, verified badges, and credentials.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i data-lucide="zap"></i></div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Instant Access</h4>
+                    <p style="color: var(--gray-500);">No passwords. No friction. One-click magic links get you straight to your data.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-copyright">
+                © 2026 World Dead Hang Championship. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Handle Portal Login
+        const portalForm = document.getElementById('portal-form');
+        if (portalForm) {
+            portalForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const emailInput = document.getElementById('quick-email');
+                const email = emailInput.value.trim();
+                const btn = document.getElementById('submit-btn');
+                const signinContainer = document.getElementById('signin-container');
+                const successMsg = document.getElementById('success-msg');
+                
+                if (!email) return;
+
+                btn.disabled = true;
+                const originalBtnText = btn.textContent;
+                btn.innerHTML = '<span style="display:inline-block; width:12px; height:12px; border:2px solid #000; border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite; margin-right:8px;"></span> Verifying...';
+
+                try {
+                    if (typeof WDHC_API !== 'undefined') {
+                        const res = await WDHC_API.requestMagicLink(email);
+                        if (res.success) {
+                            signinContainer.style.display = 'none';
+                            document.getElementById('sent-email').textContent = email;
+                            successMsg.style.display = 'block';
+                        } else {
+                            alert(res.error || 'Athlete not found on the leaderboard. Please submit a verified time first.');
+                            btn.disabled = false;
+                            btn.textContent = originalBtnText;
+                        }
+                    } else {
+                        throw new Error('API Library not loaded');
+                    }
+                } catch (err) {
+                    console.error('Portal login error:', err);
+                    alert('Connection error. Please check your internet and try again.');
+                    btn.disabled = false;
+                    btn.textContent = originalBtnText;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

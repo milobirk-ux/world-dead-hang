@@ -1,0 +1,25 @@
+# Secrets
+.env.json
+
+# Dead infrastructure
+infrastructure/
+_public/
+development_scripts/
+backups/
+bin/
+check_athletes.js
+check_markie.js
+sync_inline_athletes.js
+index.html.backup*
+package-lock.json
+package.json
+
+# Dead production scripts
+production/email_automation_v3.py
+production/email_automation_v4_batch.py
+production/__pycache__/
+production/vault/
+production/reports/
+
+# Wrangler
+.wrangler/

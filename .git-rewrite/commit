@@ -1,0 +1,6 @@
+tree fdebc7656e14bf5a9cccb180cba47736e0594537
+parent 01a87f7ac485feb44993e05b2fffc8dae6816680
+author Milo Birk <milo@homeinspectorsdetroit.com> 1773814239 -0400
+committer Milo Birk <milo@homeinspectorsdetroit.com> 1773814239 -0400
+
+UI: Fix mobile title spacing - remove negative margins, add even spacing between lines

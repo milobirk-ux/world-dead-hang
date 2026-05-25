@@ -1,0 +1,44 @@
+async function initDashboard() {
+    try {
+        // 1. Get Profile (Handles Cache -> URL -> data.json -> API chain)
+        const res = await apiRequest('GET', 'action=athlete/profile');
+
+        if (res && (res.success || res.data)) {
+            const athlete = res.data || res.profile;
+            const stats = res.stats || res.data || {};
+            
+            // Update Text
+            const displayName = athlete.displayName || athlete.name || 'Athlete';
+            const fullName = athlete.name || 'Athlete';
+            
+            document.getElementById('userName').textContent = displayName;
+            document.getElementById('sidebarUserName').textContent = fullName;
+            
+            const rank = athlete.rank || stats.rank || '--';
+            document.getElementById('sidebarUserRank').textContent = 'Rank: #' + rank;
+            document.getElementById('currentRank').textContent = '#' + rank;
+            
+            const bestTime = stats.bestHangTime || athlete.bestHangTime || '0:00';
+            document.getElementById('bestHang').textContent = bestTime;
+            document.getElementById('sidebarBestHang').textContent = bestTime;
+            
+            const prs = stats.totalPRs !== undefined ? stats.totalPRs : (athlete.totalPRs || '0');
+            document.getElementById('totalPRs').textContent = prs;
+            
+            const gripAge = athlete.gripAge || stats.gripAge || '--';
+            const ageDisplay = isNaN(gripAge) ? gripAge : gripAge + ' yrs';
+            document.getElementById('gripAge').textContent = ageDisplay;
+            document.getElementById('sidebarGripAge').textContent = ageDisplay;
+            
+            const welcomeName = athlete.displayName || (athlete.name ? athlete.name.split(' ')[0] : 'Athlete');
+            document.getElementById('welcomeTitle').textContent = 'Welcome back, ' + welcomeName + '!';
+            
+            console.log('Dashboard Data Synced');
+            document.body.classList.add('data-loaded');
+        }
+    } catch (e) {
+        console.error('Dash Error:', e);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', initDashboard);
