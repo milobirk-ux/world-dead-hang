@@ -1,6 +1,6 @@
 import { calcGripAge, getTier, parseTimeSec, fmtTime } from './lib.js';
 
-// WDHC Athlete Portal API — Cloudflare Worker v2.1
+// WDHC Athlete Portal API — Cloudflare Worker v2.2
 // Full backend: auth, profile, PR submission, approval, leaderboard sync, social cards
 
 let _env = null;
@@ -9,6 +9,34 @@ function creds() { if (!_env) throw new Error('Env not init'); return _env; }
 const SPREADSHEET_ID = '1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s';
 const DASHBOARD_URL = 'https://worlddeadhang.com/athlete-portal/dashboard.html';
 const LEADERBOARD_URL = 'https://worlddeadhang.com/index.html';
+
+// === SUPABASE ===
+const SUPABASE_URL = 'https://lwqidqblxieoscnwqhvq.supabase.co';
+const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3cWlkcWJseGllb3NjbndxaHZxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTcyMDY3NCwiZXhwIjoyMDk1Mjk2Njc0fQ.7_kJvABVfgj8ItVy87kgH5D483xxuaIAh3MyDeQf5l8';
+
+async function supabaseQuery(table, filter = '') {
+  const url = `${SUPABASE_URL}/rest/v1/${table}?select=*${filter}`;
+  const r = await fetch(url, { headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` } });
+  return r.ok ? await r.json() : [];
+}
+
+async function supabaseInsert(table, data) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+    body: JSON.stringify(data)
+  });
+  return r.ok ? await r.json() : null;
+}
+
+async function supabaseUpdate(table, id, data) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  return r.ok;
+}
 
 // === OAUTH ===
 async function getAccessToken() {
@@ -36,14 +64,103 @@ async function updateCell(tok, range, val) {
     { method: 'PUT', headers: { 'Authorization': `Bearer ${tok}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ values: [[val]] }) });
 }
 
-// === ATHLETE STATS (full) ===
-async function getAthleteStats(tok, email, name) {
+// === ATHLETE STATS (full) - Supabase version ===
+async function getAthleteStatsSupabase(email, name) {
+  // Get athlete by email
+  const athletes = await supabaseQuery('athletes', `&email=eq.${encodeURIComponent(email)}`);
+  if (!athletes.length) return null;
+  const athlete = athletes[0];
+  
+  // Get all submissions for this athlete
+  const submissions = await supabaseQuery('submissions', `&athlete_id=eq.${athlete.id}&order=time_seconds.desc`);
+  if (!submissions.length) return null;
+  
+  const best = submissions[0];
+  const bestSec = best.time_seconds;
+  
+  // Build history
+  const hist = submissions.map(s => ({
+    time: s.time_display,
+    sec: s.time_seconds,
+    date: s.attempt_date,
+    verified: s.verified,
+    isPR: s.is_pr
+  }));
+  hist.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  
+  // Calculate rank across all athletes
+  const allAthletes = await supabaseQuery('submissions', '&approved=eq.true&order=time_seconds.desc');
+  const ranks = {};
+  allAthletes.forEach(s => {
+    const aid = s.athlete_id;
+    if (!ranks[aid] || s.time_seconds > ranks[aid]) ranks[aid] = s.time_seconds;
+  });
+  const sorted = Object.values(ranks).sort((a, b) => b - a);
+  const rank = bestSec > 0 ? sorted.indexOf(bestSec) + 1 : '--';
+  
+  // Consistency
+  const times = hist.map(h => h.sec).filter(t => t > 0);
+  let consistency = null;
+  if (times.length >= 2) {
+    const mean = times.reduce((a, b) => a + b, 0) / times.length;
+    const std = Math.sqrt(times.reduce((s, t) => s + (t - mean) ** 2, 0) / times.length);
+    consistency = Math.max(0, Math.min(100, Math.round(100 - (std / mean) * 100)));
+  }
+  
+  // Days since last
+  const lastDate = hist[0]?.date || '';
+  let daysSince = null;
+  if (lastDate) { try { daysSince = Math.floor((Date.now() - new Date(lastDate).getTime()) / 864e5); } catch(e) {} }
+  
+  // Streak
+  const now = Date.now();
+  const last30 = hist.filter(h => { try { return (now - new Date(h.date).getTime()) / 864e5 <= 30; } catch(e) { return false; } });
+  const streak = last30.length;
+  
+  // PR streak
+  let prStreak = 0;
+  const revHist = [...hist].reverse();
+  let lastSec = 0;
+  for (const h of revHist) {
+    if (h.sec > lastSec) { prStreak++; lastSec = h.sec; } else break;
+  }
+  
+  const dob = athlete.dob || '', gender = athlete.gender || 'Male';
+  const weight = athlete.bodyweight_lbs || '', height = athlete.height_inches || '', training = athlete.grip_training || 'None';
+  const gripAge = calcGripAge(dob, weight, gender, bestSec, height, training);
+  
+  let chrAge = '';
+  if (dob) { try { const b = new Date(dob); if (!isNaN(b.getTime())) chrAge = Math.floor((Date.now() - b.getTime()) / (365.25 * 864e5)); } catch(e) {} }
+  
+  const tier = getTier(bestSec);
+  
+  return {
+    name: athlete.name || name || email.split('@')[0],
+    displayName: (athlete.name || name || 'Athlete').split(' ')[0],
+    email, rank, bestHangTime: fmtTime(bestSec), bestHangSec: bestSec,
+    totalSubmissions: submissions.length, verifiedSubmissions: hist.filter(h => h.verified).length,
+    gripAge, chronologicalAge: chrAge,
+    yearsSaved: chrAge && gripAge !== '--' ? Math.round((chrAge - gripAge) * 10) / 10 : null,
+    tier: tier.tier, tierColor: tier.color, tierPop: tier.pop,
+    nextTier: tier.next, nextTierSec: tier.nextSec,
+    nextTierGap: tier.nextSec > 0 ? fmtTime(tier.nextSec - bestSec) : null,
+    history: hist, lastSubmissionDate: lastDate, daysSinceLastSubmission: daysSince,
+    consistencyScore: consistency, monthlyStreak: streak, prStreak: prStreak,
+    gripTraining: training, weight, height, gender, dob,
+    source: 'supabase'
+  };
+}
+
+// === ATHLETE STATS (full) - Sheets fallback ===
+async function getAthleteStatsSheets(tok, email, name) {
   const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
   if (sub.length < 2) return null;
   const hdrs = sub[0].map(h => h.toString().trim());
   const eI = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name'), tI = hdrs.indexOf('Official Time');
-  const dobI = hdrs.indexOf('Date of Birth'), gI = hdrs.indexOf('Gender'), wI = hdrs.indexOf('Weight (lbs)');
-  const hI = hdrs.indexOf('Height (inches)'), trI = hdrs.indexOf('Grip Training Experience');
+  const dobI = hdrs.indexOf('Date of Birth'), gI = hdrs.indexOf('Gender');
+  const wI = hdrs.indexOf('Bodyweight (lbs)') >= 0 ? hdrs.indexOf('Bodyweight (lbs)') : hdrs.indexOf('Weight (lbs)');
+  const hI = hdrs.indexOf('Height') >= 0 ? hdrs.indexOf('Height') : hdrs.indexOf('Height (inches)');
+  const trI = hdrs.indexOf('Grip Training Experience');
   const dI = hdrs.indexOf('Attempt Date') >= 0 ? hdrs.indexOf('Attempt Date') : -1;
   const vI = hdrs.indexOf('Verified');
 
@@ -54,16 +171,18 @@ async function getAthleteStats(tok, email, name) {
   }
   if (!subs.length) return null;
 
-  let bestSec = 0, latest = null, prev = 0;
+  let bestSec = 0, bestRow = null, latest = null, prev = 0;
   const hist = [];
   subs.forEach(row => {
     const s = parseTimeSec(row[tI]), v = vI >= 0 ? (row[vI] || '').toString().trim().toLowerCase() === 'yes' : false;
     const dd = dI >= 0 ? row[dI] : '';
     hist.push({ time: fmtTime(s), sec: s, date: dd, verified: v, isPR: s > prev });
     if (s > prev) prev = s;
-    if (s > bestSec) { bestSec = s; }
+    if (s > bestSec) { bestSec = s; bestRow = row; }
     latest = row;
   });
+  // Use bestRow for profile details (name, DOB, weight, etc.), not last row
+  const profileRow = bestRow || latest;
   hist.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
   // Rank
@@ -104,8 +223,8 @@ async function getAthleteStats(tok, email, name) {
     if (h.sec > lastSec) { prStreak++; lastSec = h.sec; } else break;
   }
 
-  const dob = latest[dobI] || '', gender = latest[gI] || 'Male';
-  const weight = latest[wI] || '', height = latest[hI] || '', training = latest[trI] || 'None';
+  const dob = profileRow[dobI] || '', gender = profileRow[gI] || 'Male';
+  const weight = profileRow[wI] || '', height = profileRow[hI] || '', training = profileRow[trI] || 'None';
   const gripAge = calcGripAge(dob, weight, gender, bestSec, height, training);
 
   let chrAge = '';
@@ -114,8 +233,8 @@ async function getAthleteStats(tok, email, name) {
   const tier = getTier(bestSec);
 
   return {
-    name: latest[nI] || name || email.split('@')[0],
-    displayName: (latest[nI] || name || 'Athlete').split(' ')[0],
+    name: profileRow[nI] || name || email.split('@')[0],
+    displayName: (profileRow[nI] || name || 'Athlete').split(' ')[0],
     email, rank, bestHangTime: fmtTime(bestSec), bestHangSec: bestSec,
     totalSubmissions: subs.length, verifiedSubmissions: hist.filter(h => h.verified).length,
     gripAge, chronologicalAge: chrAge,
@@ -127,6 +246,16 @@ async function getAthleteStats(tok, email, name) {
     consistencyScore: consistency, monthlyStreak: streak, prStreak: prStreak,
     gripTraining: training, weight, height, gender, dob,
   };
+}
+
+// === Unified getAthleteStats - tries Supabase first, falls back to Sheets ===
+async function getAthleteStats(tok, email, name) {
+  // Try Supabase first
+  const supabaseResult = await getAthleteStatsSupabase(email, name);
+  if (supabaseResult) return supabaseResult;
+  
+  // Fall back to Sheets
+  return getAthleteStatsSheets(tok, email, name);
 }
 
 // === GMAIL ===
@@ -228,7 +357,8 @@ async function syncLeaderboard(tok) {
   const rI = hdrs.indexOf('Reviewed'), vI = hdrs.indexOf('Verified');
   const revI = hdrs.indexOf('Approved');
   const dobI = hdrs.indexOf('Date of Birth'), gI = hdrs.indexOf('Gender');
-  const wI = hdrs.indexOf('Weight (lbs)'), hI = hdrs.indexOf('Height (inches)');
+  const wI = hdrs.indexOf('Bodyweight (lbs)') >= 0 ? hdrs.indexOf('Bodyweight (lbs)') : hdrs.indexOf('Weight (lbs)');
+  const hI = hdrs.indexOf('Height') >= 0 ? hdrs.indexOf('Height') : hdrs.indexOf('Height (inches)');
   const trI = hdrs.indexOf('Grip Training Experience'), cI = hdrs.indexOf('Country');
   const tsI = hdrs.indexOf('Timestamp');
 
@@ -311,7 +441,7 @@ async function handleRequest(req) {
   // --- SHARE: social card data ---
   if (path === 'share/card' || path === 'share') return handleShareCard(token);
 
-  return jsonResp({ status: 'OK', v: 'portal-2.1' });
+  return jsonResp({ status: 'OK', v: 'portal-2.2' });
 }
 
 // ===== HANDLERS =====
@@ -325,22 +455,39 @@ async function handleMagicLink(req, email, name) {
   if (sub.length < 2) return jsonResp({ success: false, error: 'No data' }, 404);
   const hdrs = sub[0].map(h => h.toString().trim());
   const eI = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name'), tI = hdrs.indexOf('Official Time');
-  let latest = null;
-  for (let i = sub.length - 1; i >= 1; i--) {
-    if ((sub[i][eI] || '').toString().toLowerCase().trim() === em.toLowerCase().trim()) { latest = sub[i]; break; }
+  const dobI = hdrs.indexOf('Date of Birth'), gI = hdrs.indexOf('Gender');
+  const wI = hdrs.indexOf('Bodyweight (lbs)') >= 0 ? hdrs.indexOf('Bodyweight (lbs)') : hdrs.indexOf('Weight (lbs)');
+  const hI = hdrs.indexOf('Height') >= 0 ? hdrs.indexOf('Height') : hdrs.indexOf('Height (inches)');
+  const trI = hdrs.indexOf('Grip Training Experience');
+  // Find row with best time for this email+name combo, or just email if no name provided
+  let bestRow = null, bestSec = 0;
+  const emL = em.toLowerCase().trim();
+  const nmL = nm ? nm.toLowerCase().trim() : '';
+  for (let i = 1; i < sub.length; i++) {
+    const rowEmail = (sub[i][eI] || '').toString().toLowerCase().trim();
+    const rowName = (sub[i][nI] || '').toString().toLowerCase().trim();
+    
+    // Match: email matches AND (no name provided OR name matches)
+    const emailMatch = rowEmail === emL;
+    const nameMatch = !nmL || rowName === nmL || rowName.includes(nmL) || nmL.includes(rowName);
+    
+    if (emailMatch && nameMatch) {
+      const s = parseTimeSec(sub[i][tI]);
+      if (s > bestSec) { bestSec = s; bestRow = sub[i]; }
+    }
   }
-  if (!latest) return jsonResp({ success: false, error: 'Not found' }, 404);
+  if (!bestRow) return jsonResp({ success: false, error: 'Not found' }, 404);
 
-  const aName = latest[nI] || nm || em.split('@')[0];
-  const timeStr = latest[tI] || '0:00', totalSec = parseTimeSec(timeStr);
+  const aName = bestRow[nI] || nm || em.split('@')[0];
+  const timeStr = bestRow[tI] || '0:00', totalSec = parseTimeSec(timeStr);
   const mToken = genToken(), expiry = new Date(Date.now() + 864e5).toISOString();
   await appendRow(tok, 'MagicLinks!A:G', [em.toLowerCase(), mToken, expiry, 'FALSE', aName, 'FALSE', new Date().toISOString()]);
 
   const workerUrl = new URL(req.url).origin;
   const verifyUrl = `${workerUrl}/api/auth/verify?token=${mToken}`;
-  const gripAge = calcGripAge(latest[hdrs.indexOf('Date of Birth')] || '', latest[hdrs.indexOf('Weight (lbs)')] || '',
-    latest[hdrs.indexOf('Gender')] || 'Male', totalSec, latest[hdrs.indexOf('Height (inches)')] || '',
-    latest[hdrs.indexOf('Grip Training Experience')] || 'None');
+  const gripAge = calcGripAge(bestRow[dobI] || '', bestRow[wI] || '',
+    bestRow[gI] || 'Male', totalSec, bestRow[hI] || '',
+    bestRow[trI] || 'None');
   const subject = '🔥 Your WDHC Athlete Portal Access Link';
   await sendEmail(tok, em, subject, approvalEmail(aName, timeStr, totalSec, verifyUrl, gripAge));
   return jsonResp({ success: true, message: `Sent to ${em}` });
@@ -348,20 +495,33 @@ async function handleMagicLink(req, email, name) {
 
 async function handleVerify(token) {
   if (!token) return new Response('<h2>Invalid</h2>', { status: 400, headers: { 'Content-Type': 'text/html' } });
-  const tok = await getAccessToken();
-  const ml = await readSheet(tok, 'MagicLinks!A:G');
-  if (ml.length < 2) return new Response('<h2>Invalid</h2>', { status: 404, headers: { 'Content-Type': 'text/html' } });
-  const h = ml[0], tI = h.indexOf('token'), eI = h.indexOf('email'), nI = h.indexOf('athleteName');
-  let link = null, row = -1;
-  for (let i = 1; i < ml.length; i++) { if (ml[i][tI] === token) { link = ml[i]; row = i + 1; break; } }
-  if (!link) return new Response('<h2>Expired</h2>', { status: 404, headers: { 'Content-Type': 'text/html' } });
-
-  const lnkEmail = link[eI].toString().toLowerCase(), lnkName = (link[nI] || '').toString();
+  
+  // Query Supabase for magic link
+  const links = await supabaseQuery('magic_links', `&token=eq.${token}&used=eq.false`);
+  if (!links.length) return new Response('<h2>Expired</h2>', { status: 404, headers: { 'Content-Type': 'text/html' } });
+  
+  const link = links[0];
+  const lnkEmail = link.email.toLowerCase();
+  
+  // Get athlete name from athletes table
+  const athletes = await supabaseQuery('athletes', `&email=eq.${encodeURIComponent(lnkEmail)}`);
+  const lnkName = athletes.length ? athletes[0].name : '';
+  
+  // Create session in Supabase
   const sToken = genSession();
-  await appendRow(tok, 'Sessions!A:E', [genToken(), lnkEmail, sToken, new Date().toISOString(), new Date(Date.now() + 2592e6).toISOString()]);
-  try { await updateCell(tok, `MagicLinks!F${row}`, 'TRUE'); } catch(e) {}
+  const expiresAt = new Date(Date.now() + 2592e6).toISOString(); // 30 days
+  await supabaseInsert('sessions', {
+    athlete_id: athletes.length ? athletes[0].id : null,
+    email: lnkEmail,
+    token: sToken,
+    created_at: new Date().toISOString(),
+    expires_at: expiresAt
+  });
+  
+  // Mark magic link as used
+  await supabaseUpdate('magic_links', link.id, { used: true });
 
-  const stats = await getAthleteStats(tok, lnkEmail, lnkName);
+  const stats = await getAthleteStatsSupabase(lnkEmail, lnkName);
   const statsEnc = stats ? encodeURIComponent(JSON.stringify(stats)) : '';
   const redirectUrl = `${DASHBOARD_URL}?session=${sToken}${statsEnc ? '&p=' + statsEnc : ''}`;
   return new Response(redirectHtml(redirectUrl), { headers: { 'Content-Type': 'text/html', 'Location': redirectUrl } });
@@ -369,28 +529,40 @@ async function handleVerify(token) {
 
 async function handleGetProfile(token) {
   if (!token) return jsonResp({ success: false, error: 'No session' }, 401);
-  const tok = await getAccessToken();
-  const s = await readSheet(tok, 'Sessions!A:E');
-  if (s.length < 2) return jsonResp({ success: false, error: 'No session' }, 401);
-  const h = s[0].map(x => x.toString().trim()), tI = h.indexOf('token'), eI = h.indexOf('athleteId');
-  let em = null;
-  for (let i = 1; i < s.length; i++) { if (s[i][tI]?.toString() === token) { em = s[i][eI]?.toString(); break; } }
-  if (!em) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
-  const stats = await getAthleteStats(tok, em, '');
-  if (!stats) return jsonResp({ success: false, error: 'Not found' }, 404);
+  
+  // Query Supabase for session
+  const sessions = await supabaseQuery('sessions', `&session_token=eq.${token}`);
+  if (!sessions.length) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
+  
+  const session = sessions[0];
+  
+  // Get athlete by ID
+  if (!session.athlete_id) return jsonResp({ success: false, error: 'No athlete' }, 400);
+  const athletes = await supabaseQuery('athletes', `&id=eq.${session.athlete_id}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'Not found' }, 404);
+  
+  const em = athletes[0].email;
+  const stats = await getAthleteStatsSupabase(em, '');
+  if (!stats) return jsonResp({ success: false, error: 'No data' }, 404);
   return jsonResp({ success: true, data: stats });
 }
 
 async function handleGetHistory(token) {
   if (!token) return jsonResp({ success: false, error: 'No session' }, 401);
-  const tok = await getAccessToken();
-  const s = await readSheet(tok, 'Sessions!A:E');
-  if (s.length < 2) return jsonResp({ success: false, error: 'No session' }, 401);
-  const h = s[0].map(x => x.toString().trim()), tI = h.indexOf('token'), eI = h.indexOf('athleteId');
-  let em = null;
-  for (let i = 1; i < s.length; i++) { if (s[i][tI]?.toString() === token) { em = s[i][eI]?.toString(); break; } }
-  if (!em) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
-  const stats = await getAthleteStats(tok, em, '');
+  
+  // Query Supabase for session
+  const sessions = await supabaseQuery('sessions', `&session_token=eq.${token}`);
+  if (!sessions.length) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
+  
+  const session = sessions[0];
+  
+  // Get athlete by ID
+  if (!session.athlete_id) return jsonResp({ success: false, error: 'No athlete' }, 400);
+  const athletes = await supabaseQuery('athletes', `&id=eq.${session.athlete_id}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'Not found' }, 404);
+  
+  const em = athletes[0].email;
+  const stats = await getAthleteStatsSupabase(em, '');
   if (!stats) return jsonResp({ success: false, error: 'No data' }, 404);
   return jsonResp({ success: true, data: { history: stats.history, totalSubmissions: stats.totalSubmissions, bestHangTime: stats.bestHangTime, gripAge: stats.gripAge, tier: stats.tier } });
 }
@@ -402,49 +574,42 @@ async function handleSubmitHang(req, token) {
   const { hangTime, videoUrl, attemptDate, notes } = body;
   if (!hangTime) return jsonResp({ success: false, error: 'Time required' }, 400);
 
-  const tok = await getAccessToken();
-  const s = await readSheet(tok, 'Sessions!A:E');
-  if (s.length < 2) return jsonResp({ success: false, error: 'No session' }, 401);
-  const h = s[0].map(x => x.toString().trim()), tI = h.indexOf('token'), eI = h.indexOf('athleteId');
-  let em = null;
-  for (let i = 1; i < s.length; i++) { if (s[i][tI]?.toString() === token) { em = s[i][eI]?.toString(); break; } }
-  if (!em) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
+  // Query Supabase for session
+  const sessions = await supabaseQuery('sessions', `&session_token=eq.${token}`);
+  if (!sessions.length) return jsonResp({ success: false, error: 'No session' }, 401);
+  const session = sessions[0];
+  if (!session.athlete_id) return jsonResp({ success: false, error: 'No athlete' }, 400);
 
-  const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
-  if (sub.length < 2) return jsonResp({ success: false, error: 'No data' }, 404);
-  const hdrs = sub[0].map(x => x.toString().trim()), eI2 = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name');
-  let latest = null;
-  for (let i = sub.length - 1; i >= 1; i--) { if ((sub[i][eI2] || '').toString().toLowerCase().trim() === em) { latest = sub[i]; break; } }
-  if (!latest) return jsonResp({ success: false, error: 'No profile' }, 404);
+  // Get athlete
+  const athletes = await supabaseQuery('athletes', `&id=eq.${session.athlete_id}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'No profile' }, 404);
+  const athlete = athletes[0];
 
-  // Build row using existing profile data
+  // Build submission in Supabase
   const subId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-  const row = [
-    new Date().toISOString(), subId,
-    latest[nI] || '', (latest[hdrs.indexOf('First Name')] || latest[nI] || '').split(' ')[0] || '',
-    (latest[hdrs.indexOf('Last Name')] || '').split(' ').pop() || '',
-    em,
-    latest[hdrs.indexOf('City, State')] || '', latest[hdrs.indexOf('Country')] || '',
-    latest[hdrs.indexOf('Date of Birth')] || '', latest[hdrs.indexOf('Gender')] || 'Male',
-    latest[hdrs.indexOf('Weight (lbs)')] || '', latest[hdrs.indexOf('Height (inches)')] || '',
-    latest[hdrs.indexOf('Grip Training Experience')] || 'None',
-    attemptDate || new Date().toISOString().split('T')[0], hangTime,
-    videoUrl || '', notes || '', latest[hdrs.indexOf('How did you hear about us?')] || '',
-    'Yes', 'No', 'Pending', 'No', '', '', '', latest[hdrs.indexOf('Occupation')] || '',
-  ];
-  while (row.length < 27) row.push('');
-
-  const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'Custom Form Submissions'!A:AA:append?valueInputOption=USER_ENTERED`;
-  const sr = await fetch(sheetUrl, { method: 'POST', headers: { 'Authorization': `Bearer ${tok}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ values: [row] }) });
-  if (!sr.ok) return jsonResp({ success: false, error: 'Save failed' }, 500);
-
   const totalSec = parseTimeSec(hangTime);
-  const gripAge = calcGripAge(latest[hdrs.indexOf('Date of Birth')] || '', latest[hdrs.indexOf('Weight (lbs)')] || '',
-    latest[hdrs.indexOf('Gender')] || 'Male', totalSec, latest[hdrs.indexOf('Height (inches)')] || '',
-    latest[hdrs.indexOf('Grip Training Experience')] || 'None');
+  const gripAge = calcGripAge(athlete.dob, athlete.bodyweight_lbs,
+    athlete.gender, totalSec, athlete.height_inches,
+    athlete.grip_training);
+
+  const submission = await supabaseInsert('submissions', {
+    athlete_id: athlete.id,
+    submission_id: subId,
+    time_seconds: totalSec,
+    time_display: fmtTime(totalSec),
+    grip_age: gripAge,
+    tier: getTier(totalSec).tier,
+    attempt_date: attemptDate || new Date().toISOString().split('T')[0],
+    video_url: videoUrl || null,
+    notes: notes || '',
+    is_pr: true,
+    verified: false,
+    approved: false,
+    source: 'portal'
+  });
 
   // 1. Confirmation email to athlete
-  const aName = latest[nI] || em.split('@')[0];
+  const aName = athlete.name || em.split('@')[0];
   try { await sendEmail(tok, em, `Your WDHC Submission — ${fmtTime(totalSec)}`, dashboardSubmitEmail(aName, fmtTime(totalSec), gripAge)); } catch(e) { console.error('Athlete email:', e); }
 
   // 2. Admin notification
@@ -452,7 +617,7 @@ async function handleSubmitHang(req, token) {
     await sendEmail(tok, 'milobirk@gmail.com', `📬 ${aName} — ${fmtTime(totalSec)}`, notifyAdminEmail(aName, fmtTime(totalSec), em, gripAge));
   } catch(e) { console.error('Admin notify:', e); }
 
-  // 3. Auto-sync to leaderboard (pending section)
+  // 3. Sync to leaderboard 
   try {
     const approved = await syncLeaderboard(tok);
     // Write inline JSON to _public/index.html for Cloudflare Pages
@@ -474,38 +639,19 @@ async function handleUpdateProfile(req, token) {
   let body; try { body = await req.json(); } catch(e) { return jsonResp({ success: false, error: 'Invalid' }, 400); }
   const { weight, height, gripTraining } = body;
 
-  const tok = await getAccessToken();
-  const s = await readSheet(tok, 'Sessions!A:E');
-  if (s.length < 2) return jsonResp({ success: false, error: 'No session' }, 401);
-  const h = s[0].map(x => x.toString().trim()), tI = h.indexOf('token'), eI = h.indexOf('athleteId');
-  let em = null;
-  for (let i = 1; i < s.length; i++) { if (s[i][tI]?.toString() === token) { em = s[i][eI]?.toString(); break; } }
-  if (!em) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
+  // Query Supabase for session
+  const sessions = await supabaseQuery('sessions', `&session_token=eq.${token}`);
+  if (!sessions.length) return jsonResp({ success: false, error: 'No session' }, 401);
+  const session = sessions[0];
+  if (!session.athlete_id) return jsonResp({ success: false, error: 'No athlete' }, 400);
 
-  // Update latest submission row with new profile data
-  const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
-  if (sub.length >= 2) {
-    const hdrs = sub[0].map(x => x.toString().trim());
-    const eI2 = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name');
-    // Update the most recent row for this athlete
-    for (let i = sub.length - 1; i >= 1; i--) {
-      if ((sub[i][eI2] || '').toString().toLowerCase().trim() === em) {
-        const row = [...sub[i]];
-        const wI = hdrs.indexOf('Weight (lbs)'), hI = hdrs.indexOf('Height (inches)'), trI = hdrs.indexOf('Grip Training Experience');
-        if (weight && wI >= 0) row[wI] = String(weight);
-        if (height && hI >= 0) row[hI] = String(height);
-        if (gripTraining && trI >= 0) row[trI] = String(gripTraining);
-        await updateCell(tok, `'Custom Form Submissions'!A${i + 1}:AA${i + 1}`, 'SKIP'); // mark updated
-        // Write full row
-        await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'Custom Form Submissions'!A${i + 1}:AA${i + 1}?valueInputOption=USER_ENTERED`,
-          { method: 'PUT', headers: { 'Authorization': `Bearer ${tok}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ values: [row] }) });
-        break;
-      }
-    }
-  }
+  // Update athlete in Supabase
+  const updates = {};
+  if (weight) updates.bodyweight_lbs = parseInt(weight);
+  if (height) updates.height_inches = parseInt(height);
+  if (gripTraining) updates.grip_training = gripTraining;
 
-  // Clear cache so profile refreshes
-  localStorage.removeItem('wdhc_athlete_data');
+  await supabaseUpdate('athletes', session.athlete_id, updates);
 
   return jsonResp({ success: true, message: 'Profile updated' });
 }
@@ -519,38 +665,26 @@ async function handleApprove(req, params) {
   // Simple admin auth — use a secret key
   if (adminKey !== creds().ADMIN_KEY) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
 
-  const tok = await getAccessToken();
-  const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
-  if (sub.length < 2) return jsonResp({ success: false, error: 'No data' }, 404);
-  const hdrs = sub[0].map(h => h.toString().trim());
-  const eI = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name');
-  const rI = hdrs.indexOf('Reviewed'), vI = hdrs.indexOf('Verified'), aI = hdrs.indexOf('Approved');
-  const tI = hdrs.indexOf('Official Time');
+  // Find athlete by email
+  const athletes = await supabaseQuery('athletes', `&email=eq.${encodeURIComponent(athleteEmail)}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'Athlete not found' }, 404);
+  const athlete = athletes[0];
 
-  // Find the latest submission for this athlete
-  let targetRow = -1;
-  for (let i = sub.length - 1; i >= 1; i--) {
-    const re = (sub[i][eI] || '').toString().toLowerCase().trim();
-    const rn = (sub[i][nI] || '').toString().toLowerCase().trim();
-    if (re === athleteEmail.toLowerCase() && (!athleteName || rn === athleteName.toLowerCase())) {
-      targetRow = i + 1; break;
-    }
-  }
-  if (targetRow === -1) return jsonResp({ success: false, error: 'Athlete not found' }, 404);
+  // Find latest unapproved submission
+  const subs = await supabaseQuery('submissions', `&athlete_id=eq.${athlete.id}&approved=eq.false&order=created_at.desc&limit=1`);
+  if (!subs.length) return jsonResp({ success: false, error: 'No pending submission' }, 404);
+  const sub = subs[0];
 
-  // Set Reviewed=Yes, Approved=Yes (Verified is separate — checkmark only)
-  const col = n => String.fromCharCode(65 + n) + targetRow;
-  await updateCell(tok, `'Custom Form Submissions'!${col(rI)}`, 'Yes');
-  await updateCell(tok, `'Custom Form Submissions'!${col(aI)}`, 'Yes');
-  // Note: Verified is NOT set here — that's a separate action for checkmark display
+  // Approve the submission
+  await supabaseUpdate('submissions', sub.id, { approved: true, reviewed: true });
 
-  // Get the time
-const timeStr = sub[targetRow - 1][tI] || '0:00';
-  const totalSec = parseTimeSec(timeStr);
-  const gripAge = calcGripAge(sub[targetRow-1][hdrs.indexOf('Date of Birth')]||'',sub[targetRow-1][hdrs.indexOf('Weight (lbs)')]||'',sub[targetRow-1][hdrs.indexOf('Gender')]||'Male',totalSec,sub[targetRow-1][hdrs.indexOf('Height (inches)')]||'',sub[targetRow-1][hdrs.indexOf('Grip Training Experience')]||'None');
+  const timeStr = sub.time_display;
+  const totalSec = sub.time_seconds;
+  const gripAge = sub.grip_age || 0;
 
-  // Sync leaderboard
+  // Sync leaderboard via Sheets (still needed for now)
   try {
+    const tok = await getAccessToken();
     const approved = await syncLeaderboard(tok);
     const athleteJSON = JSON.stringify(approved.map(a => ({
       name: a.name, time: fmtTime(a.bestSec),
@@ -558,15 +692,25 @@ const timeStr = sub[targetRow - 1][tI] || '0:00';
       tier: getTier(a.bestSec).tier, country: a.country || '', verified: a.verified,
     })));
     const newBlock = `const athletes = [\n${athleteJSON.replace(/^\[/, '').replace(/\]$/, '')}];`;
-    // Write to a dedicated cell that get_inline_athletes.js reads
     await updateCell(tok, "'Leaderboard Cache'!A1", newBlock);
   } catch(e) { console.error('Leaderboard sync:', e); }
 
-  // Send approval email with one-click portal link
-  const aName = sub[targetRow - 1][nI] || athleteName || athleteEmail.split('@')[0];
+  // Send approval email with magic link
+  const aName = athlete.name || athleteEmail.split('@')[0];
+  const magicToken = genToken();
+  const expiresAt = new Date(Date.now() + 86400000 * 30).toISOString();
+  await supabaseInsert('magic_links', {
+    athlete_id: athlete.id,
+    email: athleteEmail,
+    token: magicToken,
+    expires_at: expiresAt,
+    used: false
+  });
+
   const workerUrl = creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev';
-  const verifyUrl = `${workerUrl}/api/auth/magic-link?email=${encodeURIComponent(athleteEmail)}`;
+  const verifyUrl = `${workerUrl}/api/auth/verify?token=${magicToken}`;
   try {
+    const tok = await getAccessToken();
     await sendEmail(tok, athleteEmail, `You're Approved! — ${timeStr}`,
       approvalEmail(aName, timeStr, totalSec, verifyUrl, gripAge));
   } catch(e) { console.error('Approval email:', e); }
@@ -581,32 +725,26 @@ async function handleVerifyApprove(req, params) {
   const adminKey = params.get('key') || '';
   if (adminKey !== creds().ADMIN_KEY) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
 
-  const tok = await getAccessToken();
-  const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
-  if (sub.length < 2) return jsonResp({ success: false, error: 'No data' }, 404);
-  const hdrs = sub[0].map(h => h.toString().trim());
-  const eI = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name');
-  const rI = hdrs.indexOf('Reviewed'), vI = hdrs.indexOf('Verified'), aI = hdrs.indexOf('Approved');
-  const tI = hdrs.indexOf('Official Time');
+  // Find athlete by email
+  const athletes = await supabaseQuery('athletes', `&email=eq.${encodeURIComponent(athleteEmail)}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'Athlete not found' }, 404);
+  const athlete = athletes[0];
 
-  let targetRow = -1;
-  for (let i = sub.length - 1; i >= 1; i--) {
-    const re = (sub[i][eI] || '').toString().toLowerCase().trim();
-    const rn = (sub[i][nI] || '').toString().toLowerCase().trim();
-    if (re === athleteEmail.toLowerCase() && (!athleteName || rn === athleteName.toLowerCase())) { targetRow = i + 1; break; }
-  }
-  if (targetRow === -1) return jsonResp({ success: false, error: 'Athlete not found' }, 404);
+  // Find latest unapproved submission
+  const subs = await supabaseQuery('submissions', `&athlete_id=eq.${athlete.id}&approved=eq.false&order=created_at.desc&limit=1`);
+  if (!subs.length) return jsonResp({ success: false, error: 'No pending submission' }, 404);
+  const sub = subs[0];
 
-  const col = n => String.fromCharCode(65 + n) + targetRow;
-  await updateCell(tok, `'Custom Form Submissions'!${col(rI)}`, 'Yes');
-  await updateCell(tok, `'Custom Form Submissions'!${col(vI)}`, 'Yes');
-  await updateCell(tok, `'Custom Form Submissions'!${col(aI)}`, 'Yes');
+  // Verify + Approve the submission
+  await supabaseUpdate('submissions', sub.id, { verified: true, approved: true, reviewed: true });
 
-const timeStr = sub[targetRow - 1][tI] || '0:00';
-  const totalSec = parseTimeSec(timeStr);
-  const gripAge = calcGripAge(sub[targetRow-1][hdrs.indexOf('Date of Birth')]||'',sub[targetRow-1][hdrs.indexOf('Weight (lbs)')]||'',sub[targetRow-1][hdrs.indexOf('Gender')]||'Male',totalSec,sub[targetRow-1][hdrs.indexOf('Height (inches)')]||'',sub[targetRow-1][hdrs.indexOf('Grip Training Experience')]||'None');
+  const timeStr = sub.time_display;
+  const totalSec = sub.time_seconds;
+  const ga = sub.grip_age || 0;
 
+  // Sync leaderboard
   try {
+    const tok = await getAccessToken();
     const approved = await syncLeaderboard(tok);
     const athleteJSON = JSON.stringify(approved.map(a => ({
       name: a.name, time: fmtTime(a.bestSec),
@@ -617,11 +755,24 @@ const timeStr = sub[targetRow - 1][tI] || '0:00';
     await updateCell(tok, "'Leaderboard Cache'!A1", newBlock);
   } catch(e) { console.error('Sync:', e); }
 
-  const aName = sub[targetRow - 1][nI] || athleteName || athleteEmail.split('@')[0];
+  // Send magic link + approval email
+  const aName = athlete.name || athleteEmail.split('@')[0];
+  const magicToken = genToken();
+  const expiresAt = new Date(Date.now() + 86400000 * 30).toISOString();
+  await supabaseInsert('magic_links', {
+    athlete_id: athlete.id,
+    email: athleteEmail,
+    token: magicToken,
+    expires_at: expiresAt,
+    used: false
+  });
+
   const workerUrl = creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev';
-  const verifyUrl = `${workerUrl}/api/auth/magic-link?email=${encodeURIComponent(athleteEmail)}`;
-  const ga = calcGripAge(sub[targetRow-1][hdrs.indexOf('Date of Birth')]||'',sub[targetRow-1][hdrs.indexOf('Weight (lbs)')]||'',sub[targetRow-1][hdrs.indexOf('Gender')]||'Male',totalSec,sub[targetRow-1][hdrs.indexOf('Height (inches)')]||'',sub[targetRow-1][hdrs.indexOf('Grip Training Experience')]||'None');
-  try { await sendEmail(tok, athleteEmail, `You're Verified! \u2705 \u2014 ${timeStr}`, approvalEmail(aName, timeStr, totalSec, verifyUrl, ga)); } catch(e) {}
+  const verifyUrl = `${workerUrl}/api/auth/verify?token=${magicToken}`;
+  try {
+    const tok = await getAccessToken();
+    await sendEmail(tok, athleteEmail, `You're Verified! ✅ — ${timeStr}`, approvalEmail(aName, timeStr, totalSec, verifyUrl, ga));
+  } catch(e) { console.error('Email:', e); }
 
   return jsonResp({ success: true, message: `Verified + Approved ${aName}` });
 }
@@ -633,27 +784,25 @@ async function handleDeny(req, params) {
   const adminKey = params.get('key') || '';
   if (adminKey !== creds().ADMIN_KEY) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
 
-  const tok = await getAccessToken();
-  const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
-  if (sub.length < 2) return jsonResp({ success: false, error: 'No data' }, 404);
-  const hdrs = sub[0].map(h => h.toString().trim());
-  const eI = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name');
-  const rI = hdrs.indexOf('Reviewed'), aI = hdrs.indexOf('Approved');
+  // Find athlete by email
+  const athletes = await supabaseQuery('athletes', `&email=eq.${encodeURIComponent(athleteEmail)}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'Athlete not found' }, 404);
+  const athlete = athletes[0];
 
-  let targetRow = -1;
-  for (let i = sub.length - 1; i >= 1; i--) {
-    const re = (sub[i][eI] || '').toString().toLowerCase().trim();
-    const rn = (sub[i][nI] || '').toString().toLowerCase().trim();
-    if (re === athleteEmail.toLowerCase() && (!athleteName || rn === athleteName.toLowerCase())) { targetRow = i + 1; break; }
-  }
-  if (targetRow === -1) return jsonResp({ success: false, error: 'Athlete not found' }, 404);
+  // Find latest unapproved submission
+  const subs = await supabaseQuery('submissions', `&athlete_id=eq.${athlete.id}&approved=eq.false&order=created_at.desc&limit=1`);
+  if (!subs.length) return jsonResp({ success: false, error: 'No pending submission' }, 404);
+  const sub = subs[0];
 
-  const col = n => String.fromCharCode(65 + n) + targetRow;
-  await updateCell(tok, `'Custom Form Submissions'!${col(rI)}`, 'Yes');
-  await updateCell(tok, `'Custom Form Submissions'!${col(aI)}`, 'No');
+  // Mark as reviewed + denied
+  await supabaseUpdate('submissions', sub.id, { reviewed: true, approved: false, verified: false });
 
-  const aName = sub[targetRow - 1][nI] || athleteName || athleteEmail.split('@')[0];
-  try { await sendEmail(tok, athleteEmail, 'WDHC Submission Update', denyEmail(aName)); } catch(e) {}
+  // Send denial email
+  const aName = athlete.name || athleteEmail.split('@')[0];
+  try {
+    const tok = await getAccessToken();
+    await sendEmail(tok, athleteEmail, 'WDHC Submission Update', denyEmail(aName));
+  } catch(e) { console.error('Denial email:', e); }
 
   return jsonResp({ success: true, message: `Denied ${aName}` });
 }

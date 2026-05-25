@@ -1,3 +1,6 @@
 name = "wdhc-portal"
 main = "portal.js"
 compatibility_date = "2024-01-01"
+
+[vars]
+SPREADSHEET_ID = "1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s"
