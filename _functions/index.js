@@ -1,3 +1,5 @@
+import { calcGripAge as gripAge, getTier, tierBadge, parseTimeSec as parseTimeToSeconds, fmtTime as formatTime } from './lib.js';
+
 // WDHC Submission Worker v2
 // Handles form submission: validates → writes to Sheet → sends immediate confirmation email
 // Credentials loaded from Cloudflare env inside fetch handler
@@ -5,8 +7,6 @@ let _env = null;
 function creds() { return _env; }
 const SPREADSHEET_ID = '1qt-KNdOMareAl2Si6WRVAuTox7avV3gGAa7zdP6EW-s';
 const SHEET_NAME = 'Custom Form Submissions';
-
-// === DATA NORMALIZATION ===
 const CITY_STATE_MAP = {
   'phx arizona': 'Phoenix, Arizona', 'phx az': 'Phoenix, Arizona', 'phx': 'Phoenix, Arizona',
   'phoenix': 'Phoenix, Arizona', 'phoenix az': 'Phoenix, Arizona',
@@ -58,6 +58,13 @@ function normalizeForm(data) {
     isPR: data.isPR||'No', prevBest: data.prevBest||'', occupation: (data.occupation||'').trim(),
   };
 }
+// === TIME ===
+function parseTimeToSeconds(t) {
+  if (!t) return 0; let s=t.toString().trim().replace('.',':');
+  if (s.includes(':')) { const p=s.split(':'); return (p.length===3)?(parseInt(p[0])||0)*60+(parseInt(p[1])||0):(parseInt(p[0])||0)*60+(parseInt(p[1])||0); }
+  const n=parseFloat(s); return n<30?Math.round(n*60):Math.round(n);
+}
+function formatTime(sec) { const m=Math.floor(sec/60),s=sec%60; return m>0?`${m}:${s.toString().padStart(2,'0')}`:`${s}s`; }
 
 // === TIME ===
 function parseTimeToSeconds(t) {
@@ -106,6 +113,66 @@ function gripAge(dob, weight, gender, sec, height, gripTraining) {
   const adjExp = (base * wAdj * hAdj * tMult * 0.70) + (base * 0.30);
   const pr = sec / Math.max(1, adjExp);
   // Asymmetric response
+  let delta;
+  if (pr >= 1.0) {
+    delta = 18 * Math.log(Math.max(1.0, pr));
+  } else {
+    delta = -12 * (1.0 - pr);
+  }
+  const ga = age - delta;
+  return Math.max(18, Math.min(95, Math.round(ga * 10) / 10));
+}
+// === TIME ===
+function parseTimeToSeconds(t) {
+  if (!t) return 0; let s=t.toString().trim().replace('.',':');
+  if (s.includes(':')) { const p=s.split(':'); return (p.length===3)?(parseInt(p[0])||0)*60+(parseInt(p[1])||0):(parseInt(p[0])||0)*60+(parseInt(p[1])||0); }
+  const n=parseFloat(s); return n<30?Math.round(n*60):Math.round(n);
+}
+function formatTime(sec) { const m=Math.floor(sec/60),s=sec%60; return m>0?`${m}:${s.toString().padStart(2,'0')}`:`${s}s`; }
+
+// === TIME ===
+function parseTimeToSeconds(t) {
+  if (!t) return 0; let s=t.toString().trim().replace('.',':');
+  if (s.includes(':')) { const p=s.split(':'); return (p.length===3)?(parseInt(p[0])||0)*60+(parseInt(p[1])||0):(parseInt(p[0])||0)*60+(parseInt(p[1])||0); }
+  const n=parseFloat(s); return n<30?Math.round(n*60):Math.round(n);
+}
+function formatTime(sec) { const m=Math.floor(sec/60),s=sec%60; return m>0?`${m}:${s.toString().padStart(2,'0')}`:`${s}s`; }
+
+// === TIER ===
+function getTier(sec) {
+  if (sec>=360) return{tier:'Freak',next:'',nextSec:0,color:'#9900ff',pop:'.001%'};
+  if (sec>=240) return{tier:'Legend',next:'Freak',nextSec:360,color:'#D4AF37',pop:'0.01%'};
+  if (sec>=180) return{tier:'Elite',next:'Legend',nextSec:240,color:'#A0A0A0',pop:'1%'};
+  if (sec>=120) return{tier:'Expert',next:'Elite',nextSec:180,color:'#cc0000',pop:'5%'};
+  if (sec>=60) return{tier:'Contender',next:'Expert',nextSec:120,color:'#666666',pop:'20%'};
+  return{tier:'Challenger',next:'Contender',nextSec:60,color:'#1E8449',pop:'75%'};
+}
+function tierBadge(t) {
+  const s={Freak:'background:#9900ff;color:#fff',Legend:'background:#D4AF37;color:#000',Elite:'background:#A0A0A0;color:#000',Expert:'background:#cc0000;color:#fff',Contender:'border:1px solid #666;color:#333',Challenger:'border:1px solid #1E8449;color:#1E8449'};
+  return `<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-weight:bold;${s[t]||''}">${t.toUpperCase()}</span>`;
+}
+
+// === GRIP AGE v2 — WDHC Biological GripAge™ ===
+// Quadratic age model + allometric weight/height scaling + training adjustment
+// Asymmetric response: log reward for overperformance, linear penalty for underperformance
+function gripAge(dob, weight, gender, sec, height, gripTraining) {
+  if (!sec) return '--';
+  let age = 35;
+  if (dob) { try { const b = new Date(dob); if (!isNaN(b.getTime())) age = Math.floor((Date.now() - b.getTime()) / (365.25 * 24 * 60 * 60 * 1000)); } catch(e) {} }
+  const isF = (gender || '').toLowerCase().includes('female');
+  const refW = isF ? 140 : 180;
+  const refH = isF ? 65 : 70;
+  const w = parseFloat(weight) || refW;
+  const h = parseFloat(height) || refH;
+  const training = (gripTraining || 'None').toString().trim();
+  const tMult = training === 'Advanced' ? 1.22 : training === 'Intermediate' ? 1.15 : training === 'Beginner' ? 1.08 : 1.0;
+  const base = isF
+    ? 108 - (0.95 * age) + (0.005 * age * age)
+    : 142 - (1.15 * age) + (0.006 * age * age);
+  const wAdj = Math.pow((refW / w), 0.70);
+  const hAdj = Math.pow((refH / h), 0.35);
+  const adjExp = (base * wAdj * hAdj * tMult * 0.70) + (base * 0.30);
+  const pr = sec / Math.max(1, adjExp);
   let delta;
   if (pr >= 1.0) {
     delta = 18 * Math.log(Math.max(1.0, pr));
@@ -223,6 +290,7 @@ async function handleRequest(request) {
     const data = await request.json();
     const n = normalizeForm(data);
     if (!n.athleteName || !n.email) return new Response(JSON.stringify({success:false,error:'Missing required fields'}),{status:400,headers:{'Content-Type':'application/json','Access-Control-Allow-Origin':'*'}});
+    if (!n.email.includes('@') || n.email.length > 254) return new Response(JSON.stringify({success:false,error:'Invalid email address'}),{status:400,headers:{'Content-Type':'application/json','Access-Control-Allow-Origin':'*'}});
 
     const token = await getAccessToken();
     const subId = 'SUB-'+Date.now()+'-'+Math.random().toString(36).substr(2,9);
