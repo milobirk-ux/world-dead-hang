@@ -145,6 +145,7 @@ async function handleLoginSubmit(e) {
     
     const form = e.target;
     const email = form.email.value.trim();
+    const athleteName = form.athleteName ? form.athleteName.value.trim() : '';
     const submitBtn = document.getElementById('loginSubmit');
     const btnText = submitBtn.querySelector('.btn-text');
     const btnSpinner = submitBtn.querySelector('.btn-spinner');
@@ -161,7 +162,7 @@ async function handleLoginSubmit(e) {
     if (btnSpinner) btnSpinner.style.display = 'inline-block';
     
     try {
-        const response = await requestMagicLink(email);
+        const response = await requestMagicLink(email, athleteName);
         
         if (response.success) {
             showMagicLinkSent(email);

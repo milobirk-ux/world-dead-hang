@@ -509,8 +509,7 @@ async function handleVerify(token) {
   const expiresAt = new Date(Date.now() + 2592e6).toISOString(); // 30 days
   await supabaseInsert('sessions', {
     athlete_id: athletes.length ? athletes[0].id : null,
-    email: lnkEmail,
-    token: sToken,
+    session_token: sToken,
     created_at: new Date().toISOString(),
     expires_at: expiresAt
   });

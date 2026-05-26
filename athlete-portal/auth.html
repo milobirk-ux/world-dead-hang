@@ -169,13 +169,17 @@
             
             <div class="auth-form active" id="loginForm">
                 <h2 style="margin-bottom: 0.5rem;">Welcome Back</h2>
-                <p class="auth-subtitle">Enter your email to receive a magic link</p>
+                <p class="auth-subtitle">Enter your email and name to receive a magic link</p>
                 
                 <form id="loginFormElement">
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
                         <input type="email" name="email" id="loginEmail" class="form-input" placeholder="athlete@example.com" required>
                         <div id="loginEmailError" style="color: #ff4444; font-size: 0.8rem; margin-top: 0.5rem; display: none;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Athlete Name <span style="color:var(--gray-500);font-weight:normal;text-transform:none;font-size:0.8rem;">(if multiple athletes share this email)</span></label>
+                        <input type="text" name="athleteName" id="loginName" class="form-input" placeholder="John Smith">
                     </div>
                     
                     <button type="submit" class="btn-primary" id="loginSubmit">
