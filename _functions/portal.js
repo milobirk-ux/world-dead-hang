@@ -391,6 +391,77 @@ async function syncLeaderboard() {
   return Object.values(athletes).sort((a, b) => b.bestSec - a.bestSec);
 }
 
+// ===== GITHUB PUSH FOR LIVE LEADERBOARD =====
+async function pushLeaderboardToGitHub(athletesList) {
+  try {
+    const GITHUB_TOKEN = creds().GITHUB_TOKEN;
+    if (!GITHUB_TOKEN) {
+      console.log('No GITHUB_TOKEN - skipping live push');
+      return false;
+    }
+    
+    // Build the athletes array JS
+    const athleteJS = athletesList.map(a => `  { name: "${a.name}", time: "${fmtTime(a.bestSec)}", gripAge: ${a.gripAge || 0}, tier: "${a.tier || 'Rookie'}", country: "${a.country || ''}", verified: ${a.verified} }`).join(',\n');
+    const newBlock = `const athletes = [\n${athleteJS}\n];`;
+    
+    // Get current index.html from GitHub
+    const repoOwner = 'milobirk-ux';
+    const repoName = 'world-dead-hang';
+    const filePath = 'index.html';
+    
+    // Get file SHA for update
+    const getResp = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (!getResp.ok) {
+      console.log('Could not get index.html SHA:', getResp.status);
+      return false;
+    }
+    const fileData = await getResp.json();
+    const sha = fileData.sha;
+    
+    // Read current content and find/replace the athletes block
+    const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
+    const athletesRegex = /const athletes = \[\s*[\s\S]*?\];/;
+    const newContent = currentContent.replace(athletesRegex, newBlock);
+    
+    // Push update
+    const updateResp = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `Leaderboard sync: ${athletesList.length} athletes`,
+        content: Buffer.from(newContent).toString('base64'),
+        sha: sha
+      })
+    });
+    
+    if (updateResp.ok) {
+      console.log('Live leaderboard pushed to GitHub');
+      // Trigger Cloudflare Pages deploy
+      await fetch(`https://api.cloudflare.com/client/v4/accounts/${creds().CF_ACCOUNT_ID}/pages/projects/world-dead-hang/deployments`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${creds().CF_API_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ branch: 'master' })
+      }).catch(e => console.log('CF Pages trigger:', e.message));
+      return true;
+    } else {
+      console.log('GitHub push failed:', updateResp.status);
+      return false;
+    }
+  } catch(e) {
+    console.error('pushLeaderboardToGitHub error:', e.message);
+    return false;
+  }
+}
+
 // ===== MAIN ROUTER =====
 export default {
   async fetch(request, env) {
@@ -731,7 +802,11 @@ async function handleApprove(req, params) {
 
   // Sync leaderboard (Supabase-only, no Sheets needed)
   try {
-    await syncLeaderboard();
+    const leaderboardData = await syncLeaderboard();
+    // Push to GitHub for live site update
+    if (leaderboardData && leaderboardData.length > 0) {
+      pushLeaderboardToGitHub(leaderboardData).catch(e => console.error('GitHub push:', e.message));
+    }
   } catch(e) { console.error('Leaderboard sync:', e); }
 
   // Backup: also mark approved in Sheet
@@ -801,7 +876,10 @@ async function handleVerifyApprove(req, params) {
 
   // Sync leaderboard (Supabase-only, no Sheets needed)
   try {
-    await syncLeaderboard();
+    const leaderboardData = await syncLeaderboard();
+    if (leaderboardData && leaderboardData.length > 0) {
+      pushLeaderboardToGitHub(leaderboardData).catch(e => console.error('GitHub push:', e.message));
+    }
   } catch(e) { console.error('Sync:', e); }
 
   // Backup: also update Sheet
@@ -906,7 +984,10 @@ async function handleSync(req) {
   if (adminKey !== creds().ADMIN_KEY) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
   // Sync leaderboard directly from Supabase
   try {
-    await syncLeaderboard();
+    const leaderboardData = await syncLeaderboard();
+    if (leaderboardData && leaderboardData.length > 0) {
+      pushLeaderboardToGitHub(leaderboardData).catch(e => console.error('GitHub push:', e.message));
+    }
     const subs = await supabaseQuery('submissions', '&approved=eq.true');
     return jsonResp({ success: true, count: subs.length, message: 'Leaderboard synced from Supabase' });
   } catch(e) {
