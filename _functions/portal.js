@@ -349,42 +349,38 @@ function redirectHtml(url) {
 }
 
 // ===== APPROVAL + LEADERBOARD SYNC =====
-async function syncLeaderboard(tok) {
-  const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
-  if (sub.length < 2) return [];
-  const hdrs = sub[0].map(h => h.toString().trim());
-  const nI = hdrs.indexOf('Athlete Name'), eI = hdrs.indexOf('Email Address'), tI = hdrs.indexOf('Official Time');
-  const rI = hdrs.indexOf('Reviewed'), vI = hdrs.indexOf('Verified');
-  const revI = hdrs.indexOf('Approved');
-  const dobI = hdrs.indexOf('Date of Birth'), gI = hdrs.indexOf('Gender');
-  const wI = hdrs.indexOf('Bodyweight (lbs)') >= 0 ? hdrs.indexOf('Bodyweight (lbs)') : hdrs.indexOf('Weight (lbs)');
-  const hI = hdrs.indexOf('Height') >= 0 ? hdrs.indexOf('Height') : hdrs.indexOf('Height (inches)');
-  const trI = hdrs.indexOf('Grip Training Experience'), cI = hdrs.indexOf('Country');
-  const tsI = hdrs.indexOf('Timestamp');
+async function syncLeaderboard() {
+  // Get all approved submissions from Supabase
+  const submissions = await supabaseQuery('submissions', '&approved=eq.true&order=time_seconds.desc');
+  if (!submissions.length) return [];
 
+  // Join with athletes table
   const athletes = {};
-  for (let i = 1; i < sub.length; i++) {
-    const row = sub[i];
-    // Sync approved athletes (verified = checkmark only, not required for leaderboard)
-    const reviewed = (row[rI] || '').toString().trim().toLowerCase() === 'yes';
-    const verified = (row[vI] || '').toString().trim().toLowerCase() === 'yes';
-    const approved = (row[revI] || '').toString().trim().toLowerCase() === 'yes';
-    if (!reviewed || !approved) continue;
-
-    const name = (row[nI] || '').toString().trim();
-    const email = (row[eI] || '').toString().trim().toLowerCase();
-    if (!name) continue;
-    const key = email ? `${email}|${name.toLowerCase()}` : name.toLowerCase();
-    const timeS = parseTimeSec(row[tI]);
-    if (!timeS) continue;
-
-    if (!athletes[key] || timeS > athletes[key].bestSec) {
-      athletes[key] = {
-        name, email, bestSec: timeS, row,
-        dob: row[dobI] || '', gender: row[gI] || 'Male',
-        training: row[trI] || 'None', country: row[cI] || '',
-      timestamp: row[tsI] || '', verified: verified,
+  for (const sub of submissions) {
+    if (!sub.athlete_id) continue;
+    
+    // Get athlete details (cache by ID)
+    if (!athletes[sub.athlete_id]) {
+      const ath = await supabaseQuery('athletes', `&id=eq.${sub.athlete_id}`);
+      if (!ath.length) continue;
+      athletes[sub.athlete_id] = {
+        name: ath[0].name,
+        email: ath[0].email,
+        dob: ath[0].dob,
+        gender: ath[0].gender,
+        training: ath[0].grip_training,
+        country: ath[0].country,
+        height: ath[0].height_inches,
+        weight: ath[0].bodyweight_lbs,
+        bestSec: 0,
+        verified: false,
       };
+    }
+    
+    const a = athletes[sub.athlete_id];
+    if (sub.time_seconds > a.bestSec) {
+      a.bestSec = sub.time_seconds;
+      a.verified = sub.verified;
     }
   }
 
@@ -613,17 +609,9 @@ async function handleSubmitHang(req, token) {
     await sendEmail(tok, 'milobirk@gmail.com', `📬 ${aName} — ${fmtTime(totalSec)}`, notifyAdminEmail(aName, fmtTime(totalSec), em, gripAge));
   } catch(e) { console.error('Admin notify:', e); }
 
-  // 3. Sync to leaderboard 
+  // 3. Sync to leaderboard (Supabase only — no Sheets)
   try {
-    const approved = await syncLeaderboard(tok);
-    // Write inline JSON to _public/index.html for Cloudflare Pages
-    const athleteJSON = JSON.stringify(approved.map(a => ({
-      name: a.name, time: fmtTime(a.bestSec), gripAge: calcGripAge(a.dob, a.weight, a.gender, a.bestSec, a.height, a.training),
-      tier: getTier(a.bestSec).tier, country: a.country || '', verified: a.verified,
-    })));
-    const marker = 'const pendingAthletes = [';
-    const newBlock = `${marker}\n${athleteJSON.replace(/^\[/, '').replace(/\]$/, '')}];`;
-    await updateCell(tok, "'Pending Leaderboard'!A1", newBlock);
+    syncLeaderboard(); // background sync, don't await
   } catch(e) { console.error('Sync:', e); }
 
   return jsonResp({ success: true, message: 'Submitted!', hangTime: fmtTime(totalSec), gripAge });
@@ -678,17 +666,9 @@ async function handleApprove(req, params) {
   const totalSec = sub.time_seconds;
   const gripAge = sub.grip_age || 0;
 
-  // Sync leaderboard via Sheets (still needed for now)
+  // Sync leaderboard (Supabase-only, no Sheets needed)
   try {
-    const tok = await getAccessToken();
-    const approved = await syncLeaderboard(tok);
-    const athleteJSON = JSON.stringify(approved.map(a => ({
-      name: a.name, time: fmtTime(a.bestSec),
-      gripAge: calcGripAge(a.dob, a.weight, a.gender, a.bestSec, a.height, a.training),
-      tier: getTier(a.bestSec).tier, country: a.country || '', verified: a.verified,
-    })));
-    const newBlock = `const athletes = [\n${athleteJSON.replace(/^\[/, '').replace(/\]$/, '')}];`;
-    await updateCell(tok, "'Leaderboard Cache'!A1", newBlock);
+    await syncLeaderboard();
   } catch(e) { console.error('Leaderboard sync:', e); }
 
   // Send approval email with magic link
@@ -738,17 +718,9 @@ async function handleVerifyApprove(req, params) {
   const totalSec = sub.time_seconds;
   const ga = sub.grip_age || 0;
 
-  // Sync leaderboard
+  // Sync leaderboard (Supabase-only, no Sheets needed)
   try {
-    const tok = await getAccessToken();
-    const approved = await syncLeaderboard(tok);
-    const athleteJSON = JSON.stringify(approved.map(a => ({
-      name: a.name, time: fmtTime(a.bestSec),
-      gripAge: calcGripAge(a.dob, a.weight, a.gender, a.bestSec, a.height, a.training),
-      tier: getTier(a.bestSec).tier, country: a.country || '', verified: a.verified,
-    })));
-    const newBlock = `const athletes = [\n${athleteJSON.replace(/^\[/, '').replace(/\]$/, '')}];`;
-    await updateCell(tok, "'Leaderboard Cache'!A1", newBlock);
+    await syncLeaderboard();
   } catch(e) { console.error('Sync:', e); }
 
   // Send magic link + approval email
@@ -832,21 +804,30 @@ function denyEmail(name) {
 async function handleSync(req) {
   const adminKey = new URL(req.url).searchParams.get('key') || '';
   if (adminKey !== creds().ADMIN_KEY) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
-  const tok = await getAccessToken();
-  const approved = await syncLeaderboard(tok);
-  return jsonResp({ success: true, count: approved.length, athletes: approved.map(a => a.name) });
+  // Sync leaderboard directly from Supabase
+  try {
+    await syncLeaderboard();
+    const subs = await supabaseQuery('submissions', '&approved=eq.true');
+    return jsonResp({ success: true, count: subs.length, message: 'Leaderboard synced from Supabase' });
+  } catch(e) {
+    return jsonResp({ success: false, error: e.message }, 500);
+  }
 }
 
 async function handleShareCard(token) {
   if (!token) return jsonResp({ success: false, error: 'No session' }, 401);
-  const tok = await getAccessToken();
-  const s = await readSheet(tok, 'Sessions!A:E');
-  if (s.length < 2) return jsonResp({ success: false, error: 'No session' }, 401);
-  const h = s[0].map(x => x.toString().trim()), tI = h.indexOf('token'), eI = h.indexOf('athleteId');
-  let em = null;
-  for (let i = 1; i < s.length; i++) { if (s[i][tI]?.toString() === token) { em = s[i][eI]?.toString(); break; } }
-  if (!em) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
-  const stats = await getAthleteStats(tok, em, '');
+  
+  // Query Supabase for session
+  const sessions = await supabaseQuery('sessions', `&session_token=eq.${token}`);
+  if (!sessions.length) return jsonResp({ success: false, error: 'Unauthorized' }, 401);
+  const session = sessions[0];
+  if (!session.athlete_id) return jsonResp({ success: false, error: 'No athlete' }, 400);
+
+  // Get athlete and stats
+  const athletes = await supabaseQuery('athletes', `&id=eq.${session.athlete_id}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'Not found' }, 404);
+  
+  const stats = await getAthleteStatsSupabase(athletes[0].email, '');
   if (!stats) return jsonResp({ success: false, error: 'No data' }, 404);
 
   // Return data for social card generation
