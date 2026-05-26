@@ -19,7 +19,7 @@ export function calcGripAge(dob, weight, gender, sec, height, training) {
   const adj = (base * Math.pow(refW / w, 0.7) * Math.pow(refH / h, 0.35) * tM * 0.7) + (base * 0.3);
   const pr = sec / Math.max(1, adj);
   const delta = pr >= 1 ? 18 * Math.log(Math.max(1, pr)) : -12 * (1 - pr);
-  return Math.max(18, Math.min(95, Math.round((age - delta) * 10) / 10));
+  return Math.max(18, Math.min(95, Math.round(age - delta)));
 }
 
 // === TIER SYSTEM ===

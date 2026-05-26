@@ -7,24 +7,36 @@ on:
     branches: [ main, master ]
 
 jobs:
-  test:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      
-      - name: Install dependencies
-        run: npm ci || npm install
-      
-      - name: Validate HTML
+
+      - name: Validate HTML files exist
         run: |
-          if [ ! -f index.html ]; then
-            echo "Error: index.html not found"
+          for f in index.html submit.html; do
+            if [ ! -f "$f" ]; then
+              echo "Error: $f not found"
+              exit 1
+            fi
+            echo "✓ $f exists"
+          done
+
+      - name: Validate JS syntax
+        run: |
+          if [ -f _functions/portal.js ]; then
+            node --check _functions/portal.js && echo "✓ portal.js syntax OK" || exit 1
+          fi
+          if [ -f _functions/lib.js ]; then
+            node --check _functions/lib.js && echo "✓ lib.js syntax OK" || exit 1
+          fi
+
+      - name: Check athletes data in index.html
+        run: |
+          if grep -q 'const athletes' index.html; then
+            echo "✓ athletes data block found"
+          else
+            echo "Error: no athletes data in index.html"
             exit 1
           fi
-          echo "HTML validation passed"
-      
+          echo "All validations passed ✓"
