@@ -448,48 +448,45 @@ async function handleRequest(req) {
 
 async function handleMagicLink(req, email, name) {
   let em = email, nm = name;
-  if (!em && req.method === 'POST') { try { const b = await req.json(); em = b.email || ''; nm = b.athleteName || ''; } catch(e) {} } if (!em) return jsonResp({ success: false, error: 'Email required' }, 400);
+  if (!em && req.method === 'POST') { try { const b = await req.json(); em = b.email || ''; nm = b.athleteName || ''; } catch(e) {} }
+  if (!em) return jsonResp({ success: false, error: 'Email required' }, 400);
   if (!em.includes('@') || em.length > 254) return jsonResp({ success: false, error: 'Invalid email' }, 400);
-  const tok = await getAccessToken();
-  const sub = await readSheet(tok, "'Custom Form Submissions'!A:ZZ");
-  if (sub.length < 2) return jsonResp({ success: false, error: 'No data' }, 404);
-  const hdrs = sub[0].map(h => h.toString().trim());
-  const eI = hdrs.indexOf('Email Address'), nI = hdrs.indexOf('Athlete Name'), tI = hdrs.indexOf('Official Time');
-  const dobI = hdrs.indexOf('Date of Birth'), gI = hdrs.indexOf('Gender');
-  const wI = hdrs.indexOf('Bodyweight (lbs)') >= 0 ? hdrs.indexOf('Bodyweight (lbs)') : hdrs.indexOf('Weight (lbs)');
-  const hI = hdrs.indexOf('Height') >= 0 ? hdrs.indexOf('Height') : hdrs.indexOf('Height (inches)');
-  const trI = hdrs.indexOf('Grip Training Experience');
-  // Find row with best time for this email+name combo, or just email if no name provided
-  let bestRow = null, bestSec = 0;
-  const emL = em.toLowerCase().trim();
-  const nmL = nm ? nm.toLowerCase().trim() : '';
-  for (let i = 1; i < sub.length; i++) {
-    const rowEmail = (sub[i][eI] || '').toString().toLowerCase().trim();
-    const rowName = (sub[i][nI] || '').toString().toLowerCase().trim();
-    
-    // Match: email matches AND (no name provided OR name matches)
-    const emailMatch = rowEmail === emL;
-    const nameMatch = !nmL || rowName === nmL || rowName.includes(nmL) || nmL.includes(rowName);
-    
-    if (emailMatch && nameMatch) {
-      const s = parseTimeSec(sub[i][tI]);
-      if (s > bestSec) { bestSec = s; bestRow = sub[i]; }
-    }
+
+  // Find athlete in Supabase by email
+  const athletes = await supabaseQuery('athletes', `&email=eq.${encodeURIComponent(em.toLowerCase())}`);
+  if (!athletes.length) return jsonResp({ success: false, error: 'Not found' }, 404);
+  const athlete = athletes[0];
+  const aName = athlete.name || nm || em.split('@')[0];
+
+  // Get best submission for this athlete
+  const submissions = await supabaseQuery('submissions', `&athlete_id=eq.${athlete.id}&approved=eq.true&order=time_seconds.desc&limit=1`);
+  let timeStr = '0:00', totalSec = 0;
+  if (submissions.length) {
+    timeStr = submissions[0].time_display;
+    totalSec = submissions[0].time_seconds;
   }
-  if (!bestRow) return jsonResp({ success: false, error: 'Not found' }, 404);
 
-  const aName = bestRow[nI] || nm || em.split('@')[0];
-  const timeStr = bestRow[tI] || '0:00', totalSec = parseTimeSec(timeStr);
-  const mToken = genToken(), expiry = new Date(Date.now() + 864e5).toISOString();
-  await appendRow(tok, 'MagicLinks!A:G', [em.toLowerCase(), mToken, expiry, 'FALSE', aName, 'FALSE', new Date().toISOString()]);
+  // Create magic link in Supabase
+  const mToken = genToken();
+  const expiry = new Date(Date.now() + 864e5).toISOString();
+  await supabaseInsert('magic_links', {
+    athlete_id: athlete.id,
+    email: em.toLowerCase(),
+    token: mToken,
+    expires_at: expiry,
+    used: false
+  });
 
+  // Calculate grip age from athlete profile
+  const gripAge = calcGripAge(athlete.dob, athlete.bodyweight_lbs,
+    athlete.gender, totalSec, athlete.height_inches,
+    athlete.grip_training);
+
+  // Send email (still uses Gmail API)
   const workerUrl = new URL(req.url).origin;
   const verifyUrl = `${workerUrl}/api/auth/verify?token=${mToken}`;
-  const gripAge = calcGripAge(bestRow[dobI] || '', bestRow[wI] || '',
-    bestRow[gI] || 'Male', totalSec, bestRow[hI] || '',
-    bestRow[trI] || 'None');
   const subject = '🔥 Your WDHC Athlete Portal Access Link';
-  await sendEmail(tok, em, subject, approvalEmail(aName, timeStr, totalSec, verifyUrl, gripAge));
+  await sendEmail(await getAccessToken(), em, subject, approvalEmail(aName, timeStr, totalSec, verifyUrl, gripAge));
   return jsonResp({ success: true, message: `Sent to ${em}` });
 }
 
