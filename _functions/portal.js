@@ -326,9 +326,11 @@ function approvalEmail(name, time, totalSec, verifyUrl, gripAge) {
 }
 
 function notifyAdminEmail(name, time, email, ga, subId = '', dbFail = false) {
-  const approveUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=***`;
-  const verifyApproveUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/verify-approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=***`;
-  const denyUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/deny?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=***`;
+  const portalUrl = creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev';
+  const adminKey = creds().ADMIN_KEY;
+  const approveUrl = `${portalUrl}/api/admin/approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=${adminKey}`;
+  const verifyApproveUrl = `${portalUrl}/api/admin/verify-approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=${adminKey}`;
+  const denyUrl = `${portalUrl}/api/admin/deny?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=${adminKey}`;
   const dbAlert = dbFail ? '<p style="background:#cc0000;color:#fff;padding:8px;border-radius:4px;">⚠ DB write failed — submission in Sheet only.</p>' : '';
   const subIdLine = subId ? `<p style="color:#666;font-size:11px;">ID: ${subId}</p>` : '';
   return `<div style="font-family:sans-serif;padding:20px;background:#1a1a1a;color:#fff;border-radius:8px;">
@@ -388,6 +390,12 @@ async function syncLeaderboard() {
     }
   }
 
+  // Compute gripAge and tier for each athlete
+  for (const a of Object.values(athletes)) {
+    a.gripAge = calcGripAge(a.dob, a.weight, a.gender, a.bestSec, a.height, a.training);
+    a.tier = getTier(a.bestSec).tier;
+  }
+
   return Object.values(athletes).sort((a, b) => b.bestSec - a.bestSec);
 }
 
@@ -401,7 +409,10 @@ async function pushLeaderboardToGitHub(athletesList) {
     }
     
     // Build the athletes array JS
-    const athleteJS = athletesList.map(a => `  { name: "${a.name}", time: "${fmtTime(a.bestSec)}", gripAge: ${a.gripAge || 0}, tier: "${a.tier || 'Rookie'}", country: "${a.country || ''}", verified: ${a.verified} }`).join(',\n');
+    const athleteJS = athletesList.map(a => {
+      const ga = typeof a.gripAge === 'number' ? a.gripAge : 0;
+      return `  { name: "${a.name}", time: "${fmtTime(a.bestSec)}", gripAge: ${ga}, tier: "${a.tier || 'Rookie'}", country: "${a.country || ''}", verified: ${a.verified} }`;
+    }).join(',\n');
     const newBlock = `const athletes = [\n${athleteJS}\n];`;
     
     // Get current index.html from GitHub
@@ -421,7 +432,7 @@ async function pushLeaderboardToGitHub(athletesList) {
     const sha = fileData.sha;
     
     // Read current content and find/replace the athletes block
-    const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
+    const currentContent = decodeURIComponent(escape(atob(fileData.content)));
     const athletesRegex = /const athletes = \[\s*[\s\S]*?\];/;
     const newContent = currentContent.replace(athletesRegex, newBlock);
     
@@ -435,7 +446,7 @@ async function pushLeaderboardToGitHub(athletesList) {
       },
       body: JSON.stringify({
         message: `Leaderboard sync: ${athletesList.length} athletes`,
-        content: Buffer.from(newContent).toString('base64'),
+        content: btoa(unescape(encodeURIComponent(newContent))),
         sha: sha
       })
     });
@@ -491,7 +502,10 @@ async function handleRequest(req) {
   // --- ATHLETE: history ---
   if (path === 'athlete/history' || path === 'history') return handleGetHistory(token);
 
-  // --- ATHLETE: submit hang ---
+  // --- PUBLIC: new athlete submission (no auth required) ---
+  if (path === 'submit' || path === 'public/submit') return handlePublicSubmit(req);
+
+  // --- ATHLETE: submit hang (logged in) ---
   if (path === 'athlete/submit-hang' || path === 'submit-hang') return handleSubmitHang(req, token);
 
   // --- ATHLETE: update profile ---
@@ -634,6 +648,97 @@ async function handleGetHistory(token) {
   return jsonResp({ success: true, data: { history: stats.history, totalSubmissions: stats.totalSubmissions, bestHangTime: stats.bestHangTime, gripAge: stats.gripAge, tier: stats.tier } });
 }
 
+// ===== PUBLIC SUBMISSION (no auth) =====
+async function handlePublicSubmit(req) {
+  if (req.method !== 'POST') return jsonResp({ success: false, error: 'Method not allowed' }, 405);
+  let body;
+  try { body = await req.json(); } catch(e) { return jsonResp({ success: false, error: 'Invalid JSON' }, 400); }
+
+  const {
+    athleteName, email, cityState, country, dob, gender,
+    weight, height, gripTraining, attemptDate, hangTime,
+    videoUrl, notes, consent
+  } = body;
+
+  if (!athleteName || !email || !hangTime) return jsonResp({ success: false, error: 'Missing required fields' }, 400);
+  if (!email.includes('@') || email.length > 254) return jsonResp({ success: false, error: 'Invalid email' }, 400);
+  if (!consent) return jsonResp({ success: false, error: 'Consent required' }, 400);
+
+  const em = email.trim().toLowerCase();
+  const totalSec = parseTimeSec(hangTime);
+  if (!totalSec) return jsonResp({ success: false, error: 'Invalid time' }, 400);
+
+  // Normalize name
+  const nameParts = athleteName.trim().split(/\s+/);
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+  const normalizedName = nameParts.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
+  // Create or update athlete in Supabase
+  let athlete = null;
+  const existing = await supabaseQuery('athletes', `&email=eq.${encodeURIComponent(em)}`);
+  if (existing.length) {
+    athlete = existing[0];
+    const updates = {};
+    if (weight) updates.bodyweight_lbs = parseInt(weight) || athlete.bodyweight_lbs;
+    if (height) updates.height_inches = parseInt(height) || athlete.height_inches;
+    if (gripTraining) updates.grip_training = gripTraining;
+    if (country) updates.country = country;
+    if (cityState) updates.city_state = cityState;
+    if (Object.keys(updates).length > 0) await supabaseUpdate('athletes', athlete.id, updates);
+  } else {
+    const created = await supabaseInsert('athletes', {
+      name: normalizedName, first_name: firstName, last_name: lastName, email: em,
+      dob: dob || null, gender: gender || 'Male',
+      bodyweight_lbs: parseInt(weight) || null, height_inches: parseInt(height) || null,
+      grip_training: gripTraining || 'None', country: country || '', city_state: cityState || '',
+      created_at: new Date().toISOString()
+    });
+    athlete = created;
+  }
+
+  // Create submission in Supabase
+  const subId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+  const gripAgeVal = calcGripAge(dob, weight, gender, totalSec, height, gripTraining);
+  await supabaseInsert('submissions', {
+    athlete_id: athlete?.id, submission_id: subId,
+    time_seconds: totalSec, time_display: fmtTime(totalSec),
+    grip_age: gripAgeVal, tier: getTier(totalSec).tier,
+    attempt_date: attemptDate || new Date().toISOString().split('T')[0],
+    video_url: videoUrl || null, notes: notes || '',
+    is_pr: true, verified: false, approved: false, source: 'public_form'
+  });
+
+  // Backup: write to Sheet
+  try {
+    const sheetTok = await getAccessToken();
+    const sheetRow = [
+      new Date().toISOString(), subId, normalizedName, firstName, lastName, em,
+      cityState || '', country || '', dob || '', gender || 'Male',
+      weight || '', height || '', gripTraining || 'None',
+      attemptDate || new Date().toISOString().split('T')[0], fmtTime(totalSec),
+      videoUrl || '', notes || '', '', 'Yes', 'No', 'Pending', 'No', '', '', '', '', '', ''
+    ];
+    await appendRow(sheetTok, "'Custom Form Submissions'!A:AA", sheetRow);
+  } catch(e) { console.error('Sheet backup failed:', e.message); }
+
+  // Send confirmation email to athlete
+  try {
+    const tok = await getAccessToken();
+    await sendEmail(tok, em, `Your WDHC Submission — ${fmtTime(totalSec)}`,
+      dashboardSubmitEmail(normalizedName.split(' ')[0], fmtTime(totalSec), gripAgeVal));
+  } catch(e) { console.error('Athlete email:', e); }
+
+  // Send admin notification
+  try {
+    const tok = await getAccessToken();
+    await sendEmail(tok, 'milobirk@gmail.com', `📬 ${normalizedName} — ${fmtTime(totalSec)}`,
+      notifyAdminEmail(normalizedName, fmtTime(totalSec), em, gripAgeVal, subId, false));
+  } catch(e) { console.error('Admin notify:', e); }
+
+  return jsonResp({ success: true, message: 'Submitted! Check your email for confirmation.', gripAge: gripAgeVal });
+}
+
 async function handleSubmitHang(req, token) {
   if (req.method !== 'POST') return jsonResp({ success: false, error: 'Method not allowed' }, 405);
   if (!token) return jsonResp({ success: false, error: 'No session' }, 401);
@@ -705,6 +810,7 @@ async function handleSubmitHang(req, token) {
   }
 
   // 1. Confirmation email to athlete
+  const em = athlete.email;
   const aName = athlete.name || em.split('@')[0];
   try { await sendEmail(await getAccessToken(), em, `Your WDHC Submission — ${fmtTime(totalSec)}`, dashboardSubmitEmail(aName, fmtTime(totalSec), gripAge)); } catch(e) { console.error('Athlete email:', e); }
 

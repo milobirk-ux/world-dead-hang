@@ -979,8 +979,8 @@
                     return;
                 }
                 
-// Cloudflare Worker URL (for production)
-                    const WEB_APP_URL = 'https://wdhc-submit.milobirk.workers.dev';
+// Cloudflare Worker URL (portal handles public submissions)
+                    const WEB_APP_URL = 'https://wdhc-portal.milobirk.workers.dev/api/submit';
                 
                 const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
