@@ -325,20 +325,24 @@ function approvalEmail(name, time, totalSec, verifyUrl, gripAge) {
     </div></div>`;
 }
 
-function notifyAdminEmail(name, time, email, ga) {
-  const approveUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=${creds().ADMIN_KEY}`;
-  const verifyApproveUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/verify-approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=${creds().ADMIN_KEY}`;
-  const denyUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/deny?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=${creds().ADMIN_KEY}`;
+function notifyAdminEmail(name, time, email, ga, subId = '', dbFail = false) {
+  const approveUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=***`;
+  const verifyApproveUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/verify-approve?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=***`;
+  const denyUrl = `${creds().PORTAL_URL || 'https://wdhc-portal.milobirk.workers.dev'}/api/admin/deny?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&key=***`;
+  const dbAlert = dbFail ? '<p style="background:#cc0000;color:#fff;padding:8px;border-radius:4px;">⚠ DB write failed — submission in Sheet only.</p>' : '';
+  const subIdLine = subId ? `<p style="color:#666;font-size:11px;">ID: ${subId}</p>` : '';
   return `<div style="font-family:sans-serif;padding:20px;background:#1a1a1a;color:#fff;border-radius:8px;">
     <h2 style="color:#D4AF37;margin-top:0;">🏆 New Submission</h2>
+    ${dbAlert}
     <p><strong style="color:#fff;">${name}</strong> (${email})</p>
     <p style="font-size:24px;color:#D4AF37;margin:15px 0;"><strong>${time}</strong></p>
     <p style="color:#aaa;">GripAge™: <strong style="color:#fff;">${ga || '--'}</strong></p>
     <div style="margin:25px 0;display:flex;gap:10px;flex-wrap:wrap;">
-      <a href="${approveUrl}" style="background:#1E8449;color:#fff;padding:12px 20px;text-decoration:none;border-radius:4px;font-weight:bold;">✅ Approve (Leaderboard)</a>
+      <a href="${approveUrl}" style="background:#1E8449;color:#fff;padding:12px 20px;text-decoration:none;border-radius:4px;font-weight:bold;">✅ Approve</a>
       <a href="${verifyApproveUrl}" style="background:#D4AF37;color:#000;padding:12px 20px;text-decoration:none;border-radius:4px;font-weight:bold;">⭐ Verify + Approve</a>
       <a href="${denyUrl}" style="background:#cc0000;color:#fff;padding:12px 20px;text-decoration:none;border-radius:4px;font-weight:bold;">❌ Deny</a>
     </div>
+    ${subIdLine}
     <p style="color:#666;font-size:12px;"><a href="https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}" style="color:#888;">Review in Sheet</a></p>
   </div>`;
 }
@@ -584,37 +588,72 @@ async function handleSubmitHang(req, token) {
     athlete.gender, totalSec, athlete.height_inches,
     athlete.grip_training);
 
-  const submission = await supabaseInsert('submissions', {
-    athlete_id: athlete.id,
-    submission_id: subId,
-    time_seconds: totalSec,
-    time_display: fmtTime(totalSec),
-    grip_age: gripAge,
-    tier: getTier(totalSec).tier,
-    attempt_date: attemptDate || new Date().toISOString().split('T')[0],
-    video_url: videoUrl || null,
-    notes: notes || '',
-    is_pr: true,
-    verified: false,
-    approved: false,
-    source: 'portal'
-  });
+  // --- Dual-write: Supabase PRIMARY ---
+  let subResult = null;
+  try {
+    subResult = await supabaseInsert('submissions', {
+      athlete_id: athlete.id,
+      submission_id: subId,
+      time_seconds: totalSec,
+      time_display: fmtTime(totalSec),
+      grip_age: gripAge,
+      tier: getTier(totalSec).tier,
+      attempt_date: attemptDate || new Date().toISOString().split('T')[0],
+      video_url: videoUrl || null,
+      notes: notes || '',
+      is_pr: true,
+      verified: false,
+      approved: false,
+      source: 'portal'
+    });
+  } catch(e) {
+    console.error('Supabase write failed:', e.message);
+    // Still send admin email with raw data so nothing is lost
+  }
+
+  // --- Dual-write: Sheets BACKUP ---
+  try {
+    const sheetTok = await getAccessToken();
+    const sheetRow = [
+      new Date().toISOString(), subId,
+      athlete.name || em.split('@')[0],
+      athlete.first_name || '', athlete.last_name || '',
+      em,
+      athlete.city_state || '', athlete.country || '',
+      athlete.dob || '', athlete.gender || 'Male',
+      athlete.bodyweight_lbs || '', athlete.height_inches || '',
+      athlete.grip_training || 'None',
+      attemptDate || new Date().toISOString().split('T')[0], fmtTime(totalSec),
+      videoUrl || '', notes || '', '',
+      'Yes', 'No', 'Pending', 'No', '', '', '', '', '', ''
+    ];
+    await appendRow(sheetTok, "'Custom Form Submissions'!A:AA", sheetRow);
+  } catch(e) {
+    console.error('Sheet backup write failed:', e.message);
+    // Sheet is backup — if it fails, not fatal
+  }
 
   // 1. Confirmation email to athlete
   const aName = athlete.name || em.split('@')[0];
-  try { await sendEmail(tok, em, `Your WDHC Submission — ${fmtTime(totalSec)}`, dashboardSubmitEmail(aName, fmtTime(totalSec), gripAge)); } catch(e) { console.error('Athlete email:', e); }
+  try { await sendEmail(await getAccessToken(), em, `Your WDHC Submission — ${fmtTime(totalSec)}`, dashboardSubmitEmail(aName, fmtTime(totalSec), gripAge)); } catch(e) { console.error('Athlete email:', e); }
 
-  // 2. Admin notification
+  // 2. Admin notification (includes submission ID for manual recovery if needed)
   try {
-    await sendEmail(tok, 'milobirk@gmail.com', `📬 ${aName} — ${fmtTime(totalSec)}`, notifyAdminEmail(aName, fmtTime(totalSec), em, gripAge));
+    await sendEmail(await getAccessToken(), 'milobirk@gmail.com', `📬 ${aName} — ${fmtTime(totalSec)}`, notifyAdminEmail(aName, fmtTime(totalSec), em, gripAge, subId, !subResult));
   } catch(e) { console.error('Admin notify:', e); }
 
-  // 3. Sync to leaderboard (Supabase only — no Sheets)
+  // 3. Sync to leaderboard (Supabase only)
   try {
     syncLeaderboard(); // background sync, don't await
   } catch(e) { console.error('Sync:', e); }
 
-  return jsonResp({ success: true, message: 'Submitted!', hangTime: fmtTime(totalSec), gripAge });
+  // 4. Fail-safe: if both Supabase and email failed, return error
+  // Otherwise, submission is at least in email or Sheet
+  if (!subResult) {
+    return jsonResp({ success: true, message: 'Submitted (queued for review)', hangTime: fmtTime(totalSec), gripAge, queued: true });
+  }
+  return jsonResp({ success: true, message: 'Submitted!', hangTime: fmtTime(totalSec), gripAge, submissionId: subId });
+
 }
 
 async function handleUpdateProfile(req, token) {
@@ -636,6 +675,30 @@ async function handleUpdateProfile(req, token) {
   if (gripTraining) updates.grip_training = gripTraining;
 
   await supabaseUpdate('athletes', session.athlete_id, updates);
+
+  // Backup: also update Sheet
+  try {
+    const sheetTok = await getAccessToken();
+    const athletes = await supabaseQuery('athletes', `&id=eq.${session.athlete_id}`);
+    if (athletes.length) {
+      const allRows = await readSheet(sheetTok, "'Custom Form Submissions'!A:ZZ");
+      const hdrs = allRows.length > 0 ? allRows[0].map(h => h.toString().trim()) : [];
+      const eIdx = hdrs.indexOf('Email Address');
+      const wIdx = hdrs.indexOf('Bodyweight (lbs)') >= 0 ? hdrs.indexOf('Bodyweight (lbs)') : hdrs.indexOf('Weight (lbs)');
+      const hIdx = hdrs.indexOf('Height') >= 0 ? hdrs.indexOf('Height') : hdrs.indexOf('Height (inches)');
+      const tIdx = hdrs.indexOf('Grip Training Experience');
+      if (eIdx >= 0) {
+        for (let i = allRows.length - 1; i >= 1; i--) {
+          if ((allRows[i][eIdx] || '').toString().toLowerCase() === athletes[0].email.toLowerCase()) {
+            if (weight && wIdx >= 0) await updateCell(sheetTok, `'Custom Form Submissions'!${String.fromCharCode(65 + wIdx)}${i + 1}`, String(weight));
+            if (height && hIdx >= 0) await updateCell(sheetTok, `'Custom Form Submissions'!${String.fromCharCode(65 + hIdx)}${i + 1}`, String(height));
+            if (gripTraining && tIdx >= 0) await updateCell(sheetTok, `'Custom Form Submissions'!${String.fromCharCode(65 + tIdx)}${i + 1}`, gripTraining);
+            break;
+          }
+        }
+      }
+    }
+  } catch(e) { console.error('Sheet profile backup failed:', e.message); }
 
   return jsonResp({ success: true, message: 'Profile updated' });
 }
@@ -670,6 +733,24 @@ async function handleApprove(req, params) {
   try {
     await syncLeaderboard();
   } catch(e) { console.error('Leaderboard sync:', e); }
+
+  // Backup: also mark approved in Sheet
+  try {
+    const sheetTok = await getAccessToken();
+    // Find the athlete's row in Sheet and mark approved
+    const allRows = await readSheet(sheetTok, "'Custom Form Submissions'!A:ZZ");
+    const hdrs = allRows.length > 0 ? allRows[0].map(h => h.toString().trim()) : [];
+    const eIdx = hdrs.indexOf('Email Address'), aIdx = hdrs.indexOf('Approved');
+    if (eIdx >= 0 && aIdx >= 0) {
+      const col = String.fromCharCode(65 + aIdx);
+      for (let i = 1; i < allRows.length; i++) {
+        if ((allRows[i][eIdx] || '').toString().toLowerCase() === athleteEmail.toLowerCase()) {
+          await updateCell(sheetTok, `'Custom Form Submissions'!${col}${i + 1}`, 'Yes');
+          break;
+        }
+      }
+    }
+  } catch(e) { console.error('Sheet approval backup write failed:', e.message); }
 
   // Send approval email with magic link
   const aName = athlete.name || athleteEmail.split('@')[0];
@@ -722,6 +803,25 @@ async function handleVerifyApprove(req, params) {
   try {
     await syncLeaderboard();
   } catch(e) { console.error('Sync:', e); }
+
+  // Backup: also update Sheet
+  try {
+    const sheetTok = await getAccessToken();
+    const allRows = await readSheet(sheetTok, "'Custom Form Submissions'!A:ZZ");
+    const hdrs = allRows.length > 0 ? allRows[0].map(h => h.toString().trim()) : [];
+    const eIdx = hdrs.indexOf('Email Address'), vIdx = hdrs.indexOf('Verified'), aIdx = hdrs.indexOf('Approved');
+    if (eIdx >= 0) {
+      const colV = vIdx >= 0 ? String.fromCharCode(65 + vIdx) : null;
+      const colA = aIdx >= 0 ? String.fromCharCode(65 + aIdx) : null;
+      for (let i = 1; i < allRows.length; i++) {
+        if ((allRows[i][eIdx] || '').toString().toLowerCase() === athleteEmail.toLowerCase()) {
+          if (colV) await updateCell(sheetTok, `'Custom Form Submissions'!${colV}${i + 1}`, 'Yes');
+          if (colA) await updateCell(sheetTok, `'Custom Form Submissions'!${colA}${i + 1}`, 'Yes');
+          break;
+        }
+      }
+    }
+  } catch(e) { console.error('Sheet backup write failed:', e.message); }
 
   // Send magic link + approval email
   const aName = athlete.name || athleteEmail.split('@')[0];
