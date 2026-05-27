@@ -12,27 +12,34 @@ const LEADERBOARD_URL = 'https://worlddeadhang.com/index.html';
 
 // === SUPABASE ===
 const SUPABASE_URL = 'https://lwqidqblxieoscnwqhvq.supabase.co';
-const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3cWlkcWJseGllb3NjbndxaHZxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTcyMDY3NCwiZXhwIjoyMDk1Mjk2Njc0fQ.7_kJvABVfgj8ItVy87kgH5D483xxuaIAh3MyDeQf5l8';
+function getSupabaseKey() {
+  const k = creds().SUPABASE_SERVICE_KEY || '';
+  if (!k || k.includes('...')) throw new Error('SUPABASE_SERVICE_KEY not set in worker secrets');
+  return k;
+}
 
 async function supabaseQuery(table, filter = '') {
+  const key = getSupabaseKey();
   const url = `${SUPABASE_URL}/rest/v1/${table}?select=*${filter}`;
-  const r = await fetch(url, { headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` } });
+  const r = await fetch(url, { headers: { 'apikey': key, 'Authorization': `Bearer ${key}` } });
   return r.ok ? await r.json() : [];
 }
 
 async function supabaseInsert(table, data) {
+  const key = getSupabaseKey();
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
     method: 'POST',
-    headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+    headers: { 'apikey': key, 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
     body: JSON.stringify(data)
   });
   return r.ok ? await r.json() : null;
 }
 
 async function supabaseUpdate(table, id, data) {
+  const key = getSupabaseKey();
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
     method: 'PATCH',
-    headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`, 'Content-Type': 'application/json' },
+    headers: { 'apikey': key, 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
   return r.ok;
@@ -258,13 +265,15 @@ async function getAthleteStats(tok, email, name) {
   return getAthleteStatsSheets(tok, email, name);
 }
 
-// === GMAIL ===
-async function sendEmail(tk, to, subject, html) {
-  const mime = `To: ${to}\r\nFrom: support@worlddeadhang.com\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}`;
-  let raw; try { raw = btoa(unescape(encodeURIComponent(mime))); } catch(e) { raw = btoa(mime); }
-  raw = raw.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const r = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send',
-    { method: 'POST', headers: { 'Authorization': `Bearer ${tk}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ raw }) });
+// === EMAIL (Resend) ===
+async function sendEmail(to, subject, html) {
+  const c = creds();
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${c.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: 'WDHC <noreply@worlddeadhang.com>', to, subject, html })
+  });
+  if (!r.ok) console.error('Resend error:', r.status, await r.text());
   return r.ok;
 }
 
@@ -360,46 +369,84 @@ async function syncLeaderboard() {
   const submissions = await supabaseQuery('submissions', '&approved=eq.true&order=time_seconds.desc');
   if (!submissions.length) return [];
 
-  // Join with athletes table
+  // Collect all athlete IDs we need
+  const athleteIds = [...new Set(submissions.map(s => s.athlete_id).filter(Boolean))];
+  
+  // Batch fetch all athletes
+  const athleteMap = {};
+  for (const aid of athleteIds) {
+    const ath = await supabaseQuery('athletes', `&id=eq.${aid}`);
+    if (ath.length) athleteMap[aid] = ath[0];
+  }
+
+  // Build per-athlete data: best submission + history
   const athletes = {};
   for (const sub of submissions) {
-    if (!sub.athlete_id) continue;
+    if (!sub.athlete_id || !athleteMap[sub.athlete_id]) continue;
+    const ath = athleteMap[sub.athlete_id];
     
-    // Get athlete details (cache by ID)
     if (!athletes[sub.athlete_id]) {
-      const ath = await supabaseQuery('athletes', `&id=eq.${sub.athlete_id}`);
-      if (!ath.length) continue;
       athletes[sub.athlete_id] = {
-        name: ath[0].name,
-        email: ath[0].email,
-        dob: ath[0].dob,
-        gender: ath[0].gender,
-        training: ath[0].grip_training,
-        country: ath[0].country,
-        height: ath[0].height_inches,
-        weight: ath[0].bodyweight_lbs,
+        athleteId: sub.athlete_id,
+        name: ath.name,
+        email: ath.email,
+        dob: ath.dob || '',
+        gender: ath.gender || 'Male',
+        training: ath.grip_training || 'None',
+        country: ath.country || '',
+        cityState: ath.city_state || '',
+        height: ath.height_inches || 0,
+        weight: ath.bodyweight_lbs || 0,
         bestSec: 0,
+        bestVideo: '',
+        bestAttemptDate: '',
+        bestSubId: null,
         verified: false,
+        history: [], // all PR submissions for this athlete
+        prCount: 0,
       };
     }
     
     const a = athletes[sub.athlete_id];
+    a.prCount++;
+    a.history.push({ date: sub.attempt_date, time: sub.time_display });
+    
+    // Use submission-provided name if available (from notes field)
+    const submissionName = sub.notes && sub.notes.trim() !== '' ? sub.notes : a.name;
+    
     if (sub.time_seconds > a.bestSec) {
       a.bestSec = sub.time_seconds;
       a.verified = sub.verified;
+      a.bestVideo = sub.video_url || '';
+      a.bestAttemptDate = sub.attempt_date || '';
+      a.bestSubId = sub.id;
+      if (submissionName !== a.name) a.name = submissionName;
     }
   }
 
-  // Compute gripAge and tier for each athlete
+  // Compute derived fields for each athlete
   for (const a of Object.values(athletes)) {
     a.gripAge = calcGripAge(a.dob, a.weight, a.gender, a.bestSec, a.height, a.training);
     a.tier = getTier(a.bestSec).tier;
+    // Determine category: Open Men/Women or Masters Male/Female (40+)
+    let isFemale = (a.gender || '').toLowerCase().includes('female');
+    let age = 0;
+    if (a.dob) { try { const b = new Date(a.dob); if (!isNaN(b.getTime())) age = Math.floor((Date.now() - b.getTime()) / (365.25 * 864e5)); } catch(e) {} }
+    const masters = age >= 40;
+    a.category = isFemale ? (masters ? 'Masters Female' : 'Open Women') : (masters ? 'Masters Male' : 'Open Men');
+    // Build location string: "City, State / Country"
+    a.location = (a.cityState && a.country) ? `${a.cityState} / ${a.country}` : (a.country || 'Unknown');
+    // Sort history by date desc
+    a.history.sort((x, y) => (y.date || '').localeCompare(x.date || ''));
   }
 
   return Object.values(athletes).sort((a, b) => b.bestSec - a.bestSec);
 }
 
 // ===== GITHUB PUSH FOR LIVE LEADERBOARD =====
+// Builds full athlete objects matching the format renderLeaderboard() expects:
+// name, category, location, occupation, gripExperience, gender, bodyweight, height,
+// dob, submissionTimestamp, country, currentPR, lastAttempt, history, isVerified, video, prCount
 async function pushLeaderboardToGitHub(athletesList) {
   try {
     const GITHUB_TOKEN = creds().GITHUB_TOKEN;
@@ -408,12 +455,30 @@ async function pushLeaderboardToGitHub(athletesList) {
       return false;
     }
     
-    // Build the athletes array JS
-    const athleteJS = athletesList.map(a => {
-      const ga = typeof a.gripAge === 'number' ? a.gripAge : 0;
-      return `  { name: "${a.name}", time: "${fmtTime(a.bestSec)}", gripAge: ${ga}, tier: "${a.tier || 'Rookie'}", country: "${a.country || ''}", verified: ${a.verified} }`;
-    }).join(',\n');
-    const newBlock = `const athletes = [\n${athleteJS}\n];`;
+    // Build full athlete objects for the frontend
+    const fullAthletes = athletesList.map(a => ({
+      name: a.name,
+      category: a.category || 'Open Men',
+      location: a.location || 'Unknown',
+      occupation: 'Athlete',
+      gripExperience: a.training || 'None',
+      gender: a.gender || 'Male',
+      bodyweight: a.weight || 0,
+      height: a.height || 0,
+      dob: a.dob || '',
+      submissionTimestamp: a.bestAttemptDate || '',
+      country: a.country || '',
+      currentPR: fmtTime(a.bestSec),
+      lastAttempt: a.bestAttemptDate || '',
+      history: (a.history || []).map(h => ({ date: h.date, time: h.time })),
+      isVerified: !!a.verified,
+      video: a.bestVideo || '#',
+      prCount: a.prCount || 1,
+    }));
+    
+    // Use JSON.stringify for proper quoted-key format
+    const athletesJSON = JSON.stringify(fullAthletes, null, 4);
+    const newBlock = `const athletes = ${athletesJSON};`;
     
     // Get current index.html from GitHub
     const repoOwner = 'milobirk-ux';
@@ -433,8 +498,15 @@ async function pushLeaderboardToGitHub(athletesList) {
     
     // Read current content and find/replace the athletes block
     const currentContent = decodeURIComponent(escape(atob(fileData.content)));
-    const athletesRegex = /const athletes = \[\s*[\s\S]*?\];/;
+    // Robust regex: match "const athletes = [" through the closing "];" 
+    // The pattern matches the array including nested braces
+    const athletesRegex = /const athletes = \[[\s\S]*?\];/;
     const newContent = currentContent.replace(athletesRegex, newBlock);
+    
+    if (newContent === currentContent) {
+      console.log('Warning: athletes regex did not match - no replacement made');
+      return false;
+    }
     
     // Push update
     const updateResp = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
@@ -452,19 +524,11 @@ async function pushLeaderboardToGitHub(athletesList) {
     });
     
     if (updateResp.ok) {
-      console.log('Live leaderboard pushed to GitHub');
-      // Trigger Cloudflare Pages deploy
-      await fetch(`https://api.cloudflare.com/client/v4/accounts/${creds().CF_ACCOUNT_ID}/pages/projects/world-dead-hang/deployments`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${creds().CF_API_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ branch: 'master' })
-      }).catch(e => console.log('CF Pages trigger:', e.message));
+      console.log('Live leaderboard pushed to GitHub — GitHub Pages auto-deploy triggered');
       return true;
     } else {
-      console.log('GitHub push failed:', updateResp.status);
+      const errBody = await updateResp.text().catch(() => '');
+      console.log('GitHub push failed:', updateResp.status, errBody.substring(0, 200));
       return false;
     }
   } catch(e) {
@@ -571,7 +635,7 @@ async function handleMagicLink(req, email, name) {
   const workerUrl = new URL(req.url).origin;
   const verifyUrl = `${workerUrl}/api/auth/verify?token=${mToken}`;
   const subject = '🔥 Your WDHC Athlete Portal Access Link';
-  await sendEmail(await getAccessToken(), em, subject, approvalEmail(aName, timeStr, totalSec, verifyUrl, gripAge));
+  await sendEmail(em, subject, approvalEmail(aName, timeStr, totalSec, verifyUrl, gripAge));
   return jsonResp({ success: true, message: `Sent to ${em}` });
 }
 
@@ -705,7 +769,7 @@ async function handlePublicSubmit(req) {
     time_seconds: totalSec, time_display: fmtTime(totalSec),
     grip_age: gripAgeVal, tier: getTier(totalSec).tier,
     attempt_date: attemptDate || new Date().toISOString().split('T')[0],
-    video_url: videoUrl || null, notes: notes || '',
+    video_url: videoUrl || null, notes: normalizedName || notes || '',
     is_pr: true, verified: false, approved: false, source: 'public_form'
   });
 
@@ -725,14 +789,14 @@ async function handlePublicSubmit(req) {
   // Send confirmation email to athlete
   try {
     const tok = await getAccessToken();
-    await sendEmail(tok, em, `Your WDHC Submission — ${fmtTime(totalSec)}`,
+    await sendEmail(em, `Your WDHC Submission — ${fmtTime(totalSec)}`,
       dashboardSubmitEmail(normalizedName.split(' ')[0], fmtTime(totalSec), gripAgeVal));
   } catch(e) { console.error('Athlete email:', e); }
 
   // Send admin notification
   try {
     const tok = await getAccessToken();
-    await sendEmail(tok, 'milobirk@gmail.com', `📬 ${normalizedName} — ${fmtTime(totalSec)}`,
+    await sendEmail('milobirk@gmail.com', `📬 ${normalizedName} — ${fmtTime(totalSec)}`,
       notifyAdminEmail(normalizedName, fmtTime(totalSec), em, gripAgeVal, subId, false));
   } catch(e) { console.error('Admin notify:', e); }
 
@@ -812,11 +876,11 @@ async function handleSubmitHang(req, token) {
   // 1. Confirmation email to athlete
   const em = athlete.email;
   const aName = athlete.name || em.split('@')[0];
-  try { await sendEmail(await getAccessToken(), em, `Your WDHC Submission — ${fmtTime(totalSec)}`, dashboardSubmitEmail(aName, fmtTime(totalSec), gripAge)); } catch(e) { console.error('Athlete email:', e); }
+  try { await sendEmail(em, `Your WDHC Submission — ${fmtTime(totalSec)}`, dashboardSubmitEmail(aName, fmtTime(totalSec), gripAge)); } catch(e) { console.error('Athlete email:', e); }
 
   // 2. Admin notification (includes submission ID for manual recovery if needed)
   try {
-    await sendEmail(await getAccessToken(), 'milobirk@gmail.com', `📬 ${aName} — ${fmtTime(totalSec)}`, notifyAdminEmail(aName, fmtTime(totalSec), em, gripAge, subId, !subResult));
+    await sendEmail('milobirk@gmail.com', `📬 ${aName} — ${fmtTime(totalSec)}`, notifyAdminEmail(aName, fmtTime(totalSec), em, gripAge, subId, !subResult));
   } catch(e) { console.error('Admin notify:', e); }
 
   // 3. Sync to leaderboard (Supabase only)
@@ -949,7 +1013,7 @@ async function handleApprove(req, params) {
   const verifyUrl = `${workerUrl}/api/auth/verify?token=${magicToken}`;
   try {
     const tok = await getAccessToken();
-    await sendEmail(tok, athleteEmail, `You're Approved! — ${timeStr}`,
+    await sendEmail(athleteEmail, `You're Approved! — ${timeStr}`,
       approvalEmail(aName, timeStr, totalSec, verifyUrl, gripAge));
   } catch(e) { console.error('Approval email:', e); }
 
@@ -1023,7 +1087,7 @@ async function handleVerifyApprove(req, params) {
   const verifyUrl = `${workerUrl}/api/auth/verify?token=${magicToken}`;
   try {
     const tok = await getAccessToken();
-    await sendEmail(tok, athleteEmail, `You're Verified! ✅ — ${timeStr}`, approvalEmail(aName, timeStr, totalSec, verifyUrl, ga));
+    await sendEmail(athleteEmail, `You're Verified! ✅ — ${timeStr}`, approvalEmail(aName, timeStr, totalSec, verifyUrl, ga));
   } catch(e) { console.error('Email:', e); }
 
   return jsonResp({ success: true, message: `Verified + Approved ${aName}` });
@@ -1053,7 +1117,7 @@ async function handleDeny(req, params) {
   const aName = athlete.name || athleteEmail.split('@')[0];
   try {
     const tok = await getAccessToken();
-    await sendEmail(tok, athleteEmail, 'WDHC Submission Update', denyEmail(aName));
+    await sendEmail(athleteEmail, 'WDHC Submission Update', denyEmail(aName));
   } catch(e) { console.error('Denial email:', e); }
 
   return jsonResp({ success: true, message: `Denied ${aName}` });
