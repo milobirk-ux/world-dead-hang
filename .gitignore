@@ -24,3 +24,7 @@ production/reports/
 # Wrangler
 .wrangler/
 .git-rewrite/
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
